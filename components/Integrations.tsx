@@ -1,104 +1,199 @@
 'use client'
 
+import DiagnosticCard from '@/components/DiagnosticCard'
 import {
-  siNotion, siGmail, siHubspot, siAirtable, siTrello,
-  siShopify, siStripe, siZapier, siGooglesheets, siGoogledrive,
-  siN8n, siMake, siAsana, siClickup,
-  siZoom, siWhatsapp, siGithub, siTypeform, siWebflow,
-  siWordpress, siJira, siMailchimp, siClaude, siDiscord,
-  siGooglecalendar, siIntercom, siZendesk, siSupabase,
+  siNotion, siGmail, siHubspot, siAirtable, siStripe, siZapier, siN8n, siMake,
+  siShopify, siTrello, siAsana, siClickup, siGooglesheets, siGoogledrive, siMailchimp, siTypeform, siWebflow, siWordpress,
+  siZoom, siWhatsapp, siGithub, siJira, siClaude, siDiscord, siGooglecalendar, siIntercom, siZendesk, siSupabase,
 } from 'simple-icons'
 import type { SimpleIcon } from 'simple-icons'
 
-// ─── Deux rangées de logos ────────────────────────────────────────────────────
+// ─── Répartition sur 2 anneaux ───────────────────────────────────────────────
 
-const ROW_1: SimpleIcon[] = [
-  siNotion, siGmail, siHubspot, siAirtable, siTrello,
-  siShopify, siStripe, siZapier, siGooglesheets, siGoogledrive,
-  siN8n, siMake, siAsana, siClickup,
+const RINGS: {
+  icons:     SimpleIcon[]
+  radius:    number
+  duration:  number
+  direction: 'cw' | 'ccw'
+}[] = [
+  {
+    icons:    [siNotion, siGmail, siHubspot, siAirtable, siStripe, siZapier, siN8n, siMake, siShopify, siTrello, siAsana, siClickup, siGooglesheets, siGoogledrive],
+    radius:   130,
+    duration: 40,
+    direction: 'cw',
+  },
+  {
+    icons:    [siMailchimp, siTypeform, siWebflow, siWordpress, siZoom, siWhatsapp, siGithub, siJira, siClaude, siDiscord, siGooglecalendar, siIntercom, siZendesk, siSupabase],
+    radius:   215,
+    duration: 65,
+    direction: 'ccw',
+  },
 ]
 
-const ROW_2: SimpleIcon[] = [
-  siZoom, siWhatsapp, siGithub, siTypeform, siWebflow,
-  siWordpress, siJira, siMailchimp, siClaude, siDiscord,
-  siGooglecalendar, siIntercom, siZendesk, siSupabase,
-]
+// ─── Logo orbe (carte circulaire) ────────────────────────────────────────────
 
-// ─── Carte logo ───────────────────────────────────────────────────────────────
-
-function LogoCard({ icon }: { icon: SimpleIcon }) {
+function LogoOrb({ icon }: { icon: SimpleIcon }) {
   return (
-    <div className="group flex-shrink-0 flex flex-col items-center justify-center gap-2.5 w-28 h-20 border border-white/[0.07] bg-[#141414] hover:border-accent/30 hover:bg-white/[0.03] transition-all duration-300 cursor-default mx-2">
+    <div
+      className="group relative w-11 h-11 rounded-full border border-white/[0.10] bg-[#141414] hover:border-accent/50 hover:bg-[#1c1c1c] transition-all duration-300 flex items-center justify-center"
+      title={icon.title}
+    >
       <svg
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-5 h-5 text-white/40 group-hover:text-white/80 transition-colors duration-300"
-        aria-label={icon.title}
+        className="w-4 h-4 text-white/50 group-hover:text-white/90 transition-colors duration-300"
       >
         <path d={icon.path} />
       </svg>
-      <span className="font-inter text-[10px] text-neutral/40 group-hover:text-neutral/70 transition-colors duration-300 tracking-wide text-center leading-none px-1 truncate w-full text-center">
+
+      {/* Tooltip nom */}
+      <span className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap font-inter text-[9px] text-neutral/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         {icon.title}
       </span>
     </div>
   )
 }
 
-// ─── Rangée défilante ─────────────────────────────────────────────────────────
+// ─── Anneau orbital ───────────────────────────────────────────────────────────
 
-function MarqueeRow({ icons, reverse = false }: { icons: SimpleIcon[]; reverse?: boolean }) {
-  // Triple pour que la boucle soit invisible quelle que soit la largeur d'écran
-  const all = [...icons, ...icons, ...icons]
+function OrbitalRing({ icons, radius, duration, direction }: typeof RINGS[0]) {
+  const spin    = `orbitCW  ${duration}s linear infinite`
+  const counter = `orbitCCW ${duration}s linear infinite`
+  const ringAnim    = direction === 'cw'  ? spin    : counter
+  const counterAnim = direction === 'cw'  ? counter : spin
+
   return (
-    <div className="relative overflow-hidden">
-      {/* Fondu gauche */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-r from-bg to-transparent" />
-      {/* Fondu droite */}
-      <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-l from-bg to-transparent" />
+    <>
+      {/* Chemin de l'anneau — cercle pointillé discret */}
+      <div
+        className="absolute rounded-full border border-dashed border-white/[0.05]"
+        style={{
+          width:  radius * 2,
+          height: radius * 2,
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
 
-      <div className={`flex ${reverse ? 'animate-marquee-reverse' : 'animate-marquee'}`}>
-        {all.map((icon, i) => (
-          <LogoCard key={`${icon.slug}-${i}`} icon={icon} />
-        ))}
+      {/* Conteneur rotatif */}
+      <div
+        className="absolute inset-0"
+        style={{ animation: ringAnim }}
+      >
+        {icons.map((icon, i) => {
+          const angle = (i / icons.length) * 360
+          return (
+            <div
+              key={icon.slug}
+              className="absolute top-1/2 left-1/2"
+              style={{
+                transform: `rotate(${angle}deg) translateX(${radius}px) translateY(-50%)`,
+              }}
+            >
+              {/* Contre-rotation pour garder le logo droit */}
+              <div style={{ animation: counterAnim }}>
+                <LogoOrb icon={icon} />
+              </div>
+            </div>
+          )
+        })}
       </div>
+    </>
+  )
+}
+
+// ─── Centre — laptop stylisé ──────────────────────────────────────────────────
+
+function LaptopCenter() {
+  return (
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+
+      {/* Pulse rings */}
+      <div className="absolute w-24 h-24 rounded-full bg-accent/10"
+        style={{ animation: 'pulse-ring 3s ease-out infinite' }} />
+      <div className="absolute w-24 h-24 rounded-full bg-accent/6"
+        style={{ animation: 'pulse-ring 3s ease-out 1.5s infinite' }} />
+
+      {/* Écran */}
+      <div className="relative z-10 w-36 border border-white/[0.12] bg-[#0d0d0d] rounded-md overflow-hidden">
+        {/* Barre de titre */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06] bg-white/[0.02]">
+          <span className="font-grotesk font-bold text-accent text-[9px] tracking-[0.15em]">STRIPWORK</span>
+          <div className="flex gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/10" />
+            <span className="w-1.5 h-1.5 rounded-full bg-white/10" />
+            <span className="w-1.5 h-1.5 rounded-full bg-accent/60" />
+          </div>
+        </div>
+        {/* Contenu écran */}
+        <div className="p-3 space-y-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+            <div className="h-1.5 w-14 bg-accent/30 rounded-full" />
+          </div>
+          <div className="h-1 w-20 bg-white/[0.07] rounded-full" />
+          <div className="h-1 w-16 bg-white/[0.07] rounded-full" />
+          <div className="h-1 w-12 bg-white/[0.05] rounded-full" />
+          <div className="mt-2 flex items-center gap-1">
+            <span className="w-1 h-1 rounded-full bg-accent/60" />
+            <div className="h-1 w-10 bg-accent/20 rounded-full" />
+          </div>
+        </div>
+      </div>
+
+      {/* Clavier */}
+      <div className="relative z-10 w-40 h-2 bg-[#161616] border border-white/[0.08] border-t-0 rounded-b-md" />
+      <div className="relative z-10 w-28 h-1 bg-[#111] rounded-b-md" />
     </div>
   )
 }
 
 // ─── Section principale ───────────────────────────────────────────────────────
 
+// Taille du conteneur orbital = rayon max × 2 + marge pour logos
+const SIZE = 215 * 2 + 80 // 510px
+
 export default function Integrations() {
   return (
-    <section className="py-24 bg-bg overflow-hidden">
-      <div className="max-w-screen-xl mx-auto px-6 md:px-10 mb-14">
+    <section className="py-24 bg-bg">
+      <div className="max-w-screen-xl mx-auto px-6 md:px-10">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <div>
-            <span className="inline-block font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent border border-accent/30 px-3 py-1.5 mb-5">
-              Intégrations
-            </span>
-            <h2 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight">
-              Connecté à tout ce que<br className="hidden md:block" /> vous utilisez déjà.
-            </h2>
-          </div>
-          <p className="font-inter text-neutral text-sm leading-relaxed max-w-xs md:text-right">
-            28 connecteurs disponibles.<br />
-            Vos outils restent en place —<br />
-            on les fait simplement parler ensemble.
+        <div className="mb-14">
+          <span className="inline-block font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent border border-accent/30 px-3 py-1.5 mb-5">
+            28 intégrations
+          </span>
+          <h2 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-3">
+            Connecté à tout ce que vous utilisez déjà.
+          </h2>
+          <p className="font-inter text-neutral text-sm max-w-sm">
+            Vos outils restent en place — on les fait parler ensemble.
           </p>
         </div>
 
-        {/* Séparateur */}
-        <div className="mt-10 h-px bg-white/[0.06]" />
-      </div>
+        {/* Layout deux colonnes */}
+        <div className="flex flex-col lg:flex-row items-center lg:gap-16">
 
-      {/* Marquees */}
-      <div className="space-y-3">
-        <MarqueeRow icons={ROW_1} />
-        <MarqueeRow icons={ROW_2} reverse />
-      </div>
+          {/* Gauche — formulaire diagnostic */}
+          <div className="w-full lg:w-[380px] flex-shrink-0">
+            <DiagnosticCard />
+          </div>
 
+          {/* Droite — animation orbitale, cachée sur mobile (décoratif) */}
+          <div className="hidden lg:flex flex-1 items-center justify-center overflow-hidden">
+            <div
+              className="relative flex-shrink-0"
+              style={{ width: SIZE, height: SIZE }}
+            >
+              {RINGS.map((ring, i) => (
+                <OrbitalRing key={i} {...ring} />
+              ))}
+              <LaptopCenter />
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
   )
 }
