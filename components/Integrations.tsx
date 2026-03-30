@@ -21,7 +21,12 @@ const GROUP_B: SimpleIcon[] = [
   siGithub, siJira, siClaude, siDiscord, siGooglecalendar, siIntercom, siZendesk, siSupabase,
 ]
 
+// Sous-ensemble pour mobile — 8 icônes par groupe
+const GROUP_A_MOBILE = GROUP_A.slice(0, 8)
+const GROUP_B_MOBILE = GROUP_B.slice(0, 8)
+
 const RADIUS = 210
+const RADIUS_MOBILE = 110
 
 // ─── Logo orbe avec couleur de marque ────────────────────────────────────────
 
@@ -128,9 +133,34 @@ function LaptopCenter() {
   )
 }
 
-// ─── Section principale ───────────────────────────────────────────────────────
+// ─── Cercle orbital réutilisable ─────────────────────────────────────────────
 
-const SIZE = RADIUS * 2 + 80
+function OrbitalScene({ radius, groupA, groupB }: {
+  radius: number
+  groupA: SimpleIcon[]
+  groupB: SimpleIcon[]
+}) {
+  const size = radius * 2 + 80
+  return (
+    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
+      {/* Cercle guide */}
+      <div
+        className="absolute rounded-full border border-dashed border-white/[0.06]"
+        style={{
+          width: radius * 2,
+          height: radius * 2,
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+      <OrbitalGroup icons={groupA} radius={radius} duration={50} direction="cw" offset={0} />
+      <OrbitalGroup icons={groupB} radius={radius} duration={50} direction="ccw" offset={360 / (groupB.length * 2)} />
+      <LaptopCenter />
+    </div>
+  )
+}
+
+// ─── Section principale ───────────────────────────────────────────────────────
 
 export default function Integrations() {
   return (
@@ -147,51 +177,22 @@ export default function Integrations() {
           </p>
         </div>
 
-        {/* Layout deux colonnes */}
+        {/* Mobile — animation au-dessus du formulaire */}
+        <div className="flex lg:hidden justify-center mb-10 overflow-hidden">
+          <OrbitalScene radius={RADIUS_MOBILE} groupA={GROUP_A_MOBILE} groupB={GROUP_B_MOBILE} />
+        </div>
+
+        {/* Layout desktop — deux colonnes */}
         <div className="flex flex-col lg:flex-row items-center lg:gap-16">
 
-          {/* Gauche — formulaire diagnostic */}
+          {/* Formulaire diagnostic */}
           <div className="w-full lg:w-[380px] flex-shrink-0">
             <DiagnosticCard />
           </div>
 
-          {/* Droite — cercle unique, deux groupes en sens inverses */}
+          {/* Desktop — animation à droite */}
           <div className="hidden lg:flex flex-1 items-center justify-center overflow-hidden">
-            <div
-              className="relative flex-shrink-0"
-              style={{ width: SIZE, height: SIZE }}
-            >
-              {/* Cercle guide — une seule ligne */}
-              <div
-                className="absolute rounded-full border border-dashed border-white/[0.06]"
-                style={{
-                  width: RADIUS * 2,
-                  height: RADIUS * 2,
-                  top: '50%', left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              />
-
-              {/* Groupe A — sens horaire, logos pairs */}
-              <OrbitalGroup
-                icons={GROUP_A}
-                radius={RADIUS}
-                duration={50}
-                direction="cw"
-                offset={0}
-              />
-
-              {/* Groupe B — sens anti-horaire, logos impairs (décalés) */}
-              <OrbitalGroup
-                icons={GROUP_B}
-                radius={RADIUS}
-                duration={50}
-                direction="ccw"
-                offset={360 / (GROUP_B.length * 2)}
-              />
-
-              <LaptopCenter />
-            </div>
+            <OrbitalScene radius={RADIUS} groupA={GROUP_A} groupB={GROUP_B} />
           </div>
 
         </div>
