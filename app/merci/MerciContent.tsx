@@ -218,25 +218,33 @@ export default function MerciContent() {
         </div>
 
         {/* Ancre de prix */}
-        <div className="border border-white/[0.08] bg-white/[0.015] p-6 mb-8">
+        <div className="border border-white/[0.08] bg-white/[0.015] p-6 mb-4">
           <p className="font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/30 mb-4">
             Investissement si on travaille ensemble
           </p>
 
           {/* Prix barré — bien visible */}
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-inter text-sm font-medium text-neutral/60">Tarif standard :</span>
+            <span className="font-inter text-sm font-medium text-muted">Tarif standard :</span>
             <span className="font-grotesk font-bold text-surface/70 text-xl line-through decoration-red-400 decoration-2">
               {config.prixBase}
             </span>
           </div>
 
           {/* Prix promo */}
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-3">
             <span className="font-grotesk font-bold text-surface text-4xl">{config.prixPromo}</span>
             <span className="font-inter text-sm font-bold text-bg bg-accent px-2.5 py-1">
               {config.reduction}
             </span>
+          </div>
+
+          {/* Paiement unique — mis en avant */}
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+            <p className="font-inter text-sm font-semibold text-accent">
+              Paiement unique — aucun abonnement Stripwork.
+            </p>
           </div>
 
           {/* Urgence */}
@@ -246,11 +254,19 @@ export default function MerciContent() {
               <p className="font-inter text-xs font-semibold text-surface/80 mb-0.5">
                 {config.promoLabel}
               </p>
-              <p className="font-inter text-xs text-neutral/40">
+              <p className="font-inter text-xs text-muted">
                 Ce tarif ne sera plus disponible après le 30 juin 2026.
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Transparence frais outils */}
+        <div className="border border-white/[0.05] bg-white/[0.01] px-5 py-4 mb-8 flex items-start gap-3">
+          <span className="text-muted text-xs mt-0.5 flex-shrink-0">ℹ</span>
+          <p className="font-inter text-xs text-muted leading-relaxed">
+            Les outils que l&apos;on connecte (n8n, Make, Claude API, etc.) génèrent des frais d&apos;usage mensuels selon votre volume — généralement entre 20€ et 150€/mois selon les cas. Ces frais sont liés à vos propres comptes, pas à Stripwork.
+          </p>
         </div>
 
         {/* CTA */}
