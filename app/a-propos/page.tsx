@@ -4,9 +4,12 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import { content } from '@/lib/content'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com'
+
 export const metadata: Metadata = {
-  title: 'À propos — Stripwork',
-  description: 'Réduire la charge mentale dans les entreprises. Accélérer les décisions sans recruter.',
+  title: 'À propos — Stripwork | Automatisation IA pour PME',
+  description: 'La mission de Stripwork : automatiser les tâches répétitives de votre entreprise et libérer vos équipes pour ce qui compte vraiment.',
+  alternates: { canonical: `${SITE_URL}/a-propos` },
 }
 
 // Page À propos — pitch fondateur, mission, valeurs

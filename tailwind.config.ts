@@ -12,8 +12,8 @@ const config: Config = {
         'surface-alt': '#1A1A1A',
       },
       fontFamily: {
-        grotesk: ['Space Grotesk', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        grotesk: ['var(--font-grotesk)', 'sans-serif'],
+        inter:   ['var(--font-inter)', 'sans-serif'],
       },
       fontSize: {
         '8xl': ['6rem', { lineHeight: '1', letterSpacing: '-0.04em' }],

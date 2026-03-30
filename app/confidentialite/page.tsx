@@ -2,9 +2,12 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com'
+
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité — Stripwork',
-  description: 'Comment Stripwork collecte, utilise et protège vos données personnelles.',
+  title: 'Politique de confidentialité — Stripwork | RGPD',
+  description: 'Stripwork protège vos données conformément au RGPD. Consultez notre politique de confidentialité et exercez vos droits.',
+  alternates: { canonical: `${SITE_URL}/confidentialite` },
 }
 
 export default function ConfidentialitePage() {
