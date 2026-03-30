@@ -3,8 +3,8 @@ import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité — Workless',
-  description: 'Comment Workless collecte, utilise et protège vos données personnelles.',
+  title: 'Politique de confidentialité — Stripwork',
+  description: 'Comment Stripwork collecte, utilise et protège vos données personnelles.',
 }
 
 export default function ConfidentialitePage() {
@@ -24,7 +24,7 @@ export default function ConfidentialitePage() {
             <section>
               <h2 className="font-grotesk font-semibold text-surface text-lg mb-4">Qui collecte vos données ?</h2>
               <p>
-                Workless collecte les informations que vous soumettez via le formulaire de diagnostic.
+                Stripwork collecte les informations que vous soumettez via le formulaire de diagnostic.
                 Ces données sont utilisées uniquement pour vous recontacter dans le cadre de votre demande.
               </p>
             </section>

@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 import { content } from '@/lib/content'
 
 export const metadata: Metadata = {
-  title: 'À propos — Workless',
+  title: 'À propos — Stripwork',
   description: 'Réduire la charge mentale dans les entreprises. Accélérer les décisions sans recruter.',
 }
 

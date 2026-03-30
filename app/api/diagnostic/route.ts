@@ -59,7 +59,7 @@ function buildEmailHtml(data: Record<string, unknown>): string {
   <div style="max-width:600px;margin:0 auto;">
 
     <div style="border-left:3px solid #c6ff00;padding-left:16px;margin-bottom:32px;">
-      <p style="color:#c6ff00;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 4px;">Nouveau diagnostic Workless</p>
+      <p style="color:#c6ff00;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 4px;">Nouveau diagnostic Stripwork</p>
       <h1 style="color:#ededed;font-size:22px;margin:0;">${prenom} — ${email}</h1>
     </div>
 
@@ -73,7 +73,7 @@ function buildEmailHtml(data: Record<string, unknown>): string {
     </table>
 
     <p style="color:#3a3a3a;font-size:11px;margin-top:32px;text-align:center;">
-      Workless · Diagnostic automatique
+      Stripwork · Diagnostic automatique
     </p>
   </div>
 </body>
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     const data = await req.json()
 
     const { error } = await resend.emails.send({
-      from: 'Workless Diagnostic <onboarding@resend.dev>',
+      from: 'Stripwork Diagnostic <onboarding@resend.dev>',
       to: DEST_EMAIL,
       subject: `Nouveau diagnostic — ${data.prenom ?? 'Sans nom'} (Profil ${data.profile})`,
       html: buildEmailHtml(data),

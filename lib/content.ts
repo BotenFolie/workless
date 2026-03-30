@@ -1,4 +1,4 @@
-// Centralisation de tout le copy du site Workless
+// Centralisation de tout le copy du site Stripwork
 // Positionnement : on automatise les tâches répétitives → libère du temps sur les tâches non récurrentes
 
 export type ContentBlock =
@@ -7,7 +7,7 @@ export type ContentBlock =
 
 export const content = {
   nav: {
-    brand: 'Workless',
+    brand: 'Stripwork',
     links: [
       { label: '\u00C0 propos', href: '/a-propos' },
       { label: 'Diagnostic', href: '#cta' },
@@ -268,11 +268,11 @@ export const content = {
       title: "On ne vous rend pas plus productif. On automatise ce qui vous ralentit.",
     },
     pitch: {
-      title: 'Pourquoi Workless',
+      title: 'Pourquoi Stripwork',
       paragraphs: [
         "La plupart des entreprises n\u2019ont pas un probl\u00E8me de performance.",
         "Elles ont un probl\u00E8me de t\u00E2ches r\u00E9p\u00E9titives non automatis\u00E9es.",
-        "On a construit Workless pour automatiser ce poids. Pas pour optimiser. Pour lib\u00E9rer du temps sur ce qui compte vraiment.",
+        "On a construit Stripwork pour automatiser ce poids. Pas pour optimiser. Pour lib\u00E9rer du temps sur ce qui compte vraiment.",
       ],
     },
     mission: {
@@ -297,6 +297,6 @@ export const content = {
   },
 
   footer: {
-    copy: '\u00A9 2025 Workless',
+    copy: '\u00A9 2025 Stripwork',
   },
 }

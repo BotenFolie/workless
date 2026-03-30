@@ -29,7 +29,7 @@ export default function PageLoader() {
             transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
             className="font-grotesk font-bold text-surface text-4xl md:text-5xl tracking-tight"
           >
-            Workless
+            Stripwork
           </motion.span>
 
           {/* Ligne de chargement accent */}

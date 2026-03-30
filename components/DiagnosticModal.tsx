@@ -155,7 +155,7 @@ export default function DiagnosticModal() {
             <div className="flex items-center justify-between px-4 md:px-8 py-3 md:py-5 border-b border-white/[0.15] flex-shrink-0">
               <div className="flex items-center gap-4">
                 <span className="font-grotesk font-bold text-surface text-base tracking-tight">
-                  Diagnostic Workless
+                  Diagnostic Stripwork
                 </span>
                 <div className="flex items-center gap-1.5">
                   {[1, 2, 3].map(n => (
@@ -595,7 +595,7 @@ export default function DiagnosticModal() {
                           required
                         />
                         <span className="font-inter text-neutral/60 text-xs leading-relaxed">
-                          J&apos;accepte que Workless utilise ces informations pour me recontacter dans le cadre de ma demande de diagnostic. Aucune diffusion à des tiers. Conformément au RGPD, vous pouvez exercer vos droits à tout moment.
+                          J&apos;accepte que Stripwork utilise ces informations pour me recontacter dans le cadre de ma demande de diagnostic. Aucune diffusion à des tiers. Conformément au RGPD, vous pouvez exercer vos droits à tout moment.
                         </span>
                       </label>
 

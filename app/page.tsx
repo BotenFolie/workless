@@ -39,8 +39,8 @@ function OrgSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Workless',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://workless.fr',
+    name: 'Stripwork',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com',
     description: 'Automatisation des tâches répétitives pour les PME de 5 à 50 personnes.',
     areaServed: 'FR',
     serviceType: 'Automatisation IA',
@@ -53,7 +53,7 @@ function OrgSchema() {
   )
 }
 
-// Homepage Workless — assemblage avec marquee entre sections clés
+// Homepage Stripwork — assemblage avec marquee entre sections clés
 export default function HomePage() {
   return (
     <>

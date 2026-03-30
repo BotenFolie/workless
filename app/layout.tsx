@@ -3,20 +3,20 @@ import './globals.css'
 import Providers from '@/components/ui/Providers'
 
 export const metadata: Metadata = {
-  title: "Workless \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
+  title: "Stripwork \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
   description:
     "On automatise les t\u00E2ches r\u00E9p\u00E9titives de votre entreprise en moins de 14 jours. Lib\u00E9rez vos \u00E9quipes pour ce qui compte vraiment.",
   openGraph: {
-    title: "Workless \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
+    title: "Stripwork \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
     description:
       "On automatise les t\u00E2ches r\u00E9p\u00E9titives de votre entreprise en moins de 14 jours. Lib\u00E9rez vos \u00E9quipes pour ce qui compte vraiment.",
     type: 'website',
     locale: 'fr_FR',
-    siteName: 'Workless',
+    siteName: 'Stripwork',
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Workless \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
+    title: "Stripwork \u2014 Automatisez jusqu\u2019\u00E0 60% de vos t\u00E2ches r\u00E9p\u00E9titives",
     description:
       "On automatise les t\u00E2ches r\u00E9p\u00E9titives de votre entreprise en moins de 14 jours.",
   },

@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://workless.fr'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
