@@ -156,7 +156,7 @@ export default function HeroDashboard() {
         {/* Barre de titre */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
           <div className="flex items-center gap-2">
-            <span className="font-grotesk font-bold text-accent text-xs tracking-widest">WORKLESS</span>
+            <span className="font-grotesk font-bold text-accent text-xs tracking-widest">STRIPWORK</span>
             <span className="text-white/20 text-xs">·</span>
             <span className="font-inter text-neutral/60 text-xs">3 agents actifs</span>
           </div>

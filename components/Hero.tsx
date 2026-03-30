@@ -117,7 +117,27 @@ export default function Hero() {
           </div>
 
           {/* ── Colonne droite : mini dashboard ── */}
-          <div className="flex items-center justify-center lg:justify-end">
+          <div className="flex flex-col items-center lg:items-end gap-6">
+
+            {/* Phrase d'ancrage prix — au-dessus du dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 2.2 }}
+              className="w-full max-w-sm flex items-stretch gap-4"
+            >
+              <div className="w-px bg-accent/40 flex-shrink-0" />
+              <div>
+                <p className="font-inter text-neutral/50 text-xs line-through mb-0.5">
+                  Un salarié : ~35 000€ par an, chaque année.
+                </p>
+                <p className="font-grotesk font-semibold text-surface text-sm leading-snug">
+                  Stripwork : le même prix.{' '}
+                  <span className="text-accent">Une seule fois.</span>
+                </p>
+              </div>
+            </motion.div>
+
             <HeroDashboard />
           </div>
 
