@@ -132,7 +132,7 @@ export default function Hero() {
                   Un salarié : ~35 000€ par an, chaque année.
                 </p>
                 <p className="font-grotesk font-semibold text-surface text-sm leading-snug">
-                  Stripwork : le même prix.{' '}
+                  Stripwork : moins cher.{' '}
                   <span className="text-accent">Une seule fois.</span>
                 </p>
               </div>
