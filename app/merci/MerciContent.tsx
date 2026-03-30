@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 // ─── Lien de réservation — à remplacer par ton vrai lien ─────────────────────
-const BOOKING_URL = 'https://calendar.google.com/calendar/u/0/appointments'
+const BOOKING_URL = 'https://calendar.app.google/Z13tCbEPiwbRKVxp8'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
