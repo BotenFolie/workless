@@ -1,86 +1,198 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 
-type Profile = 1 | 2 | 3
-type Step = 'profile' | 'form' | 'success'
-
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-const profiles = [
+// ─── Config des 7 questions ───────────────────────────────────────────────────
+
+const QUIZ_STEPS = [
   {
-    id: 1 as Profile,
-    number: '01',
-    label: "Je ne sais pas où je perds du temps",
-    sub: "On cartographie votre organisation pour identifier ce qui peut s'automatiser.",
+    id: 1,
+    key: 'probleme' as const,
+    multi: true,
+    question: 'Où perdez-vous le plus de temps en ce moment ?',
+    hint: 'Plusieurs choix possibles',
+    options: [
+      { value: 'reporting',    icon: '📊', label: 'Analyse & reporting' },
+      { value: 'emails',       icon: '✉️',  label: 'Rédaction & emails' },
+      { value: 'decisions',    icon: '⏳', label: 'Prises de décision lentes' },
+      { value: 'organisation', icon: '🗂️', label: 'Organisation interne' },
+      { value: 'autre',        icon: '💬', label: 'Autre chose' },
+    ],
   },
   {
-    id: 2 as Profile,
-    number: '02',
-    label: "Je sais où je perds du temps mais je ne vois pas comment l'automatiser",
-    sub: "On analyse la tâche en question et on identifie la bonne approche.",
+    id: 2,
+    key: 'heures' as const,
+    multi: false,
+    question: "Combien d'heures disparaissent chaque semaine ?",
+    options: [
+      { value: 'moins-5h', icon: '🟡', label: 'Moins de 5h' },
+      { value: '5-10h',    icon: '🟠', label: '5 à 10h' },
+      { value: '10-20h',   icon: '🔴', label: '10 à 20h' },
+      { value: '20h+',     icon: '🚨', label: 'Plus de 20h — chaque semaine' },
+    ],
   },
   {
-    id: 3 as Profile,
-    number: '03',
-    label: "Je sais ce qu'il faut faire mais il y a trop de paramétrage",
-    sub: "On prend en charge l'implémentation complète.",
+    id: 3,
+    key: 'personnes' as const,
+    multi: false,
+    question: 'Combien de personnes sont concernées par ce problème ?',
+    options: [
+      { value: '1-2',  icon: '👤', label: '1 à 2 personnes' },
+      { value: '3-5',  icon: '👥', label: '3 à 5 personnes' },
+      { value: '5-10', icon: '🏘️', label: '5 à 10 personnes' },
+      { value: '10+',  icon: '🏢', label: 'Plus de 10 personnes' },
+    ],
+  },
+  {
+    id: 4,
+    key: 'intention' as const,
+    multi: true,
+    question: 'Si vous supprimiez cette charge, quels seraient les bénéfices ?',
+    hint: 'Plusieurs choix possibles',
+    options: [
+      { value: 'temps',    icon: '⚡', label: 'Gagner du temps' },
+      { value: 'pression', icon: '😮‍💨', label: 'Réduire la pression' },
+      { value: 'decisions',icon: '🎯', label: 'Accélérer les décisions' },
+      { value: 'recruter', icon: '💰', label: 'Éviter de recruter' },
+    ],
+  },
+  {
+    id: 5,
+    key: 'maturite' as const,
+    multi: false,
+    question: "Avez-vous déjà essayé d'optimiser ces tâches ?",
+    options: [
+      { value: 'jamais',        icon: '🌱', label: "Non, pas encore essayé" },
+      { value: 'partiellement', icon: '🔧', label: "Oui, partiellement" },
+      { value: 'echec',         icon: '💥', label: "Oui, mais sans succès" },
+    ],
+  },
+  {
+    id: 6,
+    key: 'objectif' as const,
+    multi: false,
+    question: 'Quel est votre objectif principal ?',
+    options: [
+      { value: 'tester',      icon: '🔍', label: 'Tester une première amélioration' },
+      { value: 'ameliorer',   icon: '📈', label: "Améliorer l'efficacité globale" },
+      { value: 'transformer', icon: '🚀', label: "Transformer l'organisation" },
+    ],
   },
 ]
 
-const PERTES_OPTIONS = [
-  "Reporting & dashboards",
-  "Emails & communication interne",
-  "Analyse de données",
-  "Rédaction de contenus",
-  "Coordination & suivi de projets",
-  "Prises de décision répétitives",
-  "Traitement de documents",
-  "Autre",
-]
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-type FormData = {
-  secteur: string
-  taille: string
-  pertes: string[]
-  situation: string
-  tache: string
-  frequence: string
-  duree: string
-  outils: string
+type QuizKey = 'probleme' | 'heures' | 'personnes' | 'intention' | 'maturite' | 'objectif' | 'urgence'
+type ViewId = 'quiz' | 'contact' | 'result'
+
+// probleme et intention sont multi → string[], les autres single → string
+type QuizAnswers = {
+  probleme:  string[]
+  heures:    string
   personnes: string
-  automatisation: string
-  connexions: string
-  tente: string
-  bloquage: string
-  delai: string
-  budget: string
-  prenom: string
-  email: string
-  rgpd: boolean
+  intention: string[]
+  maturite:  string
+  objectif:  string
 }
 
-const emptyForm: FormData = {
-  secteur: '', taille: '', pertes: [], situation: '',
-  tache: '', frequence: '', duree: '', outils: '', personnes: '',
-  automatisation: '', connexions: '', tente: '', bloquage: '', delai: '', budget: '',
-  prenom: '', email: '', rgpd: false,
+type ContactData = {
+  prenom:     string
+  email:      string
+  entreprise: string
+  telephone:  string
 }
 
-const inputCls = "w-full border border-white/20 focus:border-accent/60 focus:outline-none rounded-sm px-4 py-3 font-inter text-sm transition-colors duration-200"
-const labelCls = "block font-inter text-xs font-semibold tracking-wider uppercase text-surface/70 mb-2"
-const selectCls = `${inputCls} cursor-pointer appearance-none`
-// Style inline — seul moyen fiable de battre l'héritage color:#EDEDED du body
-const inputStyle = { color: '#111111', WebkitTextFillColor: '#111111' } as React.CSSProperties
+const emptyQuiz: QuizAnswers = {
+  probleme: [], heures: '', personnes: '', intention: [],
+  maturite: '', objectif: '',
+}
+
+// ─── Scoring ──────────────────────────────────────────────────────────────────
+
+const SCORES: Record<string, number> = {
+  'moins-5h': 0, '5-10h': 1, '10-20h': 2, '20h+': 3,
+  '1-2': 0, '3-5': 1, '5-10': 2, '10+': 3,
+  'temps': 0, 'pression': 1, 'decisions': 2, 'recruter': 3,
+  'jamais': 0, 'partiellement': 1, 'echec': 2,
+  'tester': 0, 'ameliorer': 1, 'transformer': 2,
+}
+
+function computeScore(a: QuizAnswers): number {
+  // Pour intention (multi), on prend le score max parmi les sélections
+  const intentionScore = a.intention.reduce((max, v) => Math.max(max, SCORES[v] ?? 0), 0)
+  return (SCORES[a.heures] ?? 0)
+    + (SCORES[a.personnes] ?? 0)
+    + intentionScore
+    + (SCORES[a.maturite] ?? 0)
+    + (SCORES[a.objectif] ?? 0)
+}
+
+type ProfileType = 'high' | 'medium' | 'low'
+
+function getProfile(score: number): ProfileType {
+  if (score >= 10) return 'high'
+  if (score >= 5)  return 'medium'
+  return 'low'
+}
+
+// ─── Résultats personnalisés ──────────────────────────────────────────────────
+
+const RESULTS: Record<ProfileType, {
+  badge: string
+  headline: (prenom: string) => string
+  body: string
+  stats: { label: string; value: (a: QuizAnswers) => string }[]
+  cta: string
+}> = {
+  high: {
+    badge: '🔥 Profil haute valeur',
+    headline: (p) => `${p ? p + ', vous' : 'Vous'} perdez probablement entre 20% et 40% de votre capacité productive chaque semaine.`,
+    body: "Ce type de configuration permet généralement de supprimer une charge équivalente à 1 poste. On peut vous montrer exactement comment — et chiffrer ce que ça représente pour votre organisation.",
+    stats: [
+      { label: 'Heures perdues/sem.', value: (a) => a.heures === '20h+' ? '20h+' : a.heures === '10-20h' ? '~15h' : '~7h' },
+      { label: 'Personnes impactées', value: (a) => a.personnes === '10+' ? '10+' : a.personnes },
+      { label: 'Objectif identifié',  value: (a) => a.objectif === 'transformer' ? 'Transformation' : a.objectif === 'ameliorer' ? 'Efficacité' : 'Quick win' },
+    ],
+    cta: 'Réserver un appel de 30 min →',
+  },
+  medium: {
+    badge: '✅ Des gains rapides existent',
+    headline: (p) => `${p ? p + ', il y' : 'Il y'} a des optimisations concrètes dans votre organisation actuelle.`,
+    body: "Une première intervention permet généralement de récupérer plusieurs heures par semaine, sans tout reconstruire. Le bon endroit pour commencer existe — on peut l'identifier ensemble.",
+    stats: [
+      { label: 'Heures récupérables', value: (a) => a.heures === '10-20h' ? '5–10h/sem.' : '3–5h/sem.' },
+      { label: 'Périmètre',           value: (a) => a.personnes === '1-2' ? 'Individuel' : 'Équipe' },
+      { label: 'Maturité',            value: (a) => a.maturite === 'echec' ? 'Déjà tenté' : 'À explorer' },
+    ],
+    cta: 'Voir comment en 30 min →',
+  },
+  low: {
+    badge: '💡 Quelques pistes identifiées',
+    headline: (p) => `${p ? p + ', votre' : 'Votre'} situation semble déjà relativement organisée.`,
+    body: "Il peut exister des ajustements ciblés qui feraient une vraie différence. Un échange rapide permet de confirmer — ou d'écarter — les pistes.",
+    stats: [],
+    cta: 'En discuter →',
+  },
+}
+
+// ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function DiagnosticModal() {
   const { isOpen, close } = useDiagnostic()
-  const [step, setStep] = useState<Step>('profile')
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [form, setForm] = useState<FormData>(emptyForm)
-  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const [view, setView]         = useState<ViewId>('quiz')
+  const [stepIdx, setStepIdx]   = useState(0)
+  const [quiz, setQuiz]         = useState<QuizAnswers>(emptyQuiz)
+  const [contact, setContact]   = useState<ContactData>({ prenom: '', email: '', entreprise: '', telephone: '' })
+  const [rgpd, setRgpd]         = useState(false)
+  const [justSelected, setJustSelected] = useState<string | null>(null)
+  const [direction, setDirection] = useState(1)
+  const [loading, setLoading]   = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -90,42 +202,92 @@ export default function DiagnosticModal() {
   const handleClose = () => {
     close()
     setTimeout(() => {
-      setStep('profile')
-      setProfile(null)
-      setForm(emptyForm)
+      setView('quiz'); setStepIdx(0); setQuiz(emptyQuiz)
+      setContact({ prenom: '', email: '', entreprise: '', telephone: '' })
+      setRgpd(false); setJustSelected(null)
     }, 400)
   }
 
-  const selectProfile = (p: Profile) => {
-    setProfile(p)
-    setStep('form')
+  const advance = () => {
+    setDirection(1)
+    if (stepIdx < QUIZ_STEPS.length - 1) {
+      setStepIdx(s => s + 1)
+    } else {
+      setView('contact')
+    }
   }
 
-  const handleTogglePertes = (val: string) => {
-    setForm(f => ({
-      ...f,
-      pertes: f.pertes.includes(val) ? f.pertes.filter(x => x !== val) : [...f.pertes, val],
-    }))
+  // Gestion single-select (auto-advance) et multi-select (toggle)
+  const handleOptionClick = (key: QuizKey, value: string, isMulti: boolean) => {
+    if (isMulti) {
+      setQuiz(q => {
+        const arr = q[key] as string[]
+        return {
+          ...q,
+          [key]: arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value],
+        }
+      })
+    } else {
+      if (justSelected) return
+      setJustSelected(value)
+      setQuiz(q => ({ ...q, [key]: value }))
+      setTimeout(() => { setJustSelected(null); advance() }, 320)
+    }
+  }
+
+  const handleBack = () => {
+    setDirection(-1)
+    if (view === 'contact') { setView('quiz') }
+    else if (stepIdx > 0)   { setStepIdx(s => s - 1) }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    const score   = computeScore(quiz)
+    const profile = getProfile(score)
     try {
       await fetch('/api/diagnostic', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ profile, ...form }),
+        body: JSON.stringify({
+          ...quiz,
+          probleme:  quiz.probleme.join(', '),
+          intention: quiz.intention.join(', '),
+          ...contact,
+          score,
+          profile,
+        }),
       })
-    } catch {
-      // Erreur silencieuse côté UX — le succès s'affiche quoi qu'il arrive
-    } finally {
+    } catch { /* silent */ }
+    finally {
       setLoading(false)
-      setStep('success')
+      // Sauvegarde des réponses pour personnaliser la page /merci
+      sessionStorage.setItem('sw_diagnostic', JSON.stringify({
+        probleme:  quiz.probleme,
+        heures:    quiz.heures,
+        personnes: quiz.personnes,
+        intention: quiz.intention,
+        maturite:  quiz.maturite,
+        objectif:  quiz.objectif,
+      }))
+      close()
+      router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
     }
   }
 
-  const progressStep = step === 'profile' ? 1 : step === 'form' ? 2 : 3
+  const progressPct = view === 'quiz'
+    ? ((stepIdx + 1) / 7) * 100
+    : 100
+
+  const step = QUIZ_STEPS[stepIdx]
+
+  // Valeur courante pour ce step (single ou multi)
+  const currentValue = step.multi
+    ? (quiz[step.key] as string[])
+    : quiz[step.key] as string
+
+  const canAdvanceMulti = step.multi && (currentValue as string[]).length > 0
 
   return (
     <AnimatePresence>
@@ -134,534 +296,311 @@ export default function DiagnosticModal() {
           {/* Backdrop */}
           <motion.div
             key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={handleClose}
             className="fixed inset-0 z-[9993] bg-black/80 backdrop-blur-sm"
           />
 
-          {/* Modal panel */}
+          {/* Panel */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.4, ease: EASE }}
-            className="fixed inset-x-3 top-3 bottom-3 sm:inset-x-4 sm:top-[5vh] sm:bottom-[5vh] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-2xl z-[9994] bg-[#161616] border border-white/[0.12] flex flex-col overflow-hidden"
+            className="fixed inset-x-3 top-3 bottom-3 sm:inset-x-4 sm:top-[5vh] sm:bottom-[5vh] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-xl z-[9994] bg-[#161616] border border-white/[0.12] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 md:px-8 py-3 md:py-5 border-b border-white/[0.15] flex-shrink-0">
-              <div className="flex items-center gap-4">
-                <span className="font-grotesk font-bold text-surface text-base tracking-tight">
-                  Diagnostic Stripwork
-                </span>
-                <div className="flex items-center gap-1.5">
-                  {[1, 2, 3].map(n => (
-                    <div
-                      key={n}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        n <= progressStep ? 'bg-accent w-6' : 'bg-white/10 w-3'
-                      }`}
-                    />
-                  ))}
-                </div>
+            <div className="flex items-center justify-between px-5 md:px-8 py-4 border-b border-white/[0.08] flex-shrink-0">
+              <div>
+                {(view === 'quiz' && stepIdx > 0) || view === 'contact' ? (
+                  <button
+                    onClick={handleBack}
+                    className="font-inter text-xs text-neutral hover:text-surface transition-colors duration-200 flex items-center gap-1.5"
+                  >
+                    ← Retour
+                  </button>
+                ) : (
+                  <span className="font-grotesk font-bold text-surface text-sm tracking-tight">
+                    Diagnostic Stripwork
+                  </span>
+                )}
               </div>
-              <button
-                onClick={handleClose}
-                className="w-8 h-8 flex items-center justify-center text-neutral hover:text-surface transition-colors duration-200"
-                aria-label="Fermer"
-              >
-                ✕
-              </button>
+              <div className="flex items-center gap-4">
+                {view !== 'result' && (
+                  <span className="font-inter text-xs text-neutral/40 tabular-nums">
+                    {view === 'quiz' ? stepIdx + 1 : '7'}&nbsp;/ 7
+                  </span>
+                )}
+                <button
+                  onClick={handleClose}
+                  className="w-7 h-7 flex items-center justify-center text-neutral/50 hover:text-surface transition-colors duration-200 text-sm"
+                  aria-label="Fermer"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
-            {/* Contenu scrollable */}
-            <div className="flex-1 overflow-y-auto px-6 md:px-8 py-8">
-              <AnimatePresence mode="wait">
+            {/* Barre de progression */}
+            {view !== 'result' && (
+              <div className="h-px bg-white/[0.06] flex-shrink-0">
+                <motion.div
+                  className="h-full bg-accent origin-left"
+                  animate={{ scaleX: progressPct / 100 }}
+                  initial={{ scaleX: 0 }}
+                  transition={{ duration: 0.35, ease: EASE }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </div>
+            )}
 
-                {/* ─── STEP 0 : Choix du profil ─── */}
-                {step === 'profile' && (
+            {/* Contenu */}
+            <div className="flex-1 overflow-y-auto">
+              <AnimatePresence mode="wait" custom={direction}>
+
+                {/* ── Quiz ── */}
+                {view === 'quiz' && (
                   <motion.div
-                    key="profile"
-                    initial={{ opacity: 0, x: 20 }}
+                    key={`q-${stepIdx}`}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction * 24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, ease: EASE }}
+                    exit={{ opacity: 0, x: direction * -24 }}
+                    transition={{ duration: 0.22, ease: EASE }}
+                    className="px-5 md:px-8 pt-8 pb-10"
                   >
-                    <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-2">
-                      Étape 1 sur 3
+                    <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-3">
+                      Question {stepIdx + 1} sur 6
                     </p>
-                    <h2 className="font-grotesk font-bold text-surface text-2xl md:text-3xl leading-tight tracking-tight mb-8">
-                      Par où voulez-vous commencer ?
+                    <h2 className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-1.5">
+                      {step.question}
                     </h2>
+                    {'hint' in step && (
+                      <p className="font-inter text-xs text-neutral/40 mb-6">{step.hint}</p>
+                    )}
+                    {!('hint' in step) && <div className="mb-6" />}
 
-                    <div className="space-y-3">
-                      {profiles.map((p) => (
-                        <button
-                          key={p.id}
-                          onClick={() => selectProfile(p.id)}
-                          className="w-full text-left border border-white/[0.08] p-5 md:p-6 hover:border-accent/40 hover:bg-accent/[0.03] transition-all duration-200 group"
-                        >
-                          <div className="flex items-start gap-4">
-                            <span className="font-grotesk font-bold text-accent text-xs tracking-widest mt-0.5 flex-shrink-0">
-                              {p.number}
+                    <div className="space-y-2">
+                      {step.options.map((opt) => {
+                        const isSelected = step.multi
+                          ? (currentValue as string[]).includes(opt.value)
+                          : (justSelected === opt.value || currentValue === opt.value)
+
+                        return (
+                          <motion.button
+                            key={opt.value}
+                            onClick={() => handleOptionClick(step.key, opt.value, step.multi)}
+                            whileTap={{ scale: 0.985 }}
+                            className={`w-full text-left border px-4 py-3.5 flex items-center gap-4 transition-all duration-200 ${
+                              isSelected
+                                ? 'border-accent/70 bg-accent/[0.07]'
+                                : 'border-white/[0.09] hover:border-white/25 hover:bg-white/[0.025]'
+                            }`}
+                          >
+                            <span className="text-lg flex-shrink-0 w-7 text-center leading-none">
+                              {opt.icon}
                             </span>
-                            <div>
-                              <p className="font-grotesk font-semibold text-surface text-base leading-snug mb-1.5 group-hover:text-accent transition-colors duration-200">
-                                {p.label}
-                              </p>
-                              <p className="font-inter text-neutral text-sm leading-relaxed">
-                                {p.sub}
-                              </p>
-                            </div>
-                            <span className="ml-auto text-neutral group-hover:text-accent transition-colors duration-200 text-lg flex-shrink-0">
-                              →
+                            <span className={`font-inter text-sm font-medium transition-colors duration-200 ${
+                              isSelected ? 'text-surface' : 'text-surface/75'
+                            }`}>
+                              {opt.label}
                             </span>
-                          </div>
-                        </button>
-                      ))}
+                            {/* Indicateur multi (carré) ou single (check animé) */}
+                            {step.multi ? (
+                              <span className={`ml-auto flex-shrink-0 w-4 h-4 border flex items-center justify-center text-[10px] transition-all duration-200 ${
+                                isSelected ? 'border-accent bg-accent text-bg' : 'border-white/20'
+                              }`}>
+                                {isSelected && '✓'}
+                              </span>
+                            ) : (
+                              <motion.span
+                                className="ml-auto text-accent text-xs flex-shrink-0"
+                                initial={{ opacity: 0, scale: 0.5 }}
+                                animate={{ opacity: isSelected ? 1 : 0, scale: isSelected ? 1 : 0.5 }}
+                                transition={{ duration: 0.15 }}
+                              >
+                                ✓
+                              </motion.span>
+                            )}
+                          </motion.button>
+                        )
+                      })}
                     </div>
+
+                    {/* Bouton Suivant — uniquement pour les steps multi */}
+                    {step.multi && (
+                      <motion.button
+                        onClick={advance}
+                        disabled={!canAdvanceMulti}
+                        className="mt-5 w-full border border-white/[0.15] py-3.5 font-inter text-sm font-semibold text-surface transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:border-accent/50 hover:bg-accent/[0.04]"
+                      >
+                        Suivant →
+                      </motion.button>
+                    )}
                   </motion.div>
                 )}
 
-                {/* ─── STEP 1 : Formulaire ─── */}
-                {step === 'form' && profile && (
+                {/* ── Contact ── */}
+                {view === 'contact' && (
                   <motion.div
-                    key="form"
-                    initial={{ opacity: 0, x: 20 }}
+                    key="contact"
+                    initial={{ opacity: 0, x: 24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3, ease: EASE }}
+                    exit={{ opacity: 0, x: -24 }}
+                    transition={{ duration: 0.22, ease: EASE }}
+                    className="px-5 md:px-8 pt-8 pb-10"
                   >
-                    <button
-                      onClick={() => setStep('profile')}
-                      className="text-neutral hover:text-surface transition-colors duration-200 text-sm font-inter flex items-center gap-1.5 mb-6"
-                    >
-                      ← Retour
-                    </button>
-
-                    <div className="border-l-2 border-accent pl-4 mb-8">
-                      <p className="font-inter text-xs font-semibold tracking-wider uppercase text-accent mb-1">
-                        Votre profil
-                      </p>
-                      <p className="font-inter text-neutral text-sm">
-                        {profiles.find(p => p.id === profile)?.label}
-                      </p>
-                    </div>
-
-                    <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-6">
-                      Étape 2 sur 3
+                    <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-3">
+                      Dernière étape
+                    </p>
+                    <h2 className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-2">
+                      Où envoyer votre analyse ?
+                    </h2>
+                    <p className="font-inter text-neutral text-sm mb-7">
+                      On génère un résumé personnalisé à partir de vos réponses.
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-
-                      {/* ═══ PROFIL 1 ═══ */}
-                      {profile === 1 && (
-                        <>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <label className={labelCls}>Votre secteur</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.secteur}
-                                onChange={e => setForm(f => ({ ...f, secteur: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "Commerce / Retail",
-                                  "Marketing / Agence",
-                                  "Finance / Comptabilité",
-                                  "Ressources Humaines",
-                                  "Immobilier",
-                                  "Conseil / Consulting",
-                                  "E-commerce",
-                                  "Santé",
-                                  "Logistique",
-                                  "Autre",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                            <div>
-                              <label className={labelCls}>Taille de l&apos;équipe</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.taille}
-                                onChange={e => setForm(f => ({ ...f, taille: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "1 — c'est moi seul",
-                                  "2 à 5 personnes",
-                                  "6 à 20 personnes",
-                                  "21 à 50 personnes",
-                                  "Plus de 50 personnes",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className={labelCls}>
-                              Où pensez-vous perdre le plus de temps ?
-                              <span className="normal-case font-normal text-neutral/50 tracking-normal ml-1">(jusqu&apos;à 3 choix)</span>
-                            </label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1">
-                              {PERTES_OPTIONS.map(opt => (
-                                <label
-                                  key={opt}
-                                  className={`flex items-center gap-3 border px-4 py-3 cursor-pointer transition-all duration-200 ${
-                                    form.pertes.includes(opt)
-                                      ? 'border-accent/60 bg-accent/[0.06]'
-                                      : 'border-white/20 hover:border-white/40'
-                                  }`}
-                                >
-                                  <span
-                                    className={`w-4 h-4 border flex-shrink-0 flex items-center justify-center text-xs transition-all duration-200 ${
-                                      form.pertes.includes(opt)
-                                        ? 'border-accent bg-accent text-bg'
-                                        : 'border-white/40'
-                                    }`}
-                                  >
-                                    {form.pertes.includes(opt) && '✓'}
-                                  </span>
-                                  <input
-                                    type="checkbox"
-                                    className="sr-only"
-                                    checked={form.pertes.includes(opt)}
-                                    onChange={() => handleTogglePertes(opt)}
-                                    disabled={!form.pertes.includes(opt) && form.pertes.length >= 3}
-                                  />
-                                  <span className="font-inter text-sm text-surface/80">{opt}</span>
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className={labelCls}>
-                              Un mot sur votre situation actuelle
-                              <span className="normal-case font-normal text-neutral/50 tracking-normal ml-1">(optionnel)</span>
-                            </label>
-                            <textarea
-                              className={`${inputCls} resize-none`} style={inputStyle}
-                              rows={3}
-                              placeholder="Ex : on passe beaucoup de temps à consolider des données de plusieurs sources chaque semaine..."
-                              value={form.situation}
-                              onChange={e => setForm(f => ({ ...f, situation: e.target.value }))}
-                            />
-                          </div>
-                        </>
-                      )}
-
-                      {/* ═══ PROFIL 2 ═══ */}
-                      {profile === 2 && (
-                        <>
-                          <div>
-                            <label className={labelCls}>Décrivez la tâche en question</label>
-                            <textarea
-                              className={`${inputCls} resize-none`} style={inputStyle}
-                              rows={4}
-                              placeholder="Ex : chaque semaine je compile manuellement des données de 3 sources différentes pour créer un rapport envoyé à la direction..."
-                              value={form.tache}
-                              onChange={e => setForm(f => ({ ...f, tache: e.target.value }))}
-                              required
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                              <label className={labelCls}>Fréquence</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.frequence}
-                                onChange={e => setForm(f => ({ ...f, frequence: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "Tous les jours",
-                                  "Plusieurs fois par semaine",
-                                  "Chaque semaine",
-                                  "Chaque mois",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                            <div>
-                              <label className={labelCls}>Temps par occurrence</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.duree}
-                                onChange={e => setForm(f => ({ ...f, duree: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "Moins de 30 min",
-                                  "30 min à 2h",
-                                  "2h à 4h",
-                                  "Plus de 4h",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                            <div>
-                              <label className={labelCls}>Personnes impliquées</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.personnes}
-                                onChange={e => setForm(f => ({ ...f, personnes: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "1 (moi seul)",
-                                  "2 à 5",
-                                  "6 à 10",
-                                  "Plus de 10",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className={labelCls}>
-                              Outils utilisés actuellement
-                              <span className="normal-case font-normal text-neutral/50 tracking-normal ml-1">(optionnel)</span>
-                            </label>
-                            <input
-                              type="text"
-                              className={inputCls} style={inputStyle}
-                              placeholder="Ex : Excel, Google Sheets, Notion, HubSpot, Airtable..."
-                              value={form.outils}
-                              onChange={e => setForm(f => ({ ...f, outils: e.target.value }))}
-                            />
-                          </div>
-                        </>
-                      )}
-
-                      {/* ═══ PROFIL 3 ═══ */}
-                      {profile === 3 && (
-                        <>
-                          <div>
-                            <label className={labelCls}>Décrivez l&apos;automatisation souhaitée</label>
-                            <textarea
-                              className={`${inputCls} resize-none`} style={inputStyle}
-                              rows={4}
-                              placeholder="Ex : connecter mon CRM à mon outil de facturation pour déclencher automatiquement une facture dès qu'un deal est gagné..."
-                              value={form.automatisation}
-                              onChange={e => setForm(f => ({ ...f, automatisation: e.target.value }))}
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className={labelCls}>Quels outils doivent être connectés ?</label>
-                            <input
-                              type="text"
-                              className={inputCls} style={inputStyle}
-                              placeholder="Ex : HubSpot → QuickBooks → Slack"
-                              value={form.connexions}
-                              onChange={e => setForm(f => ({ ...f, connexions: e.target.value }))}
-                              required
-                            />
-                          </div>
-
-                          <div>
-                            <label className={labelCls}>Avez-vous déjà tenté de le mettre en place ?</label>
-                            <div className="flex gap-3 mt-1">
-                              {[
-                                { value: 'oui', label: "Oui, j'ai commencé mais bloqué" },
-                                { value: 'non', label: "Non, jamais essayé" },
-                              ].map(opt => (
-                                <button
-                                  key={opt.value}
-                                  type="button"
-                                  onClick={() => setForm(f => ({ ...f, tente: opt.value }))}
-                                  className={`flex-1 border px-4 py-3 font-inter text-sm transition-all duration-200 ${
-                                    form.tente === opt.value
-                                      ? 'border-accent/60 bg-accent/[0.06] text-surface'
-                                      : 'border-white/20 text-surface/70 hover:border-white/40'
-                                  }`}
-                                >
-                                  {opt.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {form.tente === 'oui' && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              transition={{ duration: 0.3, ease: EASE }}
-                            >
-                              <label className={labelCls}>
-                                Qu&apos;est-ce qui a bloqué ?
-                                <span className="normal-case font-normal text-neutral/50 tracking-normal ml-1">(optionnel)</span>
-                              </label>
-                              <textarea
-                                className={`${inputCls} resize-none`} style={inputStyle}
-                                rows={3}
-                                placeholder="Ex : l'API de l'outil X ne permet pas de récupérer ce champ précis..."
-                                value={form.bloquage}
-                                onChange={e => setForm(f => ({ ...f, bloquage: e.target.value }))}
-                              />
-                            </motion.div>
-                          )}
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <label className={labelCls}>Délai idéal</label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.delai}
-                                onChange={e => setForm(f => ({ ...f, delai: e.target.value }))}
-                                required
-                              >
-                                <option value="">Sélectionner...</option>
-                                {[
-                                  "Urgent — cette semaine",
-                                  "Dans le mois",
-                                  "Pas de deadline précise",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                            <div>
-                              <label className={labelCls}>
-                                Budget approximatif
-                                <span className="normal-case font-normal text-neutral/50 tracking-normal ml-1">(optionnel)</span>
-                              </label>
-                              <select
-                                className={selectCls} style={inputStyle}
-                                value={form.budget}
-                                onChange={e => setForm(f => ({ ...f, budget: e.target.value }))}
-                              >
-                                <option value="">Je ne sais pas encore</option>
-                                {[
-                                  "Moins de 500€",
-                                  "500€ — 2 000€",
-                                  "2 000€ — 5 000€",
-                                  "Plus de 5 000€",
-                                ].map(o => <option key={o} value={o}>{o}</option>)}
-                              </select>
-                            </div>
-                          </div>
-                        </>
-                      )}
-
-                      {/* ─── Champs communs ─── */}
-                      <div className="border-t border-white/[0.06] pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className={labelCls}>Prénom</label>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      {[
+                        { key: 'prenom'     as const, label: 'Prénom',    type: 'text',  placeholder: 'Votre prénom',          required: true  },
+                        { key: 'email'      as const, label: 'Email',     type: 'email', placeholder: 'vous@entreprise.com',    required: true  },
+                        { key: 'entreprise' as const, label: 'Entreprise',type: 'text',  placeholder: 'Nom de votre société',   required: true  },
+                        { key: 'telephone'  as const, label: 'Téléphone', type: 'tel',   placeholder: '+33 6 00 00 00 00 — optionnel', required: false },
+                      ].map(f => (
+                        <div key={f.key}>
+                          <label className="block font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/40 mb-2">
+                            {f.label}{!f.required && <span className="normal-case font-normal tracking-normal ml-1 text-surface/25">— optionnel</span>}
+                          </label>
                           <input
-                            type="text"
-                            className={inputCls} style={inputStyle}
-                            placeholder="Votre prénom"
-                            value={form.prenom}
-                            onChange={e => setForm(f => ({ ...f, prenom: e.target.value }))}
-                            required
+                            type={f.type}
+                            className="input-dark w-full border border-white/[0.15] focus:border-accent/50 focus:outline-none px-4 py-3 font-inter text-sm transition-colors duration-200"
+                            placeholder={f.placeholder}
+                            value={contact[f.key]}
+                            onChange={e => setContact(c => ({ ...c, [f.key]: e.target.value }))}
+                            required={f.required}
                           />
                         </div>
-                        <div>
-                          <label className={labelCls}>Email professionnel</label>
-                          <input
-                            type="email"
-                            className={inputCls} style={inputStyle}
-                            placeholder="vous@entreprise.com"
-                            value={form.email}
-                            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                            required
-                          />
-                        </div>
-                      </div>
+                      ))}
 
-                      {/* Consentement RGPD */}
-                      <label className="flex items-start gap-3 cursor-pointer group">
+                      <label className="flex items-start gap-3 cursor-pointer pt-1">
                         <span
-                          className={`mt-0.5 w-4 h-4 border flex-shrink-0 flex items-center justify-center text-xs transition-all duration-200 ${
-                            form.rgpd ? 'border-accent bg-accent text-bg' : 'border-white/40'
+                          className={`mt-0.5 w-4 h-4 border flex-shrink-0 flex items-center justify-center text-[10px] transition-all duration-200 ${
+                            rgpd ? 'border-accent bg-accent text-bg' : 'border-white/30'
                           }`}
                         >
-                          {form.rgpd && '✓'}
+                          {rgpd && '✓'}
                         </span>
-                        <input
-                          type="checkbox"
-                          className="sr-only"
-                          checked={form.rgpd}
-                          onChange={e => setForm(f => ({ ...f, rgpd: e.target.checked }))}
-                          required
-                        />
-                        <span className="font-inter text-neutral/60 text-xs leading-relaxed">
-                          J&apos;accepte que Stripwork utilise ces informations pour me recontacter dans le cadre de ma demande de diagnostic. Aucune diffusion à des tiers. Conformément au RGPD, vous pouvez exercer vos droits à tout moment.
+                        <input type="checkbox" className="sr-only" checked={rgpd} onChange={e => setRgpd(e.target.checked)} required />
+                        <span className="font-inter text-neutral/50 text-xs leading-relaxed">
+                          J&apos;accepte que Stripwork utilise ces informations pour me recontacter. Aucune diffusion à des tiers. Conforme RGPD.
                         </span>
                       </label>
 
                       <button
                         type="submit"
-                        disabled={loading || !form.rgpd}
-                        className="w-full bg-accent text-bg font-inter font-semibold py-4 rounded-sm hover:bg-white transition-colors duration-200 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
+                        disabled={loading || !rgpd}
+                        className="w-full bg-accent text-bg font-inter font-semibold py-4 hover:bg-white transition-colors duration-200 flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {loading ? (
                           <>
-                            <span className="w-4 h-4 border-2 border-bg/30 border-t-bg rounded-full animate-spin" />
-                            Envoi en cours...
+                            <span className="w-3.5 h-3.5 border-2 border-bg/30 border-t-bg rounded-full animate-spin" />
+                            Analyse en cours...
                           </>
                         ) : (
-                          <>Envoyer mon diagnostic →</>
+                          'Voir mon analyse →'
                         )}
                       </button>
 
-                      <p className="font-inter text-neutral/50 text-xs text-center">
-                        Réponse sous 48h ouvrées. Aucun engagement.
+                      <p className="font-inter text-neutral/30 text-xs text-center">
+                        Aucune newsletter. Réponse sous 24h ouvrées.
                       </p>
                     </form>
                   </motion.div>
                 )}
 
-                {/* ─── STEP 2 : Confirmation ─── */}
-                {step === 'success' && (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease: EASE }}
-                    className="flex flex-col items-center justify-center py-16 text-center"
-                  >
-                    <div className="w-16 h-16 border-2 border-accent flex items-center justify-center mb-8">
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, duration: 0.4, ease: EASE }}
-                        className="text-accent text-2xl font-bold"
-                      >
-                        ✓
-                      </motion.span>
-                    </div>
-
-                    <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-4">
-                      Étape 3 sur 3 — Terminé
-                    </p>
-                    <h3 className="font-grotesk font-bold text-surface text-2xl md:text-3xl leading-tight tracking-tight mb-4">
-                      Diagnostic reçu.
-                    </h3>
-                    <p className="font-inter text-neutral text-base leading-relaxed max-w-sm mb-2">
-                      {form.prenom ? `Merci ${form.prenom}.` : 'Merci.'} On analyse votre situation et on revient vers vous sous 24h.
-                    </p>
-                    <p className="font-inter text-neutral/50 text-sm">
-                      Pas de relance. Pas de newsletter. Juste une réponse.
-                    </p>
-
-                    <button
-                      onClick={handleClose}
-                      className="mt-10 font-inter text-sm text-neutral hover:text-surface transition-colors duration-200 underline underline-offset-4"
+                {/* ── Résultat ── */}
+                {view === 'result' && (() => {
+                  const score       = computeScore(quiz)
+                  const profileType = getProfile(score)
+                  const res         = RESULTS[profileType]
+                  return (
+                    <motion.div
+                      key="result"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: EASE }}
+                      className="px-5 md:px-8 pt-10 pb-12"
                     >
-                      Fermer
-                    </button>
-                  </motion.div>
-                )}
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.05, duration: 0.3, ease: EASE }}
+                        className={`inline-flex items-center border px-3 py-1.5 mb-6 ${
+                          profileType === 'high'   ? 'border-accent/40 bg-accent/[0.06]' :
+                          profileType === 'medium' ? 'border-white/20 bg-white/[0.03]' :
+                                                     'border-white/[0.08]'
+                        }`}
+                      >
+                        <span className={`font-inter text-[10px] font-semibold tracking-[0.12em] uppercase ${
+                          profileType === 'high' ? 'text-accent' : 'text-surface/60'
+                        }`}>
+                          {res.badge}
+                        </span>
+                      </motion.div>
+
+                      <motion.h3
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.12, duration: 0.35, ease: EASE }}
+                        className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-4"
+                      >
+                        {res.headline(contact.prenom)}
+                      </motion.h3>
+
+                      <motion.p
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.18, duration: 0.35, ease: EASE }}
+                        className="font-inter text-neutral text-sm leading-relaxed mb-8"
+                      >
+                        {res.body}
+                      </motion.p>
+
+                      {res.stats.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.24, duration: 0.35, ease: EASE }}
+                          className="grid grid-cols-3 gap-2 mb-8"
+                        >
+                          {res.stats.map((s) => (
+                            <div key={s.label} className="border border-white/[0.08] bg-white/[0.02] px-3 py-3.5">
+                              <p className="font-inter text-xs font-bold text-surface mb-0.5">{s.value(quiz)}</p>
+                              <p className="font-inter text-[10px] text-neutral/50 leading-snug">{s.label}</p>
+                            </div>
+                          ))}
+                        </motion.div>
+                      )}
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.35, ease: EASE }}
+                        className="space-y-3"
+                      >
+                        <button className="w-full bg-accent text-bg font-inter font-semibold py-4 hover:bg-white transition-colors duration-200">
+                          {res.cta}
+                        </button>
+                        <button
+                          onClick={handleClose}
+                          className="w-full font-inter text-xs text-neutral/40 hover:text-neutral/70 transition-colors duration-200 py-2"
+                        >
+                          Fermer
+                        </button>
+                      </motion.div>
+                    </motion.div>
+                  )
+                })()}
 
               </AnimatePresence>
             </div>

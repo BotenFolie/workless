@@ -55,16 +55,26 @@ h4 {
   background: #C6FF00;
 }
 
-/* Inputs — texte sombre pour lisibilité sur fond natif du navigateur */
-input,
-textarea,
+/* Inputs sur fond clair (selects natifs, etc.) */
 select {
-  color: #111111 !important;
-  -webkit-text-fill-color: #111111 !important;
+  color: #111111;
+  -webkit-text-fill-color: #111111;
 }
 
-input::placeholder,
-textarea::placeholder {
-  color: #6B6B6B !important;
-  -webkit-text-fill-color: #6B6B6B !important;
+/* Inputs sur fond sombre (modal diagnostic) */
+.input-dark {
+  color: #ededed !important;
+  -webkit-text-fill-color: #ededed !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+.input-dark::placeholder {
+  color: rgba(237, 237, 237, 0.2) !important;
+  -webkit-text-fill-color: rgba(237, 237, 237, 0.2) !important;
+}
+
+.input-dark:-webkit-autofill,
+.input-dark:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1e1e1e inset !important;
 }
