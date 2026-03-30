@@ -9,6 +9,7 @@ const config: Config = {
         surface: '#EDEDED',
         accent: '#C6FF00',
         neutral: '#6B6B6B',
+        muted: '#9A9A9A',
         'surface-alt': '#1A1A1A',
       },
       fontFamily: {

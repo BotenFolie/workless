@@ -1,6 +1,7 @@
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
 import ProblemBlock from '@/components/ProblemBlock'
+import CostBlock from '@/components/CostBlock'
 import OfferPillars from '@/components/OfferPillars'
 import SocialProof from '@/components/SocialProof'
 import FAQ from '@/components/FAQ'
@@ -65,6 +66,7 @@ export default function HomePage() {
         <Hero />
         <Marquee />
         <ProblemBlock />
+        <CostBlock />
         <Integrations />
         <OfferPillars />
         <Marquee />

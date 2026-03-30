@@ -50,37 +50,75 @@ export default function ProblemBlock() {
           </span>
         </RevealOnScroll>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-start">
-          {/* Colonne gauche — problème */}
-          <div className="space-y-8">
-            <RevealOnScroll delay={0.1}>
-              <p className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight">
-                {problem.headline}
+        {/* Headline */}
+        <RevealOnScroll delay={0.1}>
+          <p className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-12 max-w-2xl">
+            {problem.headline}
+          </p>
+        </RevealOnScroll>
+
+        {/* 2 colonnes : tâches universelles / tâches niches */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-white/[0.06] mb-12">
+          {/* Colonne gauche — universelles */}
+          <RevealOnScroll delay={0.15}>
+            <div className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-white/[0.06]">
+              <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-6">
+                Tâches courantes
               </p>
-            </RevealOnScroll>
+              <ul className="space-y-5">
+                {problem.universal.map((item, i) => (
+                  <li key={i} className="flex flex-col gap-1">
+                    <span className="font-inter font-semibold text-surface text-sm">{item.task}</span>
+                    <span className="font-inter text-muted text-xs italic">{item.frequency}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </RevealOnScroll>
 
-            <div className="w-12 h-px bg-white/10" />
+          {/* Colonne droite — niches */}
+          <RevealOnScroll delay={0.25} direction="left">
+            <div className="p-8 md:p-10">
+              <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-6">
+                Tâches spécifiques
+              </p>
+              <ul className="space-y-5">
+                {problem.niche.map((item, i) => (
+                  <li key={i} className="flex flex-col gap-1">
+                    <span className="font-inter font-semibold text-surface text-sm">{item.task}</span>
+                    <span className="font-inter text-muted text-xs italic">{item.frequency}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </RevealOnScroll>
+        </div>
 
-            <RevealOnScroll delay={0.2}>
-              <RenderBlocks blocks={problem.blocks} />
-            </RevealOnScroll>
-          </div>
+        {/* Phrase de clôture */}
+        <RevealOnScroll delay={0.3}>
+          <p className="font-grotesk font-bold text-accent text-xl md:text-2xl mb-16 md:mb-20">
+            {problem.closing}
+          </p>
+        </RevealOnScroll>
 
-          {/* Colonne droite — solution */}
-          <RevealOnScroll delay={0.3} direction="left">
-            <div className="border-l-2 border-accent pl-8 md:pl-10 space-y-6">
+        {/* Solution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 lg:gap-24 items-start">
+          <RevealOnScroll delay={0.1}>
+            <div className="space-y-6">
               <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent">
                 {problem.solution.label}
               </p>
-
               <p className="font-grotesk font-bold text-surface text-2xl md:text-3xl leading-tight tracking-tight">
                 {problem.solution.headline}
               </p>
-
+              <div className="w-12 h-px bg-white/10" />
               <RenderBlocks blocks={problem.solution.blocks} />
+            </div>
+          </RevealOnScroll>
 
-              {/* Compteur animé + note */}
-              <div ref={ref} className="pt-8 mt-8 border-t border-white/[0.06] space-y-2">
+          <RevealOnScroll delay={0.3} direction="left">
+            <div className="border-l-2 border-accent pl-8 md:pl-10">
+              <div ref={ref} className="space-y-2">
                 <div className="flex items-baseline gap-2">
                   <span className="font-grotesk font-bold text-accent text-6xl leading-none tabular-nums">
                     {count}

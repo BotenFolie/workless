@@ -58,6 +58,20 @@ export default function OfferPillars() {
                 </h3>
               </div>
 
+              {/* Avant / Après inline */}
+              <div className="relative z-10 space-y-2">
+                <div className="flex items-start gap-2">
+                  <span className="font-inter text-xs font-semibold text-muted uppercase tracking-widest mt-0.5 shrink-0">Avant</span>
+                  <span className="font-inter text-muted text-xs leading-relaxed line-through">{pillar.before}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="font-inter text-xs font-semibold text-accent uppercase tracking-widest mt-0.5 shrink-0">Après</span>
+                  <span className="font-inter text-surface text-xs leading-relaxed">{pillar.after}</span>
+                </div>
+              </div>
+
+              <div className="relative z-10 w-px h-6 bg-white/10 mx-0" />
+
               <div className="relative z-10">
                 <RenderBlocks
                   blocks={pillar.blocks}

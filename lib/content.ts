@@ -16,61 +16,41 @@ export const content = {
   },
 
   hero: {
-    badge: 'Moins de travail r\u00E9p\u00E9titif. Plus de temps sur l\u2019essentiel.',
-    h1: "Travaillez jusqu\u2019\u00E0 60% moins, sans recruter",
+    badge: "Vos équipes perdent 12h par semaine sur des tâches répétitives — soit plus de 1 000€/mois qui partent en fumée.",
+    h1: "Vos tâches répétitives disparaissent. Votre équipe reste.",
     subtitle: [
-      "Aujourd\u2019hui, une grande partie du travail r\u00E9p\u00E9titif dans votre entreprise peut \u00EAtre automatis\u00E9.",
-      "On identifie ces t\u00E2ches, on les automatise, et vos \u00E9quipes r\u00E9cup\u00E8rent du temps pour ce qui compte vraiment.",
+      "Pendant que votre équipe recopie, relance et formate, elle ne travaille pas sur ce qui génère de la valeur.",
+      "On identifie ce qui se répète, on l'automatise, vos équipes récupèrent du temps sur ce qui compte vraiment.",
     ],
-    cta: "Diagnostiquer ce qui me fait perdre du temps",
+    cta: "Récupérez 12h par semaine — diagnostic gratuit",
   },
 
   problem: {
-    label: 'Le probl\u00E8me',
-    headline:
-      "Vos \u00E9quipes passent leur journ\u00E9e \u00E0 r\u00E9p\u00E9ter des t\u00E2ches qui pourraient s\u2019automatiser.",
-    blocks: [
-      {
-        type: 'p',
-        text: "Analyse, r\u00E9daction, reporting, prises de d\u00E9cision lentes.",
-      },
-      {
-        type: 'p',
-        text: "Ce n\u2019est pas du travail \u00E0 forte valeur.\nC\u2019est du temps perdu sur des t\u00E2ches r\u00E9currentes.",
-      },
-      {
-        type: 'p',
-        text: "Chaque heure pass\u00E9e l\u00E0-dessus\u00A0:",
-      },
-      {
-        type: 'list',
-        items: [
-          "vous co\u00FBte de l\u2019argent",
-          "ralentit vos d\u00E9cisions",
-          "emp\u00EAche vos \u00E9quipes de se concentrer sur l\u2019essentiel",
-        ],
-      },
-      {
-        type: 'p',
-        text: "Et vous pensez que c\u2019est normal.",
-      },
-    ] as ContentBlock[],
+    label: 'Le problème',
+    headline: "Chaque semaine, votre équipe refait exactement les mêmes choses.",
+    universal: [
+      { task: "Emails et relances clients", frequency: "chaque semaine, sans exception" },
+      { task: "Reporting et tableaux de bord", frequency: "chaque lundi matin" },
+      { task: "Saisie et transfert de données", frequency: "tous les jours, à la main" },
+    ],
+    niche: [
+      { task: "Mise à jour CRM après chaque appel", frequency: "après chaque rendez-vous" },
+      { task: "Génération de devis depuis un template", frequency: "à chaque nouvelle demande" },
+      { task: "Extraction de données PDF fournisseurs", frequency: "à chaque facture reçue" },
+    ],
+    closing: "Ce n'est pas du travail. C'est de la répétition. Et ça se supprime.",
 
     solution: {
       label: 'La solution',
-      headline: "On automatise ce qui vous ralentit — vos \u00E9quipes r\u00E9cup\u00E8rent du temps pour ce qui compte.",
+      headline: "On ne vous rend pas plus productif. On automatise ce qui vous ralentit — vos équipes récupèrent du temps pour ce qui compte.",
       blocks: [
         {
           type: 'p',
-          text: "On ne vous rend pas plus productif.",
+          text: "On observe ce que vos équipes font réellement toute la journée.\nOn identifie précisément ce qui se répète.\nOn supprime ces tâches de leur agenda.",
         },
         {
           type: 'p',
-          text: "On automatise les t\u00E2ches r\u00E9p\u00E9titives pour lib\u00E9rer du temps sur ce qui ne peut pas l\u2019\u00EAtre.",
-        },
-        {
-          type: 'p',
-          text: "Moins de friction.\nMoins de charge.\nPlus de temps sur ce qui compte.",
+          text: "Moins de friction.\nMoins de charge mentale.\nPlus de temps sur ce qui ne peut pas s'automatiser.",
         },
       ] as ContentBlock[],
       kpi: {
@@ -82,63 +62,73 @@ export const content = {
     },
   },
 
+  cost: {
+    label: 'Ce que ça vous coûte vraiment',
+    headline: "Votre équipe vous coûte plus de 1 000€/mois en tâches que personne ne devrait faire.",
+    calculation: {
+      label: 'Le calcul est simple',
+      steps: [
+        "12h perdues par semaine en tâches répétitives (source : CPME, 2024)",
+        "× 25€/h en coût chargé moyen d'un employé PME",
+        "= 1 200€/mois qui partent en tâches sans valeur",
+      ],
+      conclusion: "Chaque mois sans automatisation, c'est 1 200€ que vous payez pour du travail qui n'aurait jamais dû exister.",
+    },
+  },
+
   pillars: [
     {
       number: '01',
-      title: 'Analyse du travail r\u00E9el',
+      title: 'Analyse du travail réel',
+      before: "3 outils ouverts, des données recopiées à la main, un rapport assemblé chaque lundi.",
+      after: "1 rapport automatique, généré sans intervention, disponible chaque lundi à 8h.",
       blocks: [
         {
           type: 'p',
-          text: "On ne regarde pas vos process.\nOn regarde ce que vos \u00E9quipes font r\u00E9ellement toute la journ\u00E9e.",
+          text: "On ne regarde pas vos process sur papier.\nOn regarde ce que vos équipes font réellement toute la journée.",
         },
-        { type: 'p', text: "On identifie pr\u00E9cis\u00E9ment\u00A0:" },
         {
           type: 'list',
           items: [
-            "o\u00F9 le temps est perdu sur des t\u00E2ches r\u00E9currentes",
-            "ce qui ralentit les d\u00E9cisions",
-            "ce qui pourrait s\u2019automatiser imm\u00E9diatement",
+            "Où le temps disparaît sur des tâches récurrentes",
+            "Ce qui ralentit les décisions",
+            "Ce qui peut s'automatiser immédiatement",
           ],
         },
       ] as ContentBlock[],
     },
     {
       number: '02',
-      title: 'Automatisation des t\u00E2ches r\u00E9p\u00E9titives',
+      title: 'Automatisation des tâches répétitives',
+      before: "Relances clients manuelles — 2h par semaine, chaque semaine, sans exception.",
+      after: "Les relances partent automatiquement. Votre équipe ne les voit plus.",
       blocks: [
         {
           type: 'p',
-          text: "On automatise les t\u00E2ches qui n\u2019ont plus besoin d\u2019\u00EAtre faites manuellement.",
+          text: "Pas d'optimisation. Pas d'amélioration.\nAutomatisation pure.",
         },
         {
           type: 'p',
-          text: "Pas d\u2019optimisation.\nPas d\u2019am\u00E9lioration.\n\nAutomatisation pure.",
-        },
-        {
-          type: 'p',
-          text: "Ce qui prenait des heures tourne en arri\u00E8re-plan.",
+          text: "Ce qui prenait des heures tourne en arrière-plan.\nSans effort continu. Sans erreur.",
         },
       ] as ContentBlock[],
     },
     {
       number: '03',
-      title: 'Temps lib\u00E9r\u00E9 pour l\u2019essentiel',
+      title: 'Temps libéré pour l\'essentiel',
+      before: "Mise à jour CRM après chaque appel — 20 minutes, 3 fois par jour.",
+      after: "Le CRM se met à jour seul. Vos commerciaux vendent.",
       blocks: [
         {
           type: 'p',
-          text: "Vos \u00E9quipes arr\u00EAtent de faire ce qui se r\u00E9p\u00E8te.",
+          text: "Vos équipes arrêtent de faire ce qui se répète.",
         },
-        {
-          type: 'p',
-          text: "Elles se concentrent sur les d\u00E9cisions, les projets, les t\u00E2ches non r\u00E9currentes \u00E0 forte valeur.",
-        },
-        { type: 'p', text: "R\u00E9sultat\u00A0:" },
         {
           type: 'list',
           items: [
-            "moins de charge mentale",
-            "d\u00E9cisions plus rapides",
-            "temps r\u00E9cup\u00E9r\u00E9 d\u00E8s les premiers jours",
+            "Moins de charge mentale au quotidien",
+            "Décisions plus rapides",
+            "Temps récupéré dès la première semaine",
           ],
         },
       ] as ContentBlock[],
@@ -147,15 +137,22 @@ export const content = {
 
   testimonials: [
     {
-      quote:
-        "Avant, mon \u00E9quipe passait 3h par jour \u00E0 consolider des donn\u00E9es entre nos outils. Aujourd\u2019hui c\u2019est automatis\u00E9 et ils se concentrent sur ce qui g\u00E9n\u00E8re vraiment de la valeur.",
-      author: "Sophie M.",
-      role: "Directrice Op\u00E9rations \u2014 Cabinet de conseil, 18 personnes",
+      quote: "On traitait chaque dossier entrant à la main — extraction des pièces, mise à jour du suivi, relance client. Trois collaborateurs passaient 2h par jour là-dessus. Aujourd'hui c'est automatisé. Ils travaillent sur les dossiers, pas sur leur gestion.",
+      author: "Isabelle R.",
+      role: "Associée gérante — Cabinet d'avocats, 14 personnes",
+      result: "8h récupérées par semaine par collaborateur",
     },
     {
-      quote: "On n\u2019a pas recrut\u00E9. On a automatis\u00E9 nos reportings hebdomadaires et lib\u00E9r\u00E9 pr\u00E8s de 10h par semaine. L\u2019impact a \u00E9t\u00E9 visible d\u00E8s la deuxi\u00E8me semaine.",
-      author: "Thomas B.",
-      role: "Responsable Marketing \u2014 E-commerce, 12 personnes",
+      quote: "On produisait les rapports de performance de nos clients à la main chaque semaine. Consolidation des données, mise en forme, envoi. C'était 6h perdues le vendredi. Maintenant ça tourne automatiquement le jeudi soir. Le vendredi, on analyse. On ne formate plus.",
+      author: "Nicolas T.",
+      role: "Directeur associé — Agence marketing, 11 personnes",
+      result: "6h libérées chaque vendredi",
+    },
+    {
+      quote: "Nos consultants passaient une heure par mission à recopier les données clients dans nos outils internes. Avec 30 missions actives, c'était du temps facturable perdu chaque semaine. On a automatisé l'intégralité de cette saisie. Le gain s'est vu sur la marge dès le premier mois.",
+      author: "Laurent M.",
+      role: "Directeur général — Cabinet de conseil, 22 personnes",
+      result: "30h/mois récupérées sur des tâches non facturables",
     },
   ],
 
@@ -258,9 +255,9 @@ export const content = {
     },
   ],
 
-    ctaFinal: {
-    headline: "Arr\u00EAtez de payer du temps sur des t\u00E2ches qui peuvent s\u2019automatiser",
-    cta: "Voir o\u00F9 vous perdez 30% de votre temps",
+  ctaFinal: {
+    headline: "Chaque semaine sans automatisation, c'est 300€ de perdus. La semaine prochaine, vous pouvez les récupérer.",
+    cta: "Identifier ce qui me coûte le plus — diagnostic gratuit",
   },
 
   about: {
