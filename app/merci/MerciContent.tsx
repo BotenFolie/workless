@@ -265,7 +265,7 @@ export default function MerciContent() {
         <div className="border border-white/[0.05] bg-white/[0.01] px-5 py-4 mb-8 flex items-start gap-3">
           <span className="text-muted text-xs mt-0.5 flex-shrink-0">ℹ</span>
           <p className="font-inter text-xs text-muted leading-relaxed">
-            Les outils que l&apos;on connecte (n8n, Make, Claude API, etc.) génèrent des frais d&apos;usage mensuels selon votre volume — généralement entre 20€ et 150€/mois selon les cas. Ces frais sont liés à vos propres comptes, pas à Stripwork.
+            Si certains outils de votre organisation sont payants, leurs frais habituels restent inchangés. Stripwork ne s&apos;y ajoute pas.
           </p>
         </div>
 
