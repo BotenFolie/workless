@@ -120,12 +120,7 @@ export default function Hero() {
           <div className="flex flex-col items-center lg:items-end gap-6">
 
             {/* Phrase d'ancrage prix — au-dessus du dashboard */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: EASE, delay: 2.2 }}
-              className="w-full max-w-sm flex items-stretch gap-4"
-            >
+            <div className="w-full max-w-sm flex items-stretch gap-4 opacity-0 animate-[fadeIn_0.6s_ease_2.2s_forwards]">
               <div className="w-px bg-accent/40 flex-shrink-0" />
               <div>
                 <p className="font-inter text-neutral/50 text-xs line-through mb-0.5">
@@ -136,7 +131,7 @@ export default function Hero() {
                   <span className="text-accent">Une seule fois.</span>
                 </p>
               </div>
-            </motion.div>
+            </div>
 
             <HeroDashboard />
           </div>
