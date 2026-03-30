@@ -28,12 +28,22 @@ const config: Config = {
       },
       keyframes: {
         marquee: {
-          '0%': { transform: 'translateX(0%)' },
+          '0%':   { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-33.333%)' },
+        },
+        'marquee-reverse': {
+          '0%':   { transform: 'translateX(-33.333%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+        fadeIn: {
+          to: { opacity: '1' },
         },
       },
       animation: {
-        marquee: 'marquee 20s linear infinite',
+        marquee:          'marquee 28s linear infinite',
+        'marquee-reverse':'marquee-reverse 28s linear infinite',
+        'marquee-fast':   'marquee 18s linear infinite',
+        fadeIn:           'fadeIn 0.6s ease forwards',
       },
     },
   },

@@ -87,7 +87,7 @@ const QUIZ_STEPS = [
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type QuizKey = 'probleme' | 'heures' | 'personnes' | 'intention' | 'maturite' | 'objectif' | 'urgence'
+type QuizKey = 'probleme' | 'heures' | 'personnes' | 'intention' | 'maturite' | 'objectif'
 type ViewId = 'quiz' | 'contact' | 'result'
 
 // probleme et intention sont multi → string[], les autres single → string

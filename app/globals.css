@@ -55,9 +55,6 @@ h4 {
   background: #C6FF00;
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
 
 /* Inputs sur fond clair (selects natifs, etc.) */
 select {

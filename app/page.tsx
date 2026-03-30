@@ -7,6 +7,7 @@ import FAQ from '@/components/FAQ'
 import CTAFinal from '@/components/CTAFinal'
 import Footer from '@/components/Footer'
 import Marquee from '@/components/ui/Marquee'
+import Integrations from '@/components/Integrations'
 import { content } from '@/lib/content'
 
 // Schema FAQPage pour les rich snippets Google
@@ -64,6 +65,7 @@ export default function HomePage() {
         <Hero />
         <Marquee />
         <ProblemBlock />
+        <Integrations />
         <OfferPillars />
         <Marquee />
         <SocialProof />
