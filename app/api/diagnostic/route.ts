@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim()
       || req.headers.get('x-real-ip')
       || 'unknown'
-    if (!rateLimit(ip, 5, 60000)) {
+    if (!rateLimit(ip, 3, 3600000)) {
       return NextResponse.json(
         { error: 'Trop de requêtes. Veuillez réessayer dans une minute.' },
         { status: 429 }
