@@ -22,7 +22,8 @@ export default function DiagnosticCard() {
   const [rgpd, setRgpd]       = useState(false)
   const [justSelected, setJustSelected] = useState<string | null>(null)
   const [direction, setDirection]       = useState(1)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading]       = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const step = QUIZ_STEPS[stepIdx]
 
@@ -55,10 +56,11 @@ export default function DiagnosticCard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setSubmitError(null)
     const score   = computeScore(quiz)
     const profile = getProfile(score)
     try {
-      await fetch('/api/diagnostic', {
+      const response = await fetch('/api/diagnostic', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -66,17 +68,24 @@ export default function DiagnosticCard() {
           probleme:  quiz.probleme.join(', '),
           intention: quiz.intention.join(', '),
           ...contact, score, profile,
+          _hp: '', // honeypot
         }),
       })
-    } catch { /* silent */ }
-    finally {
+
+      if (!response.ok) {
+        const json = await response.json().catch(() => ({}))
+        setSubmitError(json.error ?? 'Une erreur est survenue. Veuillez réessayer.')
+        setLoading(false)
+        return
+      }
+    } catch {
+      setSubmitError('Erreur réseau. Vérifiez votre connexion.')
       setLoading(false)
-      sessionStorage.setItem('sw_diagnostic', JSON.stringify({
-        probleme: quiz.probleme, heures: quiz.heures, personnes: quiz.personnes,
-        intention: quiz.intention, maturite: quiz.maturite, objectif: quiz.objectif,
-      }))
-      router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
+      return
     }
+
+    setLoading(false)
+    router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
   }
 
   const currentVal = step?.multi ? (quiz[step.key] as string[]) : quiz[step.key] as string
@@ -251,6 +260,10 @@ export default function DiagnosticCard() {
                     J&apos;accepte que Stripwork utilise ces données pour me recontacter. Conforme RGPD.
                   </span>
                 </label>
+
+                {submitError && (
+                  <p className="font-inter text-[10px] text-red-400 text-center">{submitError}</p>
+                )}
 
                 <button
                   type="submit"

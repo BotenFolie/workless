@@ -241,13 +241,16 @@ export default function DiagnosticModal() {
     else if (stepIdx > 0)   { setStepIdx(s => s - 1) }
   }
 
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setSubmitError(null)
     const score   = computeScore(quiz)
     const profile = getProfile(score)
     try {
-      await fetch('/api/diagnostic', {
+      const response = await fetch('/api/diagnostic', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -257,23 +260,25 @@ export default function DiagnosticModal() {
           ...contact,
           score,
           profile,
+          _hp: '', // honeypot — laissé vide par les vrais utilisateurs
         }),
       })
-    } catch { /* silent */ }
-    finally {
+
+      if (!response.ok) {
+        const json = await response.json().catch(() => ({}))
+        setSubmitError(json.error ?? 'Une erreur est survenue. Veuillez réessayer.')
+        setLoading(false)
+        return
+      }
+    } catch {
+      setSubmitError('Erreur réseau. Vérifiez votre connexion.')
       setLoading(false)
-      // Sauvegarde des réponses pour personnaliser la page /merci
-      sessionStorage.setItem('sw_diagnostic', JSON.stringify({
-        probleme:  quiz.probleme,
-        heures:    quiz.heures,
-        personnes: quiz.personnes,
-        intention: quiz.intention,
-        maturite:  quiz.maturite,
-        objectif:  quiz.objectif,
-      }))
-      close()
-      router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
+      return
     }
+
+    setLoading(false)
+    close()
+    router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
   }
 
   const progressPct = view === 'quiz'
@@ -495,6 +500,10 @@ export default function DiagnosticModal() {
                           J&apos;accepte que Stripwork utilise ces informations pour me recontacter. Aucune diffusion à des tiers. Conforme RGPD.
                         </span>
                       </label>
+
+                      {submitError && (
+                        <p className="font-inter text-xs text-red-400 text-center">{submitError}</p>
+                      )}
 
                       <button
                         type="submit"

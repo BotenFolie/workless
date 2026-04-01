@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
@@ -161,16 +160,7 @@ export default function MerciContent() {
   const prenom  = params.get('prenom') ?? ''
   const config  = PROFILS[profil]
 
-  const [diagData, setDiagData] = useState<DiagnosticData | null>(null)
-
-  useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem('sw_diagnostic')
-      if (stored) setDiagData(JSON.parse(stored))
-    } catch { /* pas de données */ }
-  }, [])
-
-  const points = generatePoints(diagData, profil)
+  const points = generatePoints(null, profil)
 
   return (
     <main className="min-h-screen bg-bg flex flex-col items-center justify-center px-4 py-16 md:py-24">
