@@ -2,6 +2,7 @@ import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rateLimit'
+import { sendTelegramAlert } from '@/lib/telegram'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const DEST_EMAIL = process.env.DIAGNOSTIC_RECIPIENT_EMAIL
@@ -99,6 +100,14 @@ export async function POST(req: NextRequest) {
     if (!sendData?.id) {
       return NextResponse.json({ error: 'Email non confirmé. Réessayez.' }, { status: 500 })
     }
+
+    // Alerte Telegram instantanée
+    await sendTelegramAlert(
+      `⚡ <b>Nouveau contact — ${data.page || 'Automatisation'}</b>\n` +
+      `👤 ${data.prenom} — ${data.email}\n` +
+      `📞 ${data.telephone}\n` +
+      (data.message ? `💬 ${data.message}` : '')
+    )
 
     return NextResponse.json({ ok: true })
 
