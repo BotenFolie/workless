@@ -2,6 +2,7 @@ import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rateLimit'
+import { sendTelegramAlert } from '@/lib/telegram'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -149,6 +150,15 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Alerte Telegram instantanée
+    await sendTelegramAlert(
+      `🔥 <b>Nouveau diagnostic</b>\n` +
+      `👤 ${validated.prenom} — ${validated.email}\n` +
+      `🏢 ${validated.entreprise}\n` +
+      `📞 ${validated.telephone || 'non renseigné'}\n` +
+      `📊 Score : <b>${validated.score}/16</b> — Profil <b>${validated.profile}</b>`
+    )
 
     return NextResponse.json({ ok: true, id: data.id })
 
