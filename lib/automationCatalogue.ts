@@ -9,29 +9,29 @@ export type CatalogueEntry = {
 
 export const CATALOGUE: CatalogueEntry[] = [
   {
-    href: '/automatisation-reactivite-leads',
-    label: 'Réactivité leads',
-    desc: 'Répondre en moins de 2 minutes au lieu de plusieurs heures',
+    href: '/automatisation-leads',
+    label: 'Automatisation leads',
+    desc: "Convertissez vos leads avant qu'ils refroidissent — réponse en moins de 2 minutes",
   },
   {
-    href: '/automatisation-traitement-factures-documents',
-    label: 'Traitement documents',
-    desc: 'Zéro saisie manuelle, extraction et injection automatiques',
+    href: '/traitement-factures-automatique',
+    label: 'Traitement factures',
+    desc: 'Zéro saisie manuelle — extraction et injection automatiques dans votre ERP',
   },
   {
-    href: '/automatisation-relances-prospects',
-    label: 'Relances prospects',
-    desc: '100% des leads suivis selon des séquences structurées',
+    href: '/relance-commerciale-automatique',
+    label: 'Relance commerciale',
+    desc: '100% des prospects suivis selon des séquences structurées, sans intervention',
   },
   {
-    href: '/automatisation-reactivation-base-clients',
+    href: '/reactivation-clients-automatique',
     label: 'Réactivation clients',
-    desc: 'CA additionnel sans budget acquisition supplémentaire',
+    desc: 'CA additionnel sur votre base existante — sans budget acquisition supplémentaire',
   },
   {
-    href: '/automatisation-reporting-interne',
-    label: 'Reporting interne',
-    desc: 'Décisions sur données fraîches, sans compilation manuelle',
+    href: '/reporting-automatique',
+    label: 'Reporting automatique',
+    desc: 'Décisions sur données fraîches chaque matin — sans compilation manuelle',
   },
 ]
 
