@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 interface RevealOnScrollProps {
@@ -11,16 +10,14 @@ interface RevealOnScrollProps {
 }
 
 // Wrapper d'animation scroll — fade + slide au viewport
-// mounted check évite la divergence SSR/client (framer-motion + Next.js App Router)
+// suppressHydrationWarning sur le motion.div évite la divergence SSR/client
+// sans jamais changer le type d'élément (ce qui brisait les IntersectionObservers enfants)
 export default function RevealOnScroll({
   children,
   delay = 0,
   direction = 'up',
   className,
 }: RevealOnScrollProps) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => { setMounted(true) }, [])
-
   const ease: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
   const hidden =
@@ -30,11 +27,6 @@ export default function RevealOnScroll({
 
   const visible = { opacity: 1, y: 0, x: 0 }
 
-  // Avant le mount côté client : div simple, identique au SSR → pas de divergence
-  if (!mounted) {
-    return <div className={className}>{children}</div>
-  }
-
   return (
     <motion.div
       initial={hidden}
@@ -42,6 +34,7 @@ export default function RevealOnScroll({
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, ease, delay }}
       className={className}
+      suppressHydrationWarning
     >
       {children}
     </motion.div>
