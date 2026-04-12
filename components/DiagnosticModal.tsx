@@ -158,7 +158,7 @@ const RESULTS: Record<ProfileType, {
       { label: 'Personnes impactées', value: (a) => a.personnes === '10+' ? '10+' : a.personnes },
       { label: 'Objectif identifié',  value: (a) => a.objectif === 'transformer' ? 'Transformation' : a.objectif === 'ameliorer' ? 'Efficacité' : 'Quick win' },
     ],
-    cta: 'Réserver un appel de 30 min →',
+    cta: "Réserver un appel d'1h →",
   },
   medium: {
     badge: '✅ Des gains rapides existent',
@@ -169,7 +169,7 @@ const RESULTS: Record<ProfileType, {
       { label: 'Périmètre',           value: (a) => a.personnes === '1-2' ? 'Individuel' : 'Équipe' },
       { label: 'Maturité',            value: (a) => a.maturite === 'echec' ? 'Déjà tenté' : 'À explorer' },
     ],
-    cta: 'Voir comment en 30 min →',
+    cta: "Voir comment en 1h →",
   },
   low: {
     badge: '💡 Quelques pistes identifiées',
@@ -278,6 +278,10 @@ export default function DiagnosticModal() {
 
     setLoading(false)
     close()
+    // Sauvegarde des réponses pour personnalisation page merci
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('stripwork_quiz', JSON.stringify(quiz))
+    }
     router.push(`/merci?profil=${profile}&prenom=${encodeURIComponent(contact.prenom)}`)
   }
 

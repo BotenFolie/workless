@@ -8,9 +8,9 @@ export default function SocialProof() {
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
           <div className="mb-16 md:mb-20">
-            <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent">
+            <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent">
               Résultats clients
-            </span>
+            </h2>
           </div>
         </RevealOnScroll>
 

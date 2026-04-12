@@ -1,16 +1,15 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { content } from '@/lib/content'
 
-// ─── Lien de réservation — à remplacer par ton vrai lien ─────────────────────
 const BOOKING_URL = 'https://calendar.app.google/Z13tCbEPiwbRKVxp8'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Profil = 'high' | 'medium' | 'low'
-
-type DiagnosticData = {
+type QuizAnswers = {
   probleme:  string[]
   heures:    string
   personnes: string
@@ -19,257 +18,307 @@ type DiagnosticData = {
   objectif:  string
 }
 
-// ─── Config statique par profil ───────────────────────────────────────────────
-
-const PROFILS: Record<Profil, {
-  label:       string
+type AutomationRec = {
+  title:       string
   description: string
-  prixBase:    string
-  prixPromo:   string
-  reduction:   string
-  promoLabel:  string
-  ctaLabel:    string
-  note:        string
-}> = {
-  high: {
-    label:       'Transformation',
-    description: "En 30 minutes, on identifie ensemble les automatisations à plus fort impact dans votre organisation — et on vous donne une estimation concrète de ce que ça représente en temps et en coût.",
-    prixBase:    '9 800€',
-    prixPromo:   '5 390€',
-    reduction:   '-45%',
-    promoLabel:  'Offre 1er semestre 2026 — places limitées à 5 projets',
-    ctaLabel:    'Réserver mon RDV offert →',
-    note:        "Sans engagement. Pas de relance si ce n'est pas le bon moment.",
-  },
-  medium: {
-    label:       'Mission ciblée',
-    description: "En 30 minutes, on cible la tâche qui vous fait perdre le plus de temps et on valide ensemble si une automatisation est rentable — et laquelle.",
-    prixBase:    '3 800€',
-    prixPromo:   '2 470€',
-    reduction:   '-35%',
-    promoLabel:  'Offre 1er semestre 2026 — 3 missions disponibles',
-    ctaLabel:    'Réserver mon RDV offert →',
-    note:        "Sans engagement. Réponse sous 24h si le créneau n'est pas disponible.",
-  },
-  low: {
-    label:       'Audit express',
-    description: "En 30 minutes, on passe en revue votre organisation et on identifie s'il existe des automatisations simples qui pourraient vous faire gagner du temps rapidement.",
-    prixBase:    '1 980€',
-    prixPromo:   '1 683€',
-    reduction:   '-15%',
-    promoLabel:  'Offre 1er semestre 2026 — tarif découverte non reconductible',
-    ctaLabel:    'Réserver mon RDV offert →',
-    note:        "Sans engagement. L'appel est vraiment gratuit.",
-  },
 }
 
-// ─── Génération dynamique des bullet points ───────────────────────────────────
+// ─── Logique de recommandation d'automatisations ──────────────────────────────
 
-function generatePoints(data: DiagnosticData | null, profil: Profil): string[] {
-  if (!data) return getDefaultPoints(profil)
+function getAutomations(data: QuizAnswers | null): AutomationRec[] {
+  if (!data) return getDefaultAutomations()
 
-  const points: string[] = []
-  const { probleme, heures, personnes, intention, maturite, objectif } = data
+  const recs: AutomationRec[] = []
+  const { probleme, heures, intention, maturite, objectif } = data
 
-  // Ce sur quoi ils perdent du temps → on décrit ce qu'on va régler
-  if (probleme.includes('reporting'))
-    points.push('Automatisation complète de vos reportings — plus jamais de consolidation manuelle')
-  if (probleme.includes('emails'))
-    points.push('Création de workflows email et templates automatisés selon vos processus')
-  if (probleme.includes('decisions'))
-    points.push('Mise en place de tableaux de bord décisionnels alimentés en temps réel')
-  if (probleme.includes('organisation'))
-    points.push('Restructuration et automatisation de vos flux internes (tâches, validations, relances)')
-  if (probleme.includes('autre'))
-    points.push('Cartographie de vos processus pour identifier les automatisations les plus rentables')
-
-  // Heures perdues → objectif chiffré
-  if (heures === '20h+')
-    points.push('Objectif : récupérer 15 à 20 heures par semaine pour votre équipe')
-  else if (heures === '10-20h')
-    points.push('Objectif : récupérer 8 à 12 heures par semaine sur les tâches ciblées')
-  else if (heures === '5-10h')
-    points.push('Objectif : récupérer 4 à 6 heures par semaine dès le premier mois')
-
-  // Personnes concernées → périmètre du déploiement
-  if (personnes === '10+')
-    points.push('Déploiement à l\'échelle de toute l\'organisation — onboarding et formation inclus')
-  else if (personnes === '5-10')
-    points.push('Implémentation et prise en main pour l\'ensemble de votre équipe')
-  else if (personnes === '3-5')
-    points.push('Solution adaptée à votre équipe avec passation individuelle')
-
-  // Intention → on répond à leur vrai besoin
-  if (intention.includes('recruter'))
-    points.push('Suppression d\'un besoin de recrutement — économie directe sur la masse salariale')
-  if (intention.includes('decisions'))
-    points.push('Accélération des cycles de décision grâce à l\'information disponible instantanément')
-  if (intention.includes('pression'))
-    points.push('Réduction de la charge mentale et des urgences opérationnelles récurrentes')
-
-  // Maturité → on rassure sur l'approche
-  if (maturite === 'echec')
-    points.push('Diagnostic préalable de ce qui a bloqué — on repart sur des bases solides')
-  else if (maturite === 'partiellement')
-    points.push('Audit de l\'existant + optimisation de ce qui est déjà en place')
-
-  // Objectif → vision long terme
-  if (objectif === 'transformer')
-    points.push('Vision à 6 mois : organisation scalable, sans recrutement supplémentaire')
-  else if (objectif === 'ameliorer')
-    points.push('Plan d\'amélioration priorisé — quick wins d\'abord, transformations ensuite')
-  else if (objectif === 'tester')
-    points.push('Première automatisation livrée rapidement pour valider le ROI avant d\'aller plus loin')
-
-  // Toujours garder entre 4 et 6 points — tronquer si trop
-  return points.slice(0, 6)
-}
-
-function getDefaultPoints(profil: Profil): string[] {
-  const defaults: Record<Profil, string[]> = {
-    high: [
-      'Cartographie complète des tâches à automatiser dans votre organisation',
-      'Implémentation sur-mesure (n8n + IA) sur les processus à plus fort impact',
-      'Objectif : récupérer l\'équivalent d\'un poste en temps productif',
-      'Suivi et ajustements inclus pendant 30 jours après livraison',
-    ],
-    medium: [
-      'Analyse approfondie de la tâche cible et de son contexte',
-      'Automatisation clé en main livrée en 5 à 10 jours',
-      'Formation incluse — 30 minutes de passation pour votre équipe',
-    ],
-    low: [
-      'Audit de votre organisation actuelle et de vos outils',
-      'Recommandations concrètes et priorisées selon votre contexte',
-      'Devis détaillé si un projet est identifié à l\'issue de l\'appel',
-    ],
+  if (probleme.includes('reporting')) {
+    recs.push({
+      title: 'Reporting hebdomadaire automatique',
+      description: 'Consolidation des données depuis vos outils, mise en forme et envoi automatique chaque semaine — zéro intervention manuelle.',
+    })
+    recs.push({
+      title: 'Dashboard de pilotage temps réel',
+      description: 'KPIs agrégés depuis vos sources existantes, mis à jour en continu et accessibles en un clic.',
+    })
   }
-  return defaults[profil]
+
+  if (probleme.includes('emails')) {
+    recs.push({
+      title: 'Séquence de relances email automatisée',
+      description: 'Relances clients ou prospects déclenchées automatiquement selon le délai, le statut ou l\'inaction — sans suivi manuel.',
+    })
+    recs.push({
+      title: 'Tri et priorisation inbox (IA)',
+      description: 'Classification automatique des emails entrants par urgence et type. Votre équipe ne traite que ce qui demande une vraie intervention.',
+    })
+  }
+
+  if (probleme.includes('decisions')) {
+    recs.push({
+      title: 'Alertes sur seuils critiques',
+      description: 'Notification Slack ou email automatique dès qu\'un KPI dépasse un seuil défini — vous décidez vite, sans surveillance constante.',
+    })
+    recs.push({
+      title: 'Synthèse IA hebdomadaire',
+      description: 'Résumé automatique des métriques clés, rédigé par IA et envoyé à votre équipe chaque semaine.',
+    })
+  }
+
+  if (probleme.includes('organisation')) {
+    recs.push({
+      title: 'Workflow de validation interne',
+      description: 'Approbations, notifications et relances automatiques — plus aucune demande perdue dans les emails ou les conversations Slack.',
+    })
+    recs.push({
+      title: 'Automatisation des tâches récurrentes',
+      description: 'Assignation automatique, suivi d\'avancement et rappels — votre équipe sait toujours où en sont les sujets sans réunion de suivi.',
+    })
+  }
+
+  if (probleme.includes('autre') || probleme.length === 0) {
+    recs.push({
+      title: 'Audit de vos processus répétitifs',
+      description: 'Cartographie complète pour identifier les 2 à 3 automatisations à plus fort impact dans votre organisation.',
+    })
+  }
+
+  // Complément basé sur l'intention
+  if (intention.includes('recruter') && recs.length < 4) {
+    recs.push({
+      title: 'Automatisation de l\'onboarding',
+      description: 'Accès outils, formation, suivi administratif — flux complet d\'intégration sans charge RH supplémentaire.',
+    })
+  }
+
+  // Complément basé sur le volume horaire
+  if ((heures === '10-20h' || heures === '20h+') && recs.length < 4) {
+    recs.push({
+      title: 'Flux CRM → Email → Slack',
+      description: 'Lead entrant → mise à jour CRM → email de bienvenue → notification équipe. Un flux connecté, zéro saisie.',
+    })
+  }
+
+  // Complément maturité
+  if (maturite === 'echec' && recs.length < 5) {
+    recs.push({
+      title: 'Audit de l\'existant + reprise',
+      description: 'Diagnostic de ce qui a bloqué par le passé, correction des causes racines, reprise sur des bases solides.',
+    })
+  }
+
+  // Complément objectif
+  if (objectif === 'transformer' && recs.length < 5) {
+    recs.push({
+      title: 'Dashboard de monitoring centralisé',
+      description: 'Toutes vos automatisations surveillées en un seul endroit — alertes, logs, performances et ajustements en temps réel.',
+    })
+  }
+
+  return recs.slice(0, 5)
 }
 
-function getProfile(profil: string | null): Profil {
-  if (profil === 'high' || profil === 'medium' || profil === 'low') return profil
-  return 'medium'
+function getDefaultAutomations(): AutomationRec[] {
+  return [
+    {
+      title: 'Relances email automatisées',
+      description: 'Séquences déclenchées automatiquement selon le comportement client — plus aucun suivi manuel.',
+    },
+    {
+      title: 'Reporting hebdomadaire automatique',
+      description: 'Données consolidées, mises en forme et envoyées chaque semaine sans intervention.',
+    },
+    {
+      title: 'Flux CRM → Email → Slack',
+      description: 'Lead entrant → CRM → email de bienvenue → notification équipe. Un flux, zéro saisie.',
+    },
+    {
+      title: 'Dashboard de pilotage temps réel',
+      description: 'KPIs agrégés depuis vos outils, disponibles en un clic pour vos décisions.',
+    },
+  ]
 }
 
 // ─── Composant ────────────────────────────────────────────────────────────────
 
 export default function MerciContent() {
-  const params  = useSearchParams()
-  const profil  = getProfile(params.get('profil'))
-  const prenom  = params.get('prenom') ?? ''
-  const config  = PROFILS[profil]
+  const params = useSearchParams()
+  const prenom = params.get('prenom') ?? ''
 
-  const points = generatePoints(null, profil)
+  const [quizData, setQuizData] = useState<QuizAnswers | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const raw = sessionStorage.getItem('stripwork_quiz')
+      if (raw) {
+        try { setQuizData(JSON.parse(raw)) } catch { /* ignore */ }
+      }
+    }
+  }, [])
+
+  const automations = getAutomations(quizData)
+  const { pricing }  = content
 
   return (
-    <main className="min-h-screen bg-bg flex flex-col items-center justify-center px-4 py-16 md:py-24">
+    <main className="min-h-screen bg-bg px-4 py-16 md:py-24">
 
       {/* Logo */}
-      <Link
-        href="/"
-        className="font-grotesk font-bold text-surface text-sm tracking-tight mb-16 hover:text-accent transition-colors duration-200"
-      >
-        Stripwork
-      </Link>
+      <div className="max-w-screen-lg mx-auto">
+        <Link
+          href="/"
+          className="font-grotesk font-bold text-surface text-sm tracking-tight mb-16 hover:text-accent transition-colors duration-200 inline-block"
+        >
+          Stripwork
+        </Link>
 
-      <div className="w-full max-w-lg">
+        {/* Header */}
+        <div className="mb-16 md:mb-20 max-w-2xl">
+          <div className="inline-flex items-center border border-accent/40 bg-accent/[0.06] px-3 py-1.5 mb-8">
+            <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent">
+              Diagnostic reçu
+            </span>
+          </div>
 
-        {/* Badge profil */}
-        <div className="inline-flex items-center border border-accent/40 bg-accent/[0.06] px-3 py-1.5 mb-8">
-          <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent">
-            Diagnostic reçu — {config.label}
-          </span>
+          <h1 className="font-grotesk font-bold text-surface text-3xl md:text-5xl leading-tight tracking-tight mb-6">
+            {prenom ? `${prenom}, voici` : 'Voici'} ce qu&apos;on peut{' '}
+            <span className="text-accent">automatiser pour vous.</span>
+          </h1>
+
+          <p className="font-inter text-neutral text-base md:text-lg leading-relaxed">
+            En 1 heure, on passe en revue vos processus et on valide ensemble ce qui est faisable — et ce que ça représente concrètement pour votre organisation.
+          </p>
         </div>
 
-        {/* Titre */}
-        <h1 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-4">
-          {prenom ? `${prenom}, votre` : 'Votre'} rendez-vous pré-optimisation est{' '}
-          <span className="text-accent">offert.</span>
-        </h1>
-
-        <p className="font-inter text-neutral text-base leading-relaxed mb-10">
-          {config.description}
-        </p>
-
-        {/* Bullet points dynamiques */}
-        <div className="border border-white/[0.08] bg-white/[0.02] p-6 mb-8">
-          <p className="font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/40 mb-5">
-            Ce qu&apos;on va faire pour vous
+        {/* Automatisations identifiées */}
+        <div className="mb-20">
+          <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-surface/40 mb-8">
+            Automatisations identifiées pour votre profil
           </p>
-          <div className="space-y-3.5">
-            {points.map((point, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="text-accent text-xs mt-0.5 flex-shrink-0 font-bold">✓</span>
-                <span className="font-inter text-sm text-surface/85 leading-snug">{point}</span>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {automations.map((auto, i) => (
+              <div key={i} className="border border-white/[0.08] bg-white/[0.02] p-6 flex flex-col gap-3">
+                <div className="flex items-start gap-3">
+                  <span className="font-grotesk font-bold text-accent text-sm flex-shrink-0 mt-0.5">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <p className="font-grotesk font-bold text-surface text-base mb-2 leading-snug">
+                      {auto.title}
+                    </p>
+                    <p className="font-inter text-neutral text-sm leading-relaxed">
+                      {auto.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Ancre de prix */}
-        <div className="border border-white/[0.08] bg-white/[0.015] p-6 mb-4">
-          <p className="font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/30 mb-4">
-            Investissement si on travaille ensemble
-          </p>
-
-          {/* Prix barré — bien visible */}
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-inter text-sm font-medium text-muted">Tarif standard :</span>
-            <span className="font-grotesk font-bold text-surface/70 text-xl line-through decoration-red-400 decoration-2">
-              {config.prixBase}
-            </span>
-          </div>
-
-          {/* Prix promo */}
-          <div className="flex items-center gap-3 mb-3">
-            <span className="font-grotesk font-bold text-surface text-4xl">{config.prixPromo}</span>
-            <span className="font-inter text-sm font-bold text-bg bg-accent px-2.5 py-1">
-              {config.reduction}
-            </span>
-          </div>
-
-          {/* Paiement unique — mis en avant */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
-            <p className="font-inter text-sm font-semibold text-accent">
-              Paiement unique — aucun abonnement Stripwork.
+        {/* CTA appel */}
+        <div className="border border-accent/30 bg-accent/[0.04] p-8 md:p-10 mb-20 flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
+          <div className="flex-1">
+            <p className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight mb-2">
+              Votre rendez-vous d&apos;1h est <span className="text-accent">offert.</span>
+            </p>
+            <p className="font-inter text-neutral text-sm leading-relaxed">
+              On valide ensemble quelles automatisations sont pertinentes — et on vous donne une estimation concrète. Sans engagement.
             </p>
           </div>
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 inline-flex items-center gap-2 font-inter font-semibold text-bg bg-accent px-8 py-4 hover:bg-white transition-colors duration-200"
+          >
+            Réserver mon RDV →
+          </a>
+        </div>
 
-          {/* Urgence */}
-          <div className="border-t border-white/[0.06] pt-4 flex items-start gap-2.5">
-            <span className="text-xs mt-0.5 flex-shrink-0">⏳</span>
-            <div>
-              <p className="font-inter text-xs font-semibold text-surface/80 mb-0.5">
-                {config.promoLabel}
+        {/* Bloc pricing */}
+        <div className="mb-12">
+          <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-surface/40 mb-3">
+            {pricing.label}
+          </p>
+          <p className="font-grotesk font-bold text-surface text-2xl md:text-3xl leading-tight tracking-tight mb-10">
+            {pricing.headline}
+          </p>
+
+          {/* 3 plans */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/[0.06] mb-6">
+            {pricing.plans.map((plan, i) => (
+              <div key={plan.name} className={`relative flex flex-col p-7 ${
+                i < pricing.plans.length - 1 ? 'border-b md:border-b-0 md:border-r border-white/[0.06]' : ''
+              } ${plan.highlight ? 'bg-accent/[0.04]' : ''}`}>
+
+                {plan.highlight && 'highlightLabel' in plan && (
+                  <div className="absolute top-0 left-7 -translate-y-1/2">
+                    <span className="font-inter text-[10px] font-bold tracking-widest uppercase bg-accent text-bg px-3 py-1">
+                      {plan.highlightLabel}
+                    </span>
+                  </div>
+                )}
+
+                <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-4">
+                  {plan.name}
+                </p>
+                <div className={`font-grotesk font-bold text-surface tracking-tight mb-1 ${plan.price === 'Sur devis' ? 'text-xl' : 'text-3xl'}`}>
+                  {plan.price}
+                </div>
+                <p className="font-inter text-neutral text-xs mb-1">{plan.priceNote}</p>
+                <p className="font-inter text-accent text-xs font-semibold mb-5">
+                  {plan.price === 'Sur devis' ? plan.delivery : `Livraison ${plan.delivery}`}
+                </p>
+
+                <ul className="space-y-2.5 flex-1 mb-6">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5">
+                      <span className="text-accent text-xs mt-0.5 flex-shrink-0 font-bold">✓</span>
+                      <span className="font-inter text-sm text-surface/75 leading-snug">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full font-inter font-semibold text-sm py-3.5 text-center transition-colors duration-200 ${
+                    plan.highlight
+                      ? 'bg-accent text-bg hover:bg-white'
+                      : 'border border-white/[0.15] text-surface hover:border-accent/50 hover:bg-accent/[0.04]'
+                  }`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Maintenance */}
+          <div className="border border-white/[0.06] p-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-10">
+            <div className="flex-shrink-0">
+              <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-1">
+                {pricing.maintenance.name}
               </p>
-              <p className="font-inter text-xs text-muted">
-                Ce tarif ne sera plus disponible après le 30 juin 2026.
-              </p>
+              <div className="font-grotesk font-bold text-surface text-2xl">{pricing.maintenance.price}</div>
+              <p className="font-inter text-neutral text-xs mt-0.5">{pricing.maintenance.priceNote}</p>
             </div>
+            <div className="h-px md:h-10 md:w-px bg-white/[0.06]" />
+            <ul className="flex flex-col md:flex-row gap-3 md:gap-6">
+              {pricing.maintenance.features.map((f) => (
+                <li key={f} className="flex items-start gap-2">
+                  <span className="text-accent text-xs mt-0.5 flex-shrink-0 font-bold">✓</span>
+                  <span className="font-inter text-sm text-surface/75 leading-snug">{f}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Transparence frais outils */}
-        <div className="border border-white/[0.05] bg-white/[0.01] px-5 py-4 mb-8 flex items-start gap-3">
-          <span className="text-muted text-xs mt-0.5 flex-shrink-0">ℹ</span>
-          <p className="font-inter text-xs text-muted leading-relaxed">
-            Si certains outils de votre organisation sont payants, leurs frais habituels restent inchangés. Stripwork ne s&apos;y ajoute pas.
-          </p>
-        </div>
-
-        {/* CTA */}
-        <a
-          href={BOOKING_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block w-full bg-accent text-bg font-inter font-semibold py-4 text-center hover:bg-white transition-colors duration-200 mb-4"
-        >
-          {config.ctaLabel}
-        </a>
-
-        <p className="font-inter text-neutral/35 text-xs text-center">{config.note}</p>
+        <p className="font-inter text-neutral/30 text-xs text-center">
+          Aucune newsletter. L&apos;appel est vraiment gratuit. Réponse sous 24h ouvrées.
+        </p>
 
       </div>
     </main>

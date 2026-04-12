@@ -49,11 +49,11 @@ export default function Hero() {
               className="mb-8 md:mb-10 flex items-stretch gap-0"
             >
               <div className="border border-accent/30 px-4 py-3 flex flex-col gap-0.5">
-                <span className="font-grotesk font-bold text-accent text-2xl leading-none">12h</span>
-                <span className="font-inter text-muted text-xs">perdues par semaine</span>
+                <span className="font-grotesk font-bold text-accent text-2xl leading-none">48h</span>
+                <span className="font-inter text-muted text-xs">perdues par mois</span>
               </div>
               <div className="border border-accent/30 border-l-0 px-4 py-3 flex flex-col gap-0.5">
-                <span className="font-grotesk font-bold text-accent text-2xl leading-none">1 000€</span>
+                <span className="font-grotesk font-bold text-accent text-2xl leading-none">2 000€</span>
                 <span className="font-inter text-muted text-xs">par mois en fumée</span>
               </div>
             </motion.div>

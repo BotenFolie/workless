@@ -45,9 +45,9 @@ export default function ProblemBlock() {
     <section className="bg-[#1A1A1A] py-24 md:py-32">
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
-          <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-14 md:mb-20">
+          <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-14 md:mb-20">
             {problem.label}
-          </span>
+          </h2>
         </RevealOnScroll>
 
         {/* Headline */}

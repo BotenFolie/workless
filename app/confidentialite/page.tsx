@@ -4,6 +4,18 @@ import type { Metadata } from 'next'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com'
 
+function BreadcrumbSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Confidentialité', item: `${SITE_URL}/confidentialite` },
+    ],
+  }
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+}
+
 export const metadata: Metadata = {
   title: 'Politique de confidentialité — Stripwork | RGPD',
   description: 'Stripwork protège vos données conformément au RGPD. Consultez notre politique de confidentialité et exercez vos droits.',
@@ -13,6 +25,7 @@ export const metadata: Metadata = {
 export default function ConfidentialitePage() {
   return (
     <>
+      <BreadcrumbSchema />
       <Nav />
       <main className="bg-[#111111] min-h-screen pt-32 pb-24">
         <div className="max-w-2xl mx-auto px-6 md:px-10">
@@ -20,7 +33,7 @@ export default function ConfidentialitePage() {
             Politique de confidentialité
           </span>
           <h1 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-12">
-            Vos données nous appartiennent pas.
+            Vos données vous appartiennent — Protégées selon le RGPD
           </h1>
 
           <div className="space-y-10 font-inter text-neutral text-sm leading-relaxed">

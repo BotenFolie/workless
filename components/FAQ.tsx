@@ -17,9 +17,9 @@ export default function FAQ() {
     <section className="bg-[#111111] py-24 md:py-32">
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
-          <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16 md:mb-20">
+          <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16 md:mb-20">
             Questions fréquentes
-          </span>
+          </h2>
         </RevealOnScroll>
 
         <div className="max-w-3xl">

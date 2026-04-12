@@ -292,7 +292,7 @@ export default function CatalogLeadForm({ page }: { page: string }) {
               Pour vous recontacter
             </h3>
             <p className="font-inter text-neutral text-sm mb-8">
-              On revient vers vous sous 24h pour un échange de 30 minutes.
+              On revient vers vous sous 24h pour un échange d&apos;une heure.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -373,7 +373,7 @@ export default function CatalogLeadForm({ page }: { page: string }) {
               Reçu, {contact.prenom}.
             </p>
             <p className="font-inter text-neutral text-sm leading-relaxed mb-8">
-              On revient vers vous sous 24h ouvrées pour un échange de 30 minutes — sans engagement, sans relance si ce n&apos;est pas le bon moment.
+              On revient vers vous sous 24h ouvrées pour un échange d&apos;une heure — sans engagement, sans relance si ce n&apos;est pas le bon moment.
             </p>
             {bookingUrl !== '#contact' && (
               <a

@@ -16,13 +16,13 @@ export const content = {
   },
 
   hero: {
-    badge: "Vos équipes perdent 12h par semaine sur des tâches répétitives — soit plus de 1 000€/mois qui partent en fumée.",
+    badge: "Vos équipes perdent 48h par mois sur des tâches répétitives — soit plus de 2 000€ que vous payez pour rien.",
     h1: "Vos tâches répétitives disparaissent. Votre équipe reste.",
     subtitle: [
       "Pendant que votre équipe recopie, relance et formate, elle ne travaille pas sur ce qui génère de la valeur.",
       "On identifie ce qui se répète, on l'automatise, vos équipes récupèrent du temps sur ce qui compte vraiment.",
     ],
-    cta: "Récupérez 12h par semaine — diagnostic gratuit",
+    cta: "Récupérez 48h par mois — diagnostic gratuit",
   },
 
   problem: {
@@ -64,15 +64,20 @@ export const content = {
 
   cost: {
     label: 'Ce que ça vous coûte vraiment',
-    headline: "Votre équipe vous coûte plus de 1 000€/mois en tâches que personne ne devrait faire.",
+    headline: "48h par mois. 2 000€ payés pour des tâches qui n'auraient jamais dû exister.",
+    stats: [
+      { value: '48h', label: 'perdues par mois', sub: '12h chaque semaine, sans exception' },
+      { value: '2 000€', label: 'payés pour rien', sub: 'au coût chargé moyen PME' },
+      { value: '24 000€', label: 'par an', sub: 'en travail sans valeur ajoutée' },
+    ],
     calculation: {
-      label: 'Le calcul est simple',
+      label: 'Le calcul',
       steps: [
-        "12h perdues par semaine en tâches répétitives (source : CPME, 2024)",
-        "× 25€/h en coût chargé moyen d'un employé PME",
-        "= 1 200€/mois qui partent en tâches sans valeur",
+        "48h perdues par mois en tâches répétitives (12h/semaine × 4)",
+        "× 42€/h — coût chargé moyen d'un collaborateur senior PME",
+        "= 2 000€/mois en travail sans valeur ajoutée",
       ],
-      conclusion: "Chaque mois sans automatisation, c'est 1 200€ que vous payez pour du travail qui n'aurait jamais dû exister.",
+      conclusion: "Chaque mois sans automatisation, c'est 2 000€ que vous payez pour du travail qui n'aurait jamais dû exister. Et 24 000€ par an.",
     },
   },
 
@@ -255,8 +260,73 @@ export const content = {
     },
   ],
 
+  pricing: {
+    label: 'Nos offres',
+    headline: 'Un prix fixe. Une livraison garantie. Zéro surprise.',
+    plans: [
+      {
+        name: 'Starter',
+        price: '1 500€',
+        priceNote: 'paiement unique',
+        delivery: '7 jours',
+        description: '1 automatisation simple au choix, livrée clé en main en 7 jours.',
+        features: [
+          'Au choix : relances email, reporting hebdo, tri inbox, ou autre tâche simple',
+          'Livraison clé en main — aucun setup de votre côté',
+          'Formation passation incluse (1h)',
+          'Ajustements inclus pendant 14 jours',
+        ],
+        highlight: false,
+        cta: 'Démarrer →',
+      },
+      {
+        name: 'Growth',
+        price: 'À partir de 2 000€',
+        priceNote: 'selon le nombre d\'automatisations',
+        priceRange: '2 000€ – 4 500€',
+        delivery: '14 à 21 jours',
+        description: '2 à 5 automatisations interconnectées + dashboard de suivi inclus.',
+        features: [
+          'De 2 à 5 automatisations sur-mesure',
+          'Dashboard de pilotage centralisé inclus',
+          'Automatisations interconnectées (ex : lead → CRM → email → Slack)',
+          'Formation équipe incluse (1h)',
+          'Ajustements inclus pendant 30 jours',
+        ],
+        highlight: true,
+        highlightLabel: 'Le plus choisi',
+        cta: 'Choisir Growth →',
+      },
+      {
+        name: 'Full Stack',
+        price: 'Sur devis',
+        priceNote: 'selon périmètre et complexité',
+        delivery: 'À définir ensemble',
+        description: 'Automatisations illimitées + dashboard de monitoring. Pour les projets sans limite de périmètre.',
+        features: [
+          'Nombre d\'automatisations illimité',
+          'Dashboard de monitoring centralisé',
+          'Audit complet de votre organisation inclus',
+          'Suivi post-livraison inclus',
+        ],
+        highlight: false,
+        cta: 'Demander un devis →',
+      },
+    ],
+    maintenance: {
+      name: 'Maintenance',
+      price: '290€/mois',
+      priceNote: 'optionnelle — sans engagement',
+      features: [
+        'Monitoring des automatisations actives',
+        '1 ajustement par mois inclus',
+        'Support prioritaire sous 24h',
+      ],
+    },
+  },
+
   ctaFinal: {
-    headline: "Chaque semaine sans automatisation, c'est 300€ de perdus. La semaine prochaine, vous pouvez les récupérer.",
+    headline: "Chaque semaine sans automatisation, c'est 500€ de perdus. La semaine prochaine, vous pouvez les récupérer.",
     cta: "Identifier ce qui me coûte le plus — diagnostic gratuit",
   },
 

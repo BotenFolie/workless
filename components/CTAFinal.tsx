@@ -14,9 +14,9 @@ export default function CTAFinal() {
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <div className="max-w-4xl">
           <RevealOnScroll>
-            <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-8">
+            <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-8">
               Prochaine étape
-            </span>
+            </h2>
           </RevealOnScroll>
 
           <RevealOnScroll delay={0.1}>

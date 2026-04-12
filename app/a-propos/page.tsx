@@ -6,6 +6,18 @@ import { content } from '@/lib/content'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://stripwork.com'
 
+function BreadcrumbSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'À propos', item: `${SITE_URL}/a-propos` },
+    ],
+  }
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+}
+
 export const metadata: Metadata = {
   title: 'À propos — Stripwork | Automatisation IA pour PME',
   description: 'La mission de Stripwork : automatiser les tâches répétitives de votre entreprise et libérer vos équipes pour ce qui compte vraiment.',
@@ -18,6 +30,7 @@ export default function AboutPage() {
 
   return (
     <main>
+      <BreadcrumbSchema />
       <Nav />
 
       {/* Hero sobre */}
@@ -38,9 +51,9 @@ export default function AboutPage() {
         <div className="max-w-screen-xl mx-auto px-6 md:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
             <div>
-              <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-8">
+              <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-8">
                 {about.pitch.title}
-              </span>
+              </h2>
               <div className="space-y-6">
                 {about.pitch.paragraphs.map((p, i) => (
                   <p
@@ -55,9 +68,9 @@ export default function AboutPage() {
 
             {/* Mission */}
             <div className="border-l border-white/[0.06] pl-8 md:pl-12 flex flex-col justify-center">
-              <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-6">
+              <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-6">
                 {about.mission.title}
-              </span>
+              </h2>
               <p className="font-inter text-neutral text-lg leading-relaxed">
                 {about.mission.text}
               </p>
@@ -69,9 +82,9 @@ export default function AboutPage() {
       {/* Valeurs */}
       <section className="bg-[#111111] py-24 md:py-32">
         <div className="max-w-screen-xl mx-auto px-6 md:px-10">
-          <span className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16">
+          <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16">
             Valeurs
-          </span>
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/[0.06]">
             {about.values.map((value, index) => (
