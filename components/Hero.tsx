@@ -3,25 +3,15 @@
 import { motion } from 'framer-motion'
 import MagneticButton from './ui/MagneticButton'
 import HeroDashboard from './ui/HeroDashboard'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-// Mots du H1 avec leur couleur respective
-const heroWords = [
-  { text: 'Vos', accent: false },
-  { text: 'tâches', accent: false },
-  { text: 'répétitives', accent: true },
-  { text: 'disparaissent.', accent: false },
-  { text: 'Votre', accent: false },
-  { text: 'équipe', accent: false },
-  { text: 'reste.', accent: false },
-]
-
 // Hero section — split text animé, CTA magnétique
 export default function Hero() {
   const { open } = useDiagnostic()
+  const c = useContent()
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center bg-[#111111] overflow-hidden pt-16">
@@ -49,21 +39,25 @@ export default function Hero() {
               className="mb-8 md:mb-10 flex items-stretch gap-0"
             >
               <div className="border border-accent/30 px-4 py-3 flex flex-col gap-0.5">
-                <span className="font-grotesk font-bold text-accent text-2xl leading-none">48h</span>
-                <span className="font-inter text-muted text-xs">perdues par mois</span>
+                <span className="font-grotesk font-bold text-accent text-2xl leading-none">
+                  {c.cost.stats[0].value}
+                </span>
+                <span className="font-inter text-muted text-xs">{c.cost.stats[0].label}</span>
               </div>
               <div className="border border-accent/30 border-l-0 px-4 py-3 flex flex-col gap-0.5">
-                <span className="font-grotesk font-bold text-accent text-2xl leading-none">2 000€</span>
-                <span className="font-inter text-muted text-xs">par mois en fumée</span>
+                <span className="font-grotesk font-bold text-accent text-2xl leading-none">
+                  {c.cost.stats[1].value}
+                </span>
+                <span className="font-inter text-muted text-xs">{c.ui.heroStatSub}</span>
               </div>
             </motion.div>
 
             {/* H1 avec split text animé */}
             <h1
               className="font-grotesk font-bold leading-[0.95] tracking-tight text-5xl sm:text-6xl md:text-7xl mb-8 md:mb-10 flex flex-wrap gap-x-[0.25em]"
-              aria-label={content.hero.h1}
+              aria-label={c.hero.h1}
             >
-              {heroWords.map((word, i) => (
+              {c.heroWords.map((word, i) => (
                 <span key={i} className="overflow-hidden inline-block">
                   <motion.span
                     initial={{ y: '110%', opacity: 0 }}
@@ -84,7 +78,7 @@ export default function Hero() {
               transition={{ duration: 0.6, ease: EASE, delay: 2.3 }}
               className="mb-12 md:mb-14 space-y-3"
             >
-              {content.hero.subtitle.map((line, i) => (
+              {c.hero.subtitle.map((line, i) => (
                 <p key={i} className="font-inter text-neutral text-lg md:text-xl leading-relaxed">
                   {line}
                 </p>
@@ -103,7 +97,7 @@ export default function Hero() {
                   onClick={open}
                   className="inline-flex items-center gap-2 font-inter font-semibold text-bg bg-accent px-8 py-4 rounded-sm text-base hover:bg-white transition-colors duration-200 group"
                 >
-                  {content.hero.cta}
+                  {c.hero.cta}
                   <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                 </button>
               </MagneticButton>
@@ -118,7 +112,7 @@ export default function Hero() {
             >
               <div className="h-px w-12 bg-accent/40" />
               <p className="font-inter text-xs text-neutral tracking-wider uppercase">
-                Premiers résultats en 14 jours
+                {c.ui.heroFirstResults}
               </p>
             </motion.div>
           </div>
@@ -129,14 +123,16 @@ export default function Hero() {
             {/* Phrase d'ancrage prix — au-dessus du dashboard */}
             <div className="w-full max-w-sm opacity-0 animate-[fadeIn_0.6s_ease_2.2s_forwards] border border-white/[0.08] p-4 space-y-2">
               <p className="font-inter text-muted text-sm leading-snug">
-                Un recrutement : <span className="line-through">35 000€/an</span>, chaque année.
+                {c.ui.heroCostBox.recruitment}{' '}
+                <span className="line-through">{c.ui.heroCostBox.cost}</span>
+                {c.ui.heroCostBox.suffix}
               </p>
               <p className="font-grotesk font-bold text-surface text-xl leading-tight">
-                Stripwork : moins cher.{' '}
-                <span className="text-accent">Une seule fois.</span>
+                {c.ui.heroCostBox.main}{' '}
+                <span className="text-accent">{c.ui.heroCostBox.once}</span>
               </p>
               <p className="font-inter text-muted text-xs">
-                Pas de salaire. Pas de charges. Pas de renouvellement.
+                {c.ui.heroCostBox.note}
               </p>
             </div>
 

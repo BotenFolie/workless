@@ -3,20 +3,22 @@
 import { motion } from 'framer-motion'
 import RevealOnScroll from './ui/RevealOnScroll'
 import RenderBlocks from './ui/RenderBlocks'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 export default function OfferPillars() {
+  const c = useContent()
+
   return (
     <section className="bg-[#111111] py-24 md:py-32">
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
           <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16 md:mb-20">
-            Comment ça marche
+            {c.ui.howItWorks}
           </h2>
         </RevealOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/[0.06]">
-          {content.pillars.map((pillar, index) => (
+          {c.pillars.map((pillar, index) => (
             <motion.div
               key={pillar.number}
               initial={{ opacity: 0, y: 50 }}
@@ -29,7 +31,7 @@ export default function OfferPillars() {
               }}
               whileHover={{ backgroundColor: 'rgba(198, 255, 0, 0.03)' }}
               className={`relative p-8 md:p-10 flex flex-col gap-6 transition-colors duration-300 ${
-                index < content.pillars.length - 1
+                index < c.pillars.length - 1
                   ? 'border-b md:border-b-0 md:border-r border-white/[0.06]'
                   : ''
               }`}
@@ -41,7 +43,7 @@ export default function OfferPillars() {
                 className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] to-transparent pointer-events-none"
               />
 
-              {/* Numéro décoratif — masqué sur mobile pour éviter overflow */}
+              {/* Numéro décoratif */}
               <span
                 aria-hidden="true"
                 className="hidden md:block absolute bottom-4 right-6 font-grotesk font-bold text-accent opacity-[0.06] text-[7rem] leading-none select-none pointer-events-none"
@@ -61,11 +63,15 @@ export default function OfferPillars() {
               {/* Avant / Après inline */}
               <div className="relative z-10 space-y-2">
                 <div className="flex items-start gap-2">
-                  <span className="font-inter text-xs font-semibold text-muted uppercase tracking-widest mt-0.5 shrink-0">Avant</span>
+                  <span className="font-inter text-xs font-semibold text-muted uppercase tracking-widest mt-0.5 shrink-0">
+                    {c.ui.before}
+                  </span>
                   <span className="font-inter text-muted text-xs leading-relaxed line-through">{pillar.before}</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <span className="font-inter text-xs font-semibold text-accent uppercase tracking-widest mt-0.5 shrink-0">Après</span>
+                  <span className="font-inter text-xs font-semibold text-accent uppercase tracking-widest mt-0.5 shrink-0">
+                    {c.ui.after}
+                  </span>
                   <span className="font-inter text-surface text-xs leading-relaxed">{pillar.after}</span>
                 </div>
               </div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import RevealOnScroll from './ui/RevealOnScroll'
 import RenderBlocks from './ui/RenderBlocks'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 function useCountUp(end: number, duration = 1500) {
   const [count, setCount] = useState(0)
@@ -38,7 +38,8 @@ function useCountUp(end: number, duration = 1500) {
 }
 
 export default function ProblemBlock() {
-  const { problem } = content
+  const c = useContent()
+  const { problem } = c
   const { count, ref } = useCountUp(14)
 
   return (
@@ -50,7 +51,6 @@ export default function ProblemBlock() {
           </h2>
         </RevealOnScroll>
 
-        {/* Headline */}
         <RevealOnScroll delay={0.1}>
           <p className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-12 max-w-2xl">
             {problem.headline}
@@ -63,7 +63,7 @@ export default function ProblemBlock() {
           <RevealOnScroll delay={0.15}>
             <div className="p-8 md:p-10 border-b md:border-b-0 md:border-r border-white/[0.06]">
               <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-6">
-                Tâches courantes
+                {c.ui.commonTasks}
               </p>
               <ul className="space-y-5">
                 {problem.universal.map((item, i) => (
@@ -80,7 +80,7 @@ export default function ProblemBlock() {
           <RevealOnScroll delay={0.25} direction="left">
             <div className="p-8 md:p-10">
               <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-6">
-                Tâches spécifiques
+                {c.ui.specificTasks}
               </p>
               <ul className="space-y-5">
                 {problem.niche.map((item, i) => (

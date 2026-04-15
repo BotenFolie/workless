@@ -1,21 +1,25 @@
+'use client'
+
 import RevealOnScroll from './ui/RevealOnScroll'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 // Section témoignages — 3 profils ultra-crédibles avec résultat chiffré
 export default function SocialProof() {
+  const c = useContent()
+
   return (
     <section className="bg-[#1A1A1A] py-24 md:py-32">
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
           <div className="mb-16 md:mb-20">
             <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent">
-              Résultats clients
+              {c.ui.clientResults}
             </h2>
           </div>
         </RevealOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {content.testimonials.map((t, index) => (
+          {c.testimonials.map((t, index) => (
             <RevealOnScroll key={index} delay={index * 0.15}>
               <div className="border border-white/[0.08] p-6 md:p-8 flex flex-col justify-between h-full hover:border-accent/20 transition-colors duration-300">
                 <span

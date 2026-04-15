@@ -1,6 +1,7 @@
 'use client'
 
 import { DiagnosticProvider } from '@/lib/diagnosticContext'
+import { LanguageProvider } from '@/lib/i18n'
 import DiagnosticModal from '@/components/DiagnosticModal'
 import LenisProvider from './LenisProvider'
 import CustomCursor from './CustomCursor'
@@ -11,15 +12,17 @@ import NoiseOverlay from './NoiseOverlay'
 // Agrège tous les providers et overlays globaux côté client
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <DiagnosticProvider>
-      <LenisProvider>
-        <PageLoader />
-        <ScrollProgress />
-        <CustomCursor />
-        <NoiseOverlay />
-        <DiagnosticModal />
-        {children}
-      </LenisProvider>
-    </DiagnosticProvider>
+    <LanguageProvider>
+      <DiagnosticProvider>
+        <LenisProvider>
+          <PageLoader />
+          <ScrollProgress />
+          <CustomCursor />
+          <NoiseOverlay />
+          <DiagnosticModal />
+          {children}
+        </LenisProvider>
+      </DiagnosticProvider>
+    </LanguageProvider>
   )
 }

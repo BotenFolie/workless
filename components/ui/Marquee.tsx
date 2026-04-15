@@ -1,18 +1,11 @@
-// Bande défilante horizontale — séparateur entre sections
-const items = [
-  'Moins de t\u00E2ches r\u00E9p\u00E9titives',
-  'Plus de temps sur l\u2019essentiel',
-  '14 jours',
-  'Sans recruter',
-  'Automatisez ce qui se r\u00E9p\u00E8te',
-  'D\u00E9cidez plus vite',
-  'Moins de charge mentale',
-  'Plus de valeur ajout\u00E9e',
-]
+'use client'
 
+import { useContent } from '@/lib/i18n'
+
+// Bande défilante horizontale — séparateur entre sections
 export default function Marquee() {
-  // Dupliquer pour rendre la boucle invisible
-  const allItems = [...items, ...items, ...items]
+  const c = useContent()
+  const allItems = [...c.marquee, ...c.marquee, ...c.marquee]
 
   return (
     <div className="relative overflow-hidden bg-accent py-4 border-y border-accent/20">

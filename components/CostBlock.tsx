@@ -1,11 +1,12 @@
 'use client'
 
 import RevealOnScroll from './ui/RevealOnScroll'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 // Bloc Coût/Perte — 3 stats visuelles choc + calcul détaillé
 export default function CostBlock() {
-  const { cost } = content
+  const c = useContent()
+  const { cost } = c
 
   return (
     <section className="bg-[#111111] py-24 md:py-32 border-t border-white/[0.06]">
@@ -17,7 +18,6 @@ export default function CostBlock() {
           </h2>
         </RevealOnScroll>
 
-        {/* Headline */}
         <RevealOnScroll delay={0.1}>
           <p className="font-grotesk font-bold text-surface text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight mb-16 md:mb-20 max-w-3xl">
             {cost.headline}

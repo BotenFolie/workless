@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 const BOOKING_URL = 'https://calendar.app.google/Z13tCbEPiwbRKVxp8'
 
@@ -18,131 +18,68 @@ type QuizAnswers = {
   objectif:  string
 }
 
-type AutomationRec = {
-  title:       string
-  description: string
-}
+type AutomationRec = { title: string; description: string }
 
-// ─── Logique de recommandation d'automatisations ──────────────────────────────
+// ─── Logique de recommandation — utilise le catalogue traduit du content ──────
 
-function getAutomations(data: QuizAnswers | null): AutomationRec[] {
-  if (!data) return getDefaultAutomations()
+function getAutomations(data: QuizAnswers | null, autos: Record<string, AutomationRec | AutomationRec[]>): AutomationRec[] {
+  const get = (key: string) => {
+    const v = autos[key]
+    return Array.isArray(v) ? v : [v]
+  }
+
+  if (!data) return get('defaults')
 
   const recs: AutomationRec[] = []
   const { probleme, heures, intention, maturite, objectif } = data
 
   if (probleme.includes('reporting')) {
-    recs.push({
-      title: 'Reporting hebdomadaire automatique',
-      description: 'Consolidation des données depuis vos outils, mise en forme et envoi automatique chaque semaine — zéro intervention manuelle.',
-    })
-    recs.push({
-      title: 'Dashboard de pilotage temps réel',
-      description: 'KPIs agrégés depuis vos sources existantes, mis à jour en continu et accessibles en un clic.',
-    })
+    recs.push(...get('reporting'))
   }
-
   if (probleme.includes('emails')) {
-    recs.push({
-      title: 'Séquence de relances email automatisée',
-      description: 'Relances clients ou prospects déclenchées automatiquement selon le délai, le statut ou l\'inaction — sans suivi manuel.',
-    })
-    recs.push({
-      title: 'Tri et priorisation inbox (IA)',
-      description: 'Classification automatique des emails entrants par urgence et type. Votre équipe ne traite que ce qui demande une vraie intervention.',
-    })
+    recs.push(...get('emails'))
   }
-
   if (probleme.includes('decisions')) {
-    recs.push({
-      title: 'Alertes sur seuils critiques',
-      description: 'Notification Slack ou email automatique dès qu\'un KPI dépasse un seuil défini — vous décidez vite, sans surveillance constante.',
-    })
-    recs.push({
-      title: 'Synthèse IA hebdomadaire',
-      description: 'Résumé automatique des métriques clés, rédigé par IA et envoyé à votre équipe chaque semaine.',
-    })
+    recs.push(...get('decisions'))
   }
-
   if (probleme.includes('organisation')) {
-    recs.push({
-      title: 'Workflow de validation interne',
-      description: 'Approbations, notifications et relances automatiques — plus aucune demande perdue dans les emails ou les conversations Slack.',
-    })
-    recs.push({
-      title: 'Automatisation des tâches récurrentes',
-      description: 'Assignation automatique, suivi d\'avancement et rappels — votre équipe sait toujours où en sont les sujets sans réunion de suivi.',
-    })
+    recs.push(...get('organisation'))
   }
-
   if (probleme.includes('autre') || probleme.length === 0) {
-    recs.push({
-      title: 'Audit de vos processus répétitifs',
-      description: 'Cartographie complète pour identifier les 2 à 3 automatisations à plus fort impact dans votre organisation.',
-    })
+    recs.push(...get('autre'))
   }
 
   // Complément basé sur l'intention
   if (intention.includes('recruter') && recs.length < 4) {
-    recs.push({
-      title: 'Automatisation de l\'onboarding',
-      description: 'Accès outils, formation, suivi administratif — flux complet d\'intégration sans charge RH supplémentaire.',
-    })
+    recs.push(autos['onboarding'] as AutomationRec)
   }
 
   // Complément basé sur le volume horaire
   if ((heures === '10-20h' || heures === '20h+') && recs.length < 4) {
-    recs.push({
-      title: 'Flux CRM → Email → Slack',
-      description: 'Lead entrant → mise à jour CRM → email de bienvenue → notification équipe. Un flux connecté, zéro saisie.',
-    })
+    recs.push(autos['crm'] as AutomationRec)
   }
 
   // Complément maturité
   if (maturite === 'echec' && recs.length < 5) {
-    recs.push({
-      title: 'Audit de l\'existant + reprise',
-      description: 'Diagnostic de ce qui a bloqué par le passé, correction des causes racines, reprise sur des bases solides.',
-    })
+    recs.push(autos['existingAudit'] as AutomationRec)
   }
 
   // Complément objectif
   if (objectif === 'transformer' && recs.length < 5) {
-    recs.push({
-      title: 'Dashboard de monitoring centralisé',
-      description: 'Toutes vos automatisations surveillées en un seul endroit — alertes, logs, performances et ajustements en temps réel.',
-    })
+    recs.push(autos['monitoring'] as AutomationRec)
   }
 
   return recs.slice(0, 5)
 }
 
-function getDefaultAutomations(): AutomationRec[] {
-  return [
-    {
-      title: 'Relances email automatisées',
-      description: 'Séquences déclenchées automatiquement selon le comportement client — plus aucun suivi manuel.',
-    },
-    {
-      title: 'Reporting hebdomadaire automatique',
-      description: 'Données consolidées, mises en forme et envoyées chaque semaine sans intervention.',
-    },
-    {
-      title: 'Flux CRM → Email → Slack',
-      description: 'Lead entrant → CRM → email de bienvenue → notification équipe. Un flux, zéro saisie.',
-    },
-    {
-      title: 'Dashboard de pilotage temps réel',
-      description: 'KPIs agrégés depuis vos outils, disponibles en un clic pour vos décisions.',
-    },
-  ]
-}
-
 // ─── Composant ────────────────────────────────────────────────────────────────
 
 export default function MerciContent() {
-  const params = useSearchParams()
-  const prenom = params.get('prenom') ?? ''
+  const params  = useSearchParams()
+  const prenom  = params.get('prenom') ?? ''
+  const c       = useContent()
+  const m       = c.ui.merci
+  const pricing = c.pricing
 
   const [quizData, setQuizData] = useState<QuizAnswers | null>(null)
 
@@ -155,8 +92,7 @@ export default function MerciContent() {
     }
   }, [])
 
-  const automations = getAutomations(quizData)
-  const { pricing }  = content
+  const automations = getAutomations(quizData, c.automations)
 
   return (
     <main className="min-h-screen bg-bg px-4 py-16 md:py-24">
@@ -174,24 +110,24 @@ export default function MerciContent() {
         <div className="mb-16 md:mb-20 max-w-2xl">
           <div className="inline-flex items-center border border-accent/40 bg-accent/[0.06] px-3 py-1.5 mb-8">
             <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent">
-              Diagnostic reçu
+              {m.badge}
             </span>
           </div>
 
           <h1 className="font-grotesk font-bold text-surface text-3xl md:text-5xl leading-tight tracking-tight mb-6">
-            {prenom ? `${prenom}, voici` : 'Voici'} ce qu&apos;on peut{' '}
-            <span className="text-accent">automatiser pour vous.</span>
+            {m.headline(prenom)}{' '}
+            <span className="text-accent">{m.headlineAccent}</span>
           </h1>
 
           <p className="font-inter text-neutral text-base md:text-lg leading-relaxed">
-            En 1 heure, on passe en revue vos processus et on valide ensemble ce qui est faisable — et ce que ça représente concrètement pour votre organisation.
+            {m.desc}
           </p>
         </div>
 
         {/* Automatisations identifiées */}
         <div className="mb-20">
           <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-surface/40 mb-8">
-            Automatisations identifiées pour votre profil
+            {m.automationsLabel}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -219,10 +155,11 @@ export default function MerciContent() {
         <div className="border border-accent/30 bg-accent/[0.04] p-8 md:p-10 mb-20 flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
           <div className="flex-1">
             <p className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight mb-2">
-              Votre rendez-vous d&apos;1h est <span className="text-accent">offert.</span>
+              {m.freeCallHeadline}{' '}
+              <span className="text-accent">{m.freeCallAccent}</span>
             </p>
             <p className="font-inter text-neutral text-sm leading-relaxed">
-              On valide ensemble quelles automatisations sont pertinentes — et on vous donne une estimation concrète. Sans engagement.
+              {m.freeCallDesc}
             </p>
           </div>
           <a
@@ -231,7 +168,7 @@ export default function MerciContent() {
             rel="noopener noreferrer"
             className="flex-shrink-0 inline-flex items-center gap-2 font-inter font-semibold text-bg bg-accent px-8 py-4 hover:bg-white transition-colors duration-200"
           >
-            Réserver mon RDV →
+            {m.bookCta}
           </a>
         </div>
 
@@ -262,12 +199,16 @@ export default function MerciContent() {
                 <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-4">
                   {plan.name}
                 </p>
-                <div className={`font-grotesk font-bold text-surface tracking-tight mb-1 ${plan.price === 'Sur devis' ? 'text-xl' : 'text-3xl'}`}>
+                <div className={`font-grotesk font-bold text-surface tracking-tight mb-1 ${
+                  plan.price === 'Sur devis' || plan.price === 'Custom quote' ? 'text-xl' : 'text-3xl'
+                }`}>
                   {plan.price}
                 </div>
                 <p className="font-inter text-neutral text-xs mb-1">{plan.priceNote}</p>
                 <p className="font-inter text-accent text-xs font-semibold mb-5">
-                  {plan.price === 'Sur devis' ? plan.delivery : `Livraison ${plan.delivery}`}
+                  {plan.price === 'Sur devis' || plan.price === 'Custom quote'
+                    ? plan.delivery
+                    : `${c.ui.delivery} ${plan.delivery}`}
                 </p>
 
                 <ul className="space-y-2.5 flex-1 mb-6">
@@ -317,7 +258,7 @@ export default function MerciContent() {
         </div>
 
         <p className="font-inter text-neutral/30 text-xs text-center">
-          Aucune newsletter. L&apos;appel est vraiment gratuit. Réponse sous 24h ouvrées.
+          {m.closing}
         </p>
 
       </div>

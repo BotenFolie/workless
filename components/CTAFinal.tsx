@@ -2,12 +2,13 @@
 
 import RevealOnScroll from './ui/RevealOnScroll'
 import MagneticButton from './ui/MagneticButton'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 
 // Section CTA finale — headline large + bouton magnétique
 export default function CTAFinal() {
   const { open } = useDiagnostic()
+  const c = useContent()
 
   return (
     <section id="cta" className="bg-[#1A1A1A] py-24 md:py-40">
@@ -15,13 +16,13 @@ export default function CTAFinal() {
         <div className="max-w-4xl">
           <RevealOnScroll>
             <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-8">
-              Prochaine étape
+              {c.ui.nextStep}
             </h2>
           </RevealOnScroll>
 
           <RevealOnScroll delay={0.1}>
             <h2 className="font-grotesk font-bold text-surface text-4xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight mb-12">
-              {content.ctaFinal.headline}
+              {c.ctaFinal.headline}
             </h2>
           </RevealOnScroll>
 
@@ -35,13 +36,13 @@ export default function CTAFinal() {
                 onClick={open}
                 className="inline-flex items-center gap-3 font-inter font-semibold text-bg bg-accent px-8 py-4 md:px-10 md:py-5 rounded-sm text-base hover:bg-white transition-colors duration-200 group"
               >
-                {content.ctaFinal.cta}
+                {c.ctaFinal.cta}
                 <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
               </button>
             </MagneticButton>
 
             <p className="font-inter text-neutral text-sm mt-6">
-              Diagnostic gratuit · Premiers résultats en 14 jours
+              {c.ui.freeCallNote}
             </p>
           </RevealOnScroll>
         </div>

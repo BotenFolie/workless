@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import RevealOnScroll from './ui/RevealOnScroll'
 import RenderBlocks from './ui/RenderBlocks'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const c = useContent()
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -18,12 +19,12 @@ export default function FAQ() {
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
         <RevealOnScroll>
           <h2 className="font-inter text-xs font-semibold tracking-widest uppercase text-accent block mb-16 md:mb-20">
-            Questions fréquentes
+            {c.ui.frequentQuestions}
           </h2>
         </RevealOnScroll>
 
         <div className="max-w-3xl">
-          {content.faq.map((item, index) => (
+          {c.faq.map((item, index) => (
             <RevealOnScroll key={index} delay={index * 0.08}>
               <div className="border-b border-white/[0.08]">
                 <button

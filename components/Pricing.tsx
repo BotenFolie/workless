@@ -2,13 +2,14 @@
 
 import RevealOnScroll from './ui/RevealOnScroll'
 import MagneticButton from './ui/MagneticButton'
-import { content } from '@/lib/content'
+import { useContent } from '@/lib/i18n'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 
 // Bloc pricing — 3 offres fixes + maintenance optionnelle
 export default function Pricing() {
   const { open } = useDiagnostic()
-  const { pricing } = content
+  const c = useContent()
+  const { pricing } = c
 
   return (
     <section className="bg-[#1A1A1A] py-24 md:py-32 border-t border-white/[0.06]">
@@ -47,13 +48,17 @@ export default function Pricing() {
                     {plan.name}
                   </p>
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className={`font-grotesk font-bold text-surface tracking-tight ${plan.price === 'Sur devis' ? 'text-2xl' : 'text-4xl'}`}>
+                    <span className={`font-grotesk font-bold text-surface tracking-tight ${
+                      plan.price === 'Sur devis' || plan.price === 'Custom quote' ? 'text-2xl' : 'text-4xl'
+                    }`}>
                       {plan.price}
                     </span>
                   </div>
                   <p className="font-inter text-neutral text-xs mb-1">{plan.priceNote}</p>
                   <p className="font-inter text-accent text-xs font-semibold">
-                    {plan.price === 'Sur devis' ? plan.delivery : `Livraison ${plan.delivery}`}
+                    {plan.price === 'Sur devis' || plan.price === 'Custom quote'
+                      ? plan.delivery
+                      : `${c.ui.delivery} ${plan.delivery}`}
                   </p>
                 </div>
 

@@ -1,6 +1,7 @@
 'use client'
 
 import DiagnosticCard from '@/components/DiagnosticCard'
+import { useContent } from '@/lib/i18n'
 import {
   siNotion, siGmail, siHubspot, siAirtable, siStripe, siZapier, siN8n, siMake,
   siShopify, siTrello, siAsana, siClickup, siGooglesheets, siGoogledrive, siMailchimp, siTypeform,
@@ -21,18 +22,14 @@ const GROUP_B: SimpleIcon[] = [
   siGithub, siJira, siClaude, siDiscord, siGooglecalendar, siIntercom, siZendesk, siSupabase,
 ]
 
-// Sous-ensemble pour mobile — 8 icônes par groupe
 const GROUP_A_MOBILE = GROUP_A.slice(0, 8)
 const GROUP_B_MOBILE = GROUP_B.slice(0, 8)
 
 const RADIUS = 210
 const RADIUS_MOBILE = 110
 
-// ─── Logo orbe avec couleur de marque ────────────────────────────────────────
-
 function LogoOrb({ icon }: { icon: SimpleIcon }) {
   const brandColor = `#${icon.hex}`
-
   return (
     <div
       className="group relative w-10 h-10 rounded-full border border-white/[0.08] bg-[#141414] hover:border-white/20 transition-all duration-300 flex items-center justify-center"
@@ -49,14 +46,8 @@ function LogoOrb({ icon }: { icon: SimpleIcon }) {
   )
 }
 
-// ─── Groupe orbital sur un seul cercle ────────────────────────────────────────
-
 function OrbitalGroup({
-  icons,
-  radius,
-  duration,
-  direction,
-  offset = 0,
+  icons, radius, duration, direction, offset = 0,
 }: {
   icons: SimpleIcon[]
   radius: number
@@ -79,9 +70,7 @@ function OrbitalGroup({
           <div
             key={icon.slug}
             className="absolute top-1/2 left-1/2"
-            style={{
-              transform: `rotate(${angle}deg) translateX(${radius}px) translateY(-50%)`,
-            }}
+            style={{ transform: `rotate(${angle}deg) translateX(${radius}px) translateY(-50%)` }}
           >
             <div style={{ animation: counterAnim }}>
               <LogoOrb icon={icon} />
@@ -93,8 +82,6 @@ function OrbitalGroup({
   )
 }
 
-// ─── Centre — laptop stylisé ──────────────────────────────────────────────────
-
 function LaptopCenter() {
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
@@ -102,7 +89,6 @@ function LaptopCenter() {
         style={{ animation: 'pulse-ring 3s ease-out infinite' }} />
       <div className="absolute w-24 h-24 rounded-full bg-accent/6"
         style={{ animation: 'pulse-ring 3s ease-out 1.5s infinite' }} />
-
       <div className="relative z-10 w-36 border border-white/[0.12] bg-[#0d0d0d] rounded-md overflow-hidden">
         <div className="flex items-center justify-between px-3 py-2 border-b border-white/[0.06] bg-white/[0.02]">
           <span className="font-grotesk font-bold text-accent text-[9px] tracking-[0.15em]">STRIPWORK</span>
@@ -126,14 +112,11 @@ function LaptopCenter() {
           </div>
         </div>
       </div>
-
       <div className="relative z-10 w-40 h-2 bg-[#161616] border border-white/[0.08] border-t-0 rounded-b-md" />
       <div className="relative z-10 w-28 h-1 bg-[#111] rounded-b-md" />
     </div>
   )
 }
-
-// ─── Cercle orbital réutilisable ─────────────────────────────────────────────
 
 function OrbitalScene({ radius, groupA, groupB }: {
   radius: number
@@ -143,12 +126,10 @@ function OrbitalScene({ radius, groupA, groupB }: {
   const size = radius * 2 + 80
   return (
     <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
-      {/* Cercle guide */}
       <div
         className="absolute rounded-full border border-dashed border-white/[0.06]"
         style={{
-          width: radius * 2,
-          height: radius * 2,
+          width: radius * 2, height: radius * 2,
           top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
         }}
@@ -160,41 +141,33 @@ function OrbitalScene({ radius, groupA, groupB }: {
   )
 }
 
-// ─── Section principale ───────────────────────────────────────────────────────
-
 export default function Integrations() {
+  const c = useContent()
+
   return (
     <section className="py-24 bg-bg">
       <div className="max-w-screen-xl mx-auto px-6 md:px-10">
 
-        {/* Header */}
         <div className="mb-14">
           <h2 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-3">
-            Connecté à tout ce que vous utilisez déjà.
+            {c.ui.integrationsTitle}
           </h2>
           <p className="font-inter text-muted text-sm max-w-sm">
-            On branche Stripwork sur vos outils en place — rien à changer, tout à gagner.
+            {c.ui.integrationsSub}
           </p>
         </div>
 
-        {/* Mobile — animation au-dessus du formulaire */}
         <div className="flex lg:hidden justify-center mb-10 overflow-hidden">
           <OrbitalScene radius={RADIUS_MOBILE} groupA={GROUP_A_MOBILE} groupB={GROUP_B_MOBILE} />
         </div>
 
-        {/* Layout desktop — deux colonnes */}
         <div className="flex flex-col lg:flex-row items-center lg:gap-16">
-
-          {/* Formulaire diagnostic */}
           <div className="w-full lg:w-[380px] flex-shrink-0">
             <DiagnosticCard />
           </div>
-
-          {/* Desktop — animation à droite */}
           <div className="hidden lg:flex flex-1 items-center justify-center overflow-hidden">
             <OrbitalScene radius={RADIUS} groupA={GROUP_A} groupB={GROUP_B} />
           </div>
-
         </div>
       </div>
     </section>
