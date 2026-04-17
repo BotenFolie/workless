@@ -80,6 +80,20 @@ export type AutomationPageData = {
   crossLinks: CatalogueEntry[]
 }
 
+// ── Labels UI (pages FR uniquement) ──────────────────────────────────────────
+
+const UI = {
+  before:           'Avant',
+  after:            'Après',
+  forWho:           'Ce système est fait pour vous si',
+  notForWho:        "Ce système n'est pas pour vous si",
+  faq:              'Questions fréquentes',
+  nextStep:         'Prochaine étape',
+  formHeadline:     'Trouvez le système qui vous convient.',
+  formSubtitle:     'Répondez à quelques questions. On vous rappelle avec une recommandation adaptée — sans engagement.',
+  crossLinksLabel:  'Autres automatisations',
+}
+
 // ── Composant ────────────────────────────────────────────────────────────────
 
 export default function AutomationPage({ data }: { data: AutomationPageData }) {
@@ -250,7 +264,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.06] mb-8">
             {/* Avant */}
             <div className="bg-[#1A1A1A] p-8 md:p-12">
-              <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-neutral/40 mb-6">Avant</p>
+              <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-neutral/40 mb-6">{UI.before}</p>
               <div className="space-y-4">
                 {caseStudy.before.map((b, i) => (
                   <div key={i} className="flex items-center gap-4">
@@ -264,7 +278,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
             </div>
             {/* Après */}
             <div className="bg-[#1A1A1A] p-8 md:p-12">
-              <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-6">Après</p>
+              <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-6">{UI.after}</p>
               <div className="space-y-4">
                 {caseStudy.after.map((a, i) => (
                   <div key={i} className="flex items-center gap-4">
@@ -300,7 +314,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.06]">
             <div className="bg-[#111111] p-8 md:p-12">
               <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-8">
-                Ce système est fait pour vous si
+                {UI.forWho}
               </p>
               <ul className="space-y-4">
                 {targeting.forWho.map((item, i) => (
@@ -313,7 +327,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
             </div>
             <div className="bg-[#111111] p-8 md:p-12">
               <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-neutral/30 mb-8">
-                Ce système n&apos;est pas pour vous si
+                {UI.notForWho}
               </p>
               <ul className="space-y-4">
                 {targeting.notForWho.map((item, i) => (
@@ -352,7 +366,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
       <section className="bg-[#111111] py-24 md:py-32">
         <div className="max-w-screen-xl mx-auto px-6 md:px-10">
           <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent block mb-12">
-            Questions fréquentes
+            {UI.faq}
           </span>
           <div className="max-w-3xl divide-y divide-white/[0.06]">
             {faq.map((item, i) => (
@@ -375,13 +389,13 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
               <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent block mb-6">
-                Prochaine étape
+                {UI.nextStep}
               </span>
               <h2 className="font-grotesk font-bold text-surface text-3xl md:text-4xl leading-tight tracking-tight mb-6">
-                Trouvez le système qui vous convient.
+                {UI.formHeadline}
               </h2>
               <p className="font-inter text-neutral text-base leading-relaxed">
-                8 questions pour comprendre votre situation. On vous rappelle avec une recommandation adaptée — sans engagement.
+                {UI.formSubtitle}
               </p>
             </div>
             <CatalogLeadForm page={slug} />
@@ -394,7 +408,7 @@ export default function AutomationPage({ data }: { data: AutomationPageData }) {
         <section className="bg-[#1A1A1A] py-24 md:py-32 border-t border-white/[0.06]">
           <div className="max-w-screen-xl mx-auto px-6 md:px-10">
             <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent block mb-12">
-              Autres automatisations
+              {UI.crossLinksLabel}
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {crossLinks.map((link) => (

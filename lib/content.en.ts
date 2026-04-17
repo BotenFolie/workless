@@ -49,7 +49,7 @@ export const contentEN = {
     headline: "Every week, your team does exactly the same things over again.",
     universal: [
       { task: "Emails and client follow-ups", frequency: "every week, without exception" },
-      { task: "Reporting and dashboards", frequency: "every Monday morning" },
+      { task: "Reporting and data consolidation", frequency: "every Monday morning" },
       { task: "Data entry and transfers", frequency: "every day, manually" },
     ],
     niche: [
@@ -304,11 +304,10 @@ export const contentEN = {
         priceNote: 'based on number of automations',
         priceRange: '€2,000 – €4,500',
         delivery: '14 to 21 days',
-        description: '2 to 5 interconnected automations + monitoring dashboard included.',
+        description: '2 to 5 custom automations, designed around your processes and existing tools.',
         features: [
           '2 to 5 custom automations',
-          'Centralized monitoring dashboard included',
-          'Interconnected automations (e.g.: lead → CRM → email → Slack)',
+          'Built around your existing tools (CRM, Sheets, email...)',
           'Team training included (1h)',
           'Adjustments included for 30 days',
         ],
@@ -321,10 +320,9 @@ export const contentEN = {
         price: 'Custom quote',
         priceNote: 'based on scope and complexity',
         delivery: 'To define together',
-        description: 'Unlimited automations + monitoring dashboard. For projects with no scope limit.',
+        description: 'Unlimited automations, tailored to each process. For projects with no scope limit.',
         features: [
           'Unlimited automations',
-          'Centralized monitoring dashboard',
           'Full organizational audit included',
           'Post-delivery follow-up included',
         ],
@@ -625,7 +623,7 @@ export const contentEN = {
   automations: {
     reporting: [
       { title: 'Automatic weekly reporting', description: 'Data consolidated from your tools, formatted and sent automatically every week — zero manual intervention.' },
-      { title: 'Real-time monitoring dashboard', description: 'KPIs aggregated from your existing sources, updated continuously and accessible in one click.' },
+      { title: 'Automatic performance report', description: 'KPIs aggregated from your existing sources, formatted and sent automatically to your team.' },
     ],
     emails: [
       { title: 'Automated email follow-up sequence', description: "Client or prospect follow-ups triggered automatically based on delay, status, or inaction — no manual tracking." },
@@ -645,12 +643,12 @@ export const contentEN = {
     onboarding: { title: "Onboarding automation", description: "Tool access, training, administrative tracking — complete integration flow with no additional HR load." },
     crm: { title: 'CRM → Email → Slack flow', description: "Incoming lead → CRM update → welcome email → team notification. One connected flow, zero manual entry." },
     existingAudit: { title: "Existing system audit + recovery", description: "Diagnosis of what blocked in the past, root cause correction, restart on solid foundations." },
-    monitoring: { title: 'Centralized monitoring dashboard', description: "All your automations monitored in one place — alerts, logs, performance, and real-time adjustments." },
+    monitoring: { title: 'Active automation monitoring', description: "Your automations monitored continuously — automatic alerts, logs, and real-time adjustments." },
     defaults: [
       { title: 'Automated email follow-ups', description: "Sequences triggered automatically based on client behavior — no more manual tracking." },
       { title: 'Automatic weekly reporting', description: 'Data consolidated, formatted and sent every week without intervention.' },
       { title: 'CRM → Email → Slack flow', description: "Incoming lead → CRM → welcome email → team notification. One flow, zero manual entry." },
-      { title: 'Real-time monitoring dashboard', description: 'KPIs aggregated from your tools, available in one click for your decisions.' },
+      { title: 'Automatic performance report', description: 'KPIs aggregated from your tools, formatted and sent automatically every week.' },
     ],
   } as Record<string, AutomationRec | AutomationRec[]>,
 
@@ -658,5 +656,93 @@ export const contentEN = {
     label:          'Chat on WhatsApp',
     tooltip:        'Talk to a human, not a bot',
     prefillMessage: 'Hi Mathieu, I\'d like to discuss my automation project.',
+  },
+
+  automationsCatalog: {
+    badge:    'Catalogue',
+    title:    'What we can automate for you',
+    subtitle: 'Select a category to explore possible automations. Each system plugs into your existing infrastructure — without replacing your tools.',
+    cta:      'Run the diagnostic',
+    categories: [
+      {
+        id: 'email',
+        icon: '✉',
+        label: 'Email & Communication',
+        items: [
+          'Personalised auto-reply to every incoming form submission',
+          'Automatic nurturing sequence (D+1, D+3, D+7)',
+          'Welcome email generated from client profile',
+          'Sales follow-up triggered by deal status change',
+          'Dormant client reactivation campaign (> 90 days)',
+          'Weekly team digest sent every Monday morning',
+          'Appointment confirmation and reminder',
+        ],
+      },
+      {
+        id: 'docs',
+        icon: '◈',
+        label: 'Documents & Data',
+        items: [
+          'Structured data extraction from invoice PDFs',
+          'Automatic summary of contracts or quotes',
+          'CV scoring and ranking for incoming applications',
+          'Raw data transformation into narrative reports',
+          'Automatic Google Sheets update from forms or emails',
+        ],
+      },
+      {
+        id: 'meetings',
+        icon: '◎',
+        label: 'Meetings & Productivity',
+        items: [
+          'Meeting notes generated from a transcript',
+          'Automatic extraction of decisions, actions and owners',
+          'Long email thread summarised into key points',
+          'Agenda generation from scattered notes',
+        ],
+      },
+      {
+        id: 'crm',
+        icon: '⬡',
+        label: 'Sales & CRM',
+        items: [
+          'Automatic scoring of every incoming lead',
+          'Contact enrichment from forms or emails',
+          'Personalised proposal generation',
+          'Post-demo follow-up email tailored to the prospect',
+        ],
+      },
+      {
+        id: 'support',
+        icon: '◇',
+        label: 'Customer Support',
+        items: [
+          'Ticket triage by urgency and category',
+          'Automatic reply to frequently asked questions',
+          'Automatic escalation to the right person',
+          'Weekly satisfaction and recurring topics report',
+        ],
+      },
+      {
+        id: 'finance',
+        icon: '▲',
+        label: 'Finance & Admin',
+        items: [
+          'Automatic extraction and categorisation of expenses',
+          'Automatic invoice reminder at D+15, D+30',
+          'Narrative financial report generated from your data',
+        ],
+      },
+      {
+        id: 'hr',
+        icon: '○',
+        label: 'HR & Recruiting',
+        items: [
+          'Automatic screening of incoming applications',
+          'Job offer generation from an internal brief',
+          'Onboarding email sequence for new hires',
+        ],
+      },
+    ],
   },
 }

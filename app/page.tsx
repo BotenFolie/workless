@@ -3,6 +3,7 @@ import Hero from '@/components/Hero'
 import ProblemBlock from '@/components/ProblemBlock'
 import CostBlock from '@/components/CostBlock'
 import OfferPillars from '@/components/OfferPillars'
+import AutomationsCatalog from '@/components/AutomationsCatalog'
 import SocialProof from '@/components/SocialProof'
 import Pricing from '@/components/Pricing'
 import FAQ from '@/components/FAQ'
@@ -116,10 +117,11 @@ export default function HomePage() {
       <main>
         <Nav />
         <Hero />
+        <Integrations />
+        <AutomationsCatalog />
         <Marquee />
         <ProblemBlock />
         <CostBlock />
-        <Integrations />
         <OfferPillars />
         <Marquee />
         <SocialProof />

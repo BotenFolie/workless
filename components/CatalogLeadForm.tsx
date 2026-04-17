@@ -76,6 +76,29 @@ const STEPS = [
   },
 ]
 
+// ── Labels UI (formulaire FR uniquement) ─────────────────────────────────────
+
+const UI = {
+  qualificationLabel: 'Qualification',
+  back:               '← Retour',
+  lastStep:           'Dernière étape',
+  contactHeadline:    'Pour vous recontacter',
+  contactSubtitle:    "On revient vers vous sous 24h pour un échange d'une heure.",
+  fields: {
+    prenom:    { label: 'Prénom',    placeholder: 'Votre prénom' },
+    email:     { label: 'Email',     placeholder: 'vous@entreprise.com' },
+    telephone: { label: 'Téléphone', placeholder: '+33 6 00 00 00 00' },
+  },
+  rgpd:        "J'accepte que Stripwork utilise ces informations pour me recontacter. Conforme RGPD. Aucune diffusion à des tiers.",
+  submit:      'Envoyer →',
+  submitting:  'Envoi en cours...',
+  responseNote:'Réponse sous 24h ouvrées. Sans engagement.',
+  successNote: "On revient vers vous sous 24h ouvrées pour un échange d'une heure — sans engagement, sans relance si ce n'est pas le bon moment.",
+  bookSlot:    'Réserver un créneau directement',
+  errorDefault:'Une erreur est survenue. Réessayez.',
+  errorNetwork:'Erreur réseau. Vérifiez votre connexion.',
+}
+
 type StepKey = 'enjeu' | 'equipe' | 'heures' | 'outil' | 'maturite' | 'objectif'
 
 type Answers = Record<StepKey, string>
@@ -162,14 +185,14 @@ export default function CatalogLeadForm({ page }: { page: string }) {
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}))
-        setError(json.error ?? 'Une erreur est survenue. Réessayez.')
+        setError(json.error ?? UI.errorDefault)
         setLoading(false)
         return
       }
 
       setView('done')
     } catch {
-      setError('Erreur réseau. Vérifiez votre connexion.')
+      setError(UI.errorNetwork)
     } finally {
       setLoading(false)
     }
@@ -213,11 +236,11 @@ export default function CatalogLeadForm({ page }: { page: string }) {
                   onClick={handleBack}
                   className="font-inter text-xs text-neutral/50 hover:text-neutral transition-colors flex items-center gap-1.5"
                 >
-                  ← Retour
+                  {UI.back}
                 </button>
               ) : (
                 <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent">
-                  Qualification
+                  {UI.qualificationLabel}
                 </span>
               )}
               <span className="font-inter text-xs text-neutral/30 tabular-nums">
@@ -281,26 +304,26 @@ export default function CatalogLeadForm({ page }: { page: string }) {
                 onClick={handleBack}
                 className="font-inter text-xs text-neutral/50 hover:text-neutral transition-colors flex items-center gap-1.5"
               >
-                ← Retour
+                {UI.back}
               </button>
               <span className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent">
-                Dernière étape
+                {UI.lastStep}
               </span>
             </div>
 
             <h3 className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-2">
-              Pour vous recontacter
+              {UI.contactHeadline}
             </h3>
             <p className="font-inter text-neutral text-sm mb-8">
-              On revient vers vous sous 24h pour un échange d&apos;une heure.
+              {UI.contactSubtitle}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {[
-                { key: 'prenom'    as const, label: 'Prénom',    type: 'text',  placeholder: 'Votre prénom',          required: true },
-                { key: 'email'     as const, label: 'Email',     type: 'email', placeholder: 'vous@entreprise.com',   required: true },
-                { key: 'telephone' as const, label: 'Téléphone', type: 'tel',   placeholder: '+33 6 00 00 00 00',     required: true },
-              ].map(f => (
+              {([
+                { key: 'prenom'    as const, type: 'text',  required: true, ...UI.fields.prenom },
+                { key: 'email'     as const, type: 'email', required: true, ...UI.fields.email },
+                { key: 'telephone' as const, type: 'tel',   required: true, ...UI.fields.telephone },
+              ] as Array<{ key: keyof ContactData; label: string; type: string; placeholder: string; required: boolean }>).map(f => (
                 <div key={f.key}>
                   <label className="block font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/40 mb-2">
                     {f.label}
@@ -327,7 +350,7 @@ export default function CatalogLeadForm({ page }: { page: string }) {
                 </span>
                 <input type="checkbox" className="sr-only" checked={rgpd} onChange={e => setRgpd(e.target.checked)} required />
                 <span className="font-inter text-neutral/40 text-xs leading-relaxed">
-                  J&apos;accepte que Stripwork utilise ces informations pour me recontacter. Conforme RGPD. Aucune diffusion à des tiers.
+                  {UI.rgpd}
                 </span>
               </label>
 
@@ -343,15 +366,15 @@ export default function CatalogLeadForm({ page }: { page: string }) {
                 {loading ? (
                   <>
                     <span className="w-3.5 h-3.5 border-2 border-bg/30 border-t-bg rounded-full animate-spin" />
-                    Envoi en cours...
+                    {UI.submitting}
                   </>
                 ) : (
-                  'Envoyer →'
+                  UI.submit
                 )}
               </button>
 
               <p className="font-inter text-neutral/30 text-xs text-center">
-                Réponse sous 24h ouvrées. Sans engagement.
+                {UI.responseNote}
               </p>
             </form>
           </motion.div>
@@ -373,7 +396,7 @@ export default function CatalogLeadForm({ page }: { page: string }) {
               Reçu, {contact.prenom}.
             </p>
             <p className="font-inter text-neutral text-sm leading-relaxed mb-8">
-              On revient vers vous sous 24h ouvrées pour un échange d&apos;une heure — sans engagement, sans relance si ce n&apos;est pas le bon moment.
+              {UI.successNote}
             </p>
             {bookingUrl !== '#contact' && (
               <a
@@ -382,7 +405,7 @@ export default function CatalogLeadForm({ page }: { page: string }) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 font-inter font-semibold text-bg bg-accent px-8 py-4 hover:bg-white transition-colors duration-200 group text-sm"
               >
-                Réserver un créneau directement
+                {UI.bookSlot}
                 <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
               </a>
             )}

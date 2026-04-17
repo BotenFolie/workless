@@ -331,11 +331,10 @@ export const contentFR = {
         priceNote: "selon le nombre d'automatisations",
         priceRange: '2 000€ – 4 500€',
         delivery: '14 à 21 jours',
-        description: '2 à 5 automatisations interconnectées + dashboard de suivi inclus.',
+        description: '2 à 5 automatisations sur-mesure, conçues selon vos processus et vos outils existants.',
         features: [
           'De 2 à 5 automatisations sur-mesure',
-          'Dashboard de pilotage centralisé inclus',
-          'Automatisations interconnectées (ex : lead → CRM → email → Slack)',
+          'Adaptées à vos outils existants (CRM, Sheets, email...)',
           'Formation équipe incluse (1h)',
           'Ajustements inclus pendant 30 jours',
         ],
@@ -348,10 +347,9 @@ export const contentFR = {
         price: 'Sur devis',
         priceNote: 'selon périmètre et complexité',
         delivery: 'À définir ensemble',
-        description: 'Automatisations illimitées + dashboard de monitoring. Pour les projets sans limite de périmètre.',
+        description: 'Automatisations illimitées, adaptées à chaque processus. Pour les projets sans limite de périmètre.',
         features: [
           "Nombre d'automatisations illimité",
-          'Dashboard de monitoring centralisé',
           'Audit complet de votre organisation inclus',
           'Suivi post-livraison inclus',
         ],
@@ -663,7 +661,7 @@ export const contentFR = {
   automations: {
     reporting: [
       { title: 'Reporting hebdomadaire automatique', description: 'Consolidation des données depuis vos outils, mise en forme et envoi automatique chaque semaine — zéro intervention manuelle.' },
-      { title: 'Dashboard de pilotage temps réel', description: 'KPIs agrégés depuis vos sources existantes, mis à jour en continu et accessibles en un clic.' },
+      { title: 'Rapport de pilotage automatique', description: 'KPIs agrégés depuis vos sources existantes, mis en forme et envoyés automatiquement à votre équipe.' },
     ],
     emails: [
       { title: 'Séquence de relances email automatisée', description: "Relances clients ou prospects déclenchées automatiquement selon le délai, le statut ou l'inaction — sans suivi manuel." },
@@ -683,12 +681,12 @@ export const contentFR = {
     onboarding: { title: "Automatisation de l'onboarding", description: "Accès outils, formation, suivi administratif — flux complet d'intégration sans charge RH supplémentaire." },
     crm: { title: 'Flux CRM → Email → Slack', description: "Lead entrant → mise à jour CRM → email de bienvenue → notification équipe. Un flux connecté, zéro saisie." },
     existingAudit: { title: "Audit de l'existant + reprise", description: "Diagnostic de ce qui a bloqué par le passé, correction des causes racines, reprise sur des bases solides." },
-    monitoring: { title: 'Dashboard de monitoring centralisé', description: "Toutes vos automatisations surveillées en un seul endroit — alertes, logs, performances et ajustements en temps réel." },
+    monitoring: { title: 'Monitoring des automatisations actives', description: "Vos automatisations surveillées en continu — alertes automatiques, logs et ajustements en temps réel." },
     defaults: [
       { title: 'Relances email automatisées', description: "Séquences déclenchées automatiquement selon le comportement client — plus aucun suivi manuel." },
       { title: 'Reporting hebdomadaire automatique', description: 'Données consolidées, mises en forme et envoyées chaque semaine sans intervention.' },
       { title: 'Flux CRM → Email → Slack', description: "Lead entrant → CRM → email de bienvenue → notification équipe. Un flux, zéro saisie." },
-      { title: 'Dashboard de pilotage temps réel', description: 'KPIs agrégés depuis vos outils, disponibles en un clic pour vos décisions.' },
+      { title: 'Rapport de pilotage automatique', description: 'KPIs agrégés depuis vos outils, mis en forme et envoyés automatiquement chaque semaine.' },
     ],
   } as Record<string, AutomationRec | AutomationRec[]>,
 
@@ -696,6 +694,94 @@ export const contentFR = {
     label:          'Discuter sur WhatsApp',
     tooltip:        'Parlez à un humain, pas un robot',
     prefillMessage: 'Bonjour Mathieu, je souhaite discuter de mon projet d\'automatisation.',
+  },
+
+  automationsCatalog: {
+    badge:    'Catalogue',
+    title:    'Ce qu\'on peut automatiser chez vous',
+    subtitle: 'Sélectionnez une catégorie pour explorer les automatisations possibles. Chaque système est branché sur votre infrastructure existante — sans remplacer vos outils.',
+    cta:      'Lancer le diagnostic',
+    categories: [
+      {
+        id: 'email',
+        icon: '✉',
+        label: 'Email & Communication',
+        items: [
+          'Autoréponse personnalisée à chaque formulaire entrant',
+          'Séquence de nurturing automatique (J+1, J+3, J+7)',
+          'Email de bienvenue client généré selon son profil',
+          'Relance commerciale déclenchée par changement de statut',
+          'Réactivation de la base clients dormants (> 90 jours)',
+          'Digest hebdomadaire équipe envoyé chaque lundi matin',
+          'Confirmation et rappel de rendez-vous automatique',
+        ],
+      },
+      {
+        id: 'docs',
+        icon: '◈',
+        label: 'Documents & Données',
+        items: [
+          'Extraction structurée de données depuis une facture PDF',
+          'Analyse et résumé automatique de contrats ou devis',
+          'Scoring et tri de candidatures depuis CVs reçus',
+          'Transformation de données brutes en rapport narratif',
+          'Mise à jour automatique Google Sheets depuis un formulaire',
+        ],
+      },
+      {
+        id: 'meetings',
+        icon: '◎',
+        label: 'Réunions & Productivité',
+        items: [
+          'Compte-rendu de réunion généré depuis une transcription',
+          'Extraction automatique des décisions, actions et responsables',
+          'Synthèse d\'un fil email long en points clés',
+          'Génération d\'un ordre du jour depuis des notes éparses',
+        ],
+      },
+      {
+        id: 'crm',
+        icon: '⬡',
+        label: 'Vente & CRM',
+        items: [
+          'Scoring automatique de chaque lead entrant selon son message',
+          'Enrichissement fiche contact depuis formulaire ou email',
+          'Génération de proposition commerciale personnalisée',
+          'Email de suivi post-démo adapté au contexte du prospect',
+        ],
+      },
+      {
+        id: 'support',
+        icon: '◇',
+        label: 'Support Client',
+        items: [
+          'Triage des tickets par urgence et catégorie',
+          'Réponse automatique aux questions fréquentes',
+          'Escalade automatique vers le bon interlocuteur',
+          'Rapport hebdomadaire satisfaction et sujets récurrents',
+        ],
+      },
+      {
+        id: 'finance',
+        icon: '▲',
+        label: 'Finance & Admin',
+        items: [
+          'Extraction et catégorisation automatique des dépenses',
+          'Relance automatique des factures impayées à J+15, J+30',
+          'Rapport financier narratif généré depuis vos données',
+        ],
+      },
+      {
+        id: 'hr',
+        icon: '○',
+        label: 'RH & Recrutement',
+        items: [
+          'Screening automatique des candidatures reçues',
+          'Génération d\'offres d\'emploi depuis un brief interne',
+          'Séquence d\'onboarding email pour les nouvelles recrues',
+        ],
+      },
+    ],
   },
 }
 

@@ -2,66 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useContent } from '@/lib/i18n'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
-// Les 3 agents affichés dans le dashboard
-const AGENTS = [
-  {
-    id: 'rapport',
-    name: 'Rapport hebdomadaire',
-    desc: 'Google Sheets → PDF → Email',
-    saved: '2h 15min',
-  },
-  {
-    id: 'emails',
-    name: 'Tri emails entrants',
-    desc: 'Catégorisation + Réponses auto',
-    saved: '45min',
-  },
-  {
-    id: 'synthese',
-    name: 'Synthèse réunion',
-    desc: 'Transcription → Action items',
-    saved: '30min',
-  },
-]
-
-// Séquences de chat pour chaque agent (boucle infinie)
-const SEQUENCES = [
-  [
-    { type: 'sys', text: 'Agent rapport — démarrage' },
-    { type: 'run', text: 'Connexion Google Sheets...' },
-    { type: 'ok', text: '847 lignes importées ✓' },
-    { type: 'run', text: 'Calcul des KPIs en cours...' },
-    { type: 'ok', text: 'Rapport PDF généré ✓' },
-    { type: 'ok', text: 'Envoyé à direction@ ✓' },
-    { type: 'meta', text: 'Économisé : 2h 15min' },
-  ],
-  [
-    { type: 'sys', text: 'Agent emails — démarrage' },
-    { type: 'run', text: 'Lecture boîte de réception...' },
-    { type: 'ok', text: '23 emails analysés ✓' },
-    { type: 'run', text: 'Tri par priorité...' },
-    { type: 'ok', text: '8 réponses auto envoyées ✓' },
-    { type: 'ok', text: 'Dossiers mis à jour ✓' },
-    { type: 'meta', text: 'Économisé : 45min' },
-  ],
-  [
-    { type: 'sys', text: 'Agent synthèse — démarrage' },
-    { type: 'run', text: 'Transcription audio...' },
-    { type: 'ok', text: '1 245 mots transcrits ✓' },
-    { type: 'run', text: 'Extraction des décisions...' },
-    { type: 'ok', text: '5 action items identifiés ✓' },
-    { type: 'ok', text: 'Notion mis à jour ✓' },
-    { type: 'meta', text: 'Économisé : 30min' },
-  ],
-]
 
 type AgentStatus = 'idle' | 'running' | 'done'
 type ChatLine = { type: string; text: string; id: number }
 
+// Temps économisés en minutes par agent (fixe, indépendant de la langue)
+const SAVED_MINUTES = [135, 45, 30]
+
 export default function HeroDashboard() {
+  const c = useContent()
+  const { agents, sequences, activeAgents, automationActive, savedFormat } = c.heroDashboard
+
   const [statuses, setStatuses] = useState<AgentStatus[]>(['idle', 'idle', 'idle'])
   const [activeAgent, setActiveAgent] = useState(0)
   const [lines, setLines] = useState<ChatLine[]>([])
@@ -85,9 +39,8 @@ export default function HeroDashboard() {
     const delay = (ms: number) => new Promise(r => setTimeout(r, ms))
 
     const runSequence = async (agentIdx: number) => {
-      const seq = SEQUENCES[agentIdx]
+      const seq = sequences[agentIdx]
 
-      // Passer à "running"
       setStatuses(s => s.map((v, i) => (i === agentIdx ? 'running' : v)))
       setActiveAgent(agentIdx)
       setLines([])
@@ -99,9 +52,8 @@ export default function HeroDashboard() {
 
       await delay(800)
 
-      // Passer à "done"
       setStatuses(s => s.map((v, i) => (i === agentIdx ? 'done' : v)))
-      setTotalSaved(t => t + [135, 45, 30][agentIdx])
+      setTotalSaved(t => t + SAVED_MINUTES[agentIdx])
       await delay(1200)
     }
 
@@ -111,7 +63,6 @@ export default function HeroDashboard() {
         for (let i = 0; i < 3; i++) {
           await runSequence(i)
         }
-        // Reset après la 3e passe
         await new Promise(r => setTimeout(r, 1000))
         setStatuses(['idle', 'idle', 'idle'])
         setTotalSaved(0)
@@ -119,8 +70,8 @@ export default function HeroDashboard() {
       }
     }
 
-    // Lancer après le page loader
     setTimeout(loop, 2200)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const msgColor: Record<string, string> = {
@@ -158,7 +109,7 @@ export default function HeroDashboard() {
           <div className="flex items-center gap-2">
             <span className="font-grotesk font-bold text-accent text-xs tracking-widest">STRIPWORK</span>
             <span className="text-white/20 text-xs">·</span>
-            <span className="font-inter text-neutral/60 text-xs">3 agents actifs</span>
+            <span className="font-inter text-neutral/60 text-xs">{activeAgents}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
@@ -169,7 +120,7 @@ export default function HeroDashboard() {
 
         {/* Liste des agents */}
         <div className="px-4 pt-4 pb-2 space-y-2">
-          {AGENTS.map((agent, i) => (
+          {agents.map((agent, i) => (
             <motion.div
               key={agent.id}
               animate={{
@@ -237,7 +188,7 @@ export default function HeroDashboard() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-50" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
             </span>
-            <span className="font-inter text-neutral/50 text-[10px]">Automatisation active</span>
+            <span className="font-inter text-neutral/50 text-[10px]">{automationActive}</span>
           </div>
           <AnimatePresence mode="wait">
             {totalSaved > 0 && (
@@ -247,7 +198,7 @@ export default function HeroDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 className="font-inter text-accent text-[10px] font-semibold"
               >
-                -{Math.floor(totalSaved / 60)}h {totalSaved % 60}min économisées
+                {savedFormat(Math.floor(totalSaved / 60), totalSaved % 60)}
               </motion.span>
             )}
           </AnimatePresence>
