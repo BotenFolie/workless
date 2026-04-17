@@ -1,16 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useContent, useLang } from '@/lib/i18n'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 
 // Nav sticky avec hamburger mobile + switcher de langue FR/EN
 export default function Nav() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen]       = useState(false)
+  const [servicesOpen, setServicesOpen] = useState(false)
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const { open } = useDiagnostic()
   const c = useContent()
   const { lang, setLang } = useLang()
+
+  // Ferme le dropdown si clic à l'extérieur
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setServicesOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#111111] border-b border-white/[0.06]">
@@ -25,6 +39,37 @@ export default function Nav() {
 
         {/* Navigation desktop */}
         <nav className="hidden md:flex items-center gap-8">
+          {/* Dropdown Services */}
+          <div ref={dropdownRef} className="relative">
+            <button
+              onClick={() => setServicesOpen(!servicesOpen)}
+              className="flex items-center gap-1 font-inter text-sm text-neutral hover:text-surface transition-colors duration-200"
+            >
+              {c.nav.servicesLabel}
+              <svg
+                className={`w-3 h-3 mt-px transition-transform duration-200 ${servicesOpen ? 'rotate-180' : ''}`}
+                fill="none" viewBox="0 0 10 6" stroke="currentColor" strokeWidth={1.8}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+
+            {servicesOpen && (
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 bg-[#161616] border border-white/[0.08] rounded-sm shadow-xl py-1">
+                {c.nav.services.map((s) => (
+                  <Link
+                    key={s.href}
+                    href={s.href}
+                    onClick={() => setServicesOpen(false)}
+                    className="block px-4 py-2.5 font-inter text-sm text-neutral hover:text-surface hover:bg-white/[0.04] transition-colors duration-150"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           {c.nav.links.map((link) => (
             <Link
               key={link.href}
@@ -82,6 +127,36 @@ export default function Nav() {
       {/* Menu mobile déroulant */}
       {menuOpen && (
         <div className="md:hidden bg-[#111111] border-t border-white/[0.06] px-6 py-6 flex flex-col gap-6">
+          {/* Services accordion mobile */}
+          <div>
+            <button
+              onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+              className="flex items-center justify-between w-full font-inter text-base text-neutral hover:text-surface transition-colors duration-200"
+            >
+              {c.nav.servicesLabel}
+              <svg
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                fill="none" viewBox="0 0 10 6" stroke="currentColor" strokeWidth={1.8}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+            {mobileServicesOpen && (
+              <div className="mt-3 flex flex-col gap-3 pl-3 border-l border-white/[0.08]">
+                {c.nav.services.map((s) => (
+                  <Link
+                    key={s.href}
+                    href={s.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="font-inter text-sm text-neutral hover:text-surface transition-colors duration-200"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           {c.nav.links.map((link) => (
             <Link
               key={link.href}

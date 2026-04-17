@@ -11,6 +11,14 @@ export const contentEN = {
       { label: 'About', href: '/a-propos' },
       { label: 'Diagnostic', href: '#cta' },
     ],
+    servicesLabel: 'Services',
+    services: [
+      { label: 'Lead automation',         href: '/automatisation-leads' },
+      { label: 'Sales follow-up',         href: '/relance-commerciale-automatique' },
+      { label: 'Automated reporting',     href: '/reporting-automatique' },
+      { label: 'Dormant client revival',  href: '/reactivation-clients-automatique' },
+      { label: 'Invoice processing',      href: '/traitement-factures-automatique' },
+    ],
     cta: 'Get diagnosed',
     langFR: 'FR',
     langEN: 'EN',
@@ -571,6 +579,48 @@ export const contentEN = {
   },
 
   // ─── Automations (page Merci) ─────────────────────────────────────────────────
+
+  // ─── Hero Dashboard ───────────────────────────────────────────────────────────
+
+  heroDashboard: {
+    agents: [
+      { id: 'rapport',  name: 'Weekly report',    desc: 'Google Sheets → PDF → Email',    saved: '2h 15min' },
+      { id: 'emails',   name: 'Inbox triage',     desc: 'Categorization + Auto-replies',  saved: '45min' },
+      { id: 'synthese', name: 'Meeting summary',  desc: 'Transcript → Action items',      saved: '30min' },
+    ],
+    sequences: [
+      [
+        { type: 'sys',  text: 'Report agent — starting' },
+        { type: 'run',  text: 'Connecting to Google Sheets...' },
+        { type: 'ok',   text: '847 rows imported ✓' },
+        { type: 'run',  text: 'Calculating KPIs...' },
+        { type: 'ok',   text: 'PDF report generated ✓' },
+        { type: 'ok',   text: 'Sent to management@ ✓' },
+        { type: 'meta', text: 'Saved: 2h 15min' },
+      ],
+      [
+        { type: 'sys',  text: 'Email agent — starting' },
+        { type: 'run',  text: 'Reading inbox...' },
+        { type: 'ok',   text: '23 emails analyzed ✓' },
+        { type: 'run',  text: 'Sorting by priority...' },
+        { type: 'ok',   text: '8 auto-replies sent ✓' },
+        { type: 'ok',   text: 'Folders updated ✓' },
+        { type: 'meta', text: 'Saved: 45min' },
+      ],
+      [
+        { type: 'sys',  text: 'Summary agent — starting' },
+        { type: 'run',  text: 'Transcribing audio...' },
+        { type: 'ok',   text: '1,245 words transcribed ✓' },
+        { type: 'run',  text: 'Extracting decisions...' },
+        { type: 'ok',   text: '5 action items identified ✓' },
+        { type: 'ok',   text: 'Notion updated ✓' },
+        { type: 'meta', text: 'Saved: 30min' },
+      ],
+    ],
+    activeAgents: '3 active agents',
+    automationActive: 'Automation active',
+    savedFormat: (h: number, m: number) => `-${h}h ${m}min saved`,
+  },
 
   automations: {
     reporting: [

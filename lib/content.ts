@@ -38,6 +38,14 @@ export const contentFR = {
       { label: 'À propos', href: '/a-propos' },
       { label: 'Diagnostic', href: '#cta' },
     ],
+    servicesLabel: 'Services',
+    services: [
+      { label: 'Automatisation des leads',     href: '/automatisation-leads' },
+      { label: 'Relance commerciale',           href: '/relance-commerciale-automatique' },
+      { label: 'Reporting automatique',         href: '/reporting-automatique' },
+      { label: 'Réactivation clients dormants', href: '/reactivation-clients-automatique' },
+      { label: 'Traitement de factures',        href: '/traitement-factures-automatique' },
+    ],
     cta: 'Diagnostiquer',
     langFR: 'FR',
     langEN: 'EN',
@@ -609,6 +617,48 @@ export const contentFR = {
   },
 
   // ─── Automations (page Merci) ─────────────────────────────────────────────────
+
+  // ─── Hero Dashboard (widget animé côté droit du hero) ────────────────────────
+
+  heroDashboard: {
+    agents: [
+      { id: 'rapport',  name: 'Rapport hebdomadaire', desc: 'Google Sheets → PDF → Email',      saved: '2h 15min' },
+      { id: 'emails',   name: 'Tri emails entrants',   desc: 'Catégorisation + Réponses auto',   saved: '45min' },
+      { id: 'synthese', name: 'Synthèse réunion',      desc: 'Transcription → Action items',     saved: '30min' },
+    ],
+    sequences: [
+      [
+        { type: 'sys',  text: 'Agent rapport — démarrage' },
+        { type: 'run',  text: 'Connexion Google Sheets...' },
+        { type: 'ok',   text: '847 lignes importées ✓' },
+        { type: 'run',  text: 'Calcul des KPIs en cours...' },
+        { type: 'ok',   text: 'Rapport PDF généré ✓' },
+        { type: 'ok',   text: 'Envoyé à direction@ ✓' },
+        { type: 'meta', text: 'Économisé : 2h 15min' },
+      ],
+      [
+        { type: 'sys',  text: 'Agent emails — démarrage' },
+        { type: 'run',  text: 'Lecture boîte de réception...' },
+        { type: 'ok',   text: '23 emails analysés ✓' },
+        { type: 'run',  text: 'Tri par priorité...' },
+        { type: 'ok',   text: '8 réponses auto envoyées ✓' },
+        { type: 'ok',   text: 'Dossiers mis à jour ✓' },
+        { type: 'meta', text: 'Économisé : 45min' },
+      ],
+      [
+        { type: 'sys',  text: 'Agent synthèse — démarrage' },
+        { type: 'run',  text: 'Transcription audio...' },
+        { type: 'ok',   text: '1 245 mots transcrits ✓' },
+        { type: 'run',  text: 'Extraction des décisions...' },
+        { type: 'ok',   text: '5 action items identifiés ✓' },
+        { type: 'ok',   text: 'Notion mis à jour ✓' },
+        { type: 'meta', text: 'Économisé : 30min' },
+      ],
+    ],
+    activeAgents: '3 agents actifs',
+    automationActive: 'Automatisation active',
+    savedFormat: (h: number, m: number) => `-${h}h ${m}min économisées`,
+  },
 
   automations: {
     reporting: [
