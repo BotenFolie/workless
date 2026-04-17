@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     images: [
       {
-        url: `${SITE_URL}/og-image.png`,
+        url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: 'Stripwork — Automatisation IA pour PME',
@@ -50,18 +50,13 @@ export const metadata: Metadata = {
     title: "Stripwork — Automatisez jusqu'à 60% de vos tâches répétitives",
     description:
       "On automatise les tâches répétitives de votre entreprise en moins de 14 jours. Libérez vos équipes.",
-    images: [`${SITE_URL}/og-image.png`],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${spaceGrotesk.variable} ${inter.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-      </head>
       <body className="cursor-none">
         <Providers>{children}</Providers>
       </body>
