@@ -241,7 +241,12 @@ export async function sendAutoresponse(
   type: 'diagnostic' | 'qualify',
   data: Record<string, unknown>
 ): Promise<void> {
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
+  const apiKey = process.env.ANTHROPIC_API_KEY
+  if (!apiKey) {
+    console.error('[autoresponder] ANTHROPIC_API_KEY manquante — abandon')
+    return
+  }
+  const anthropic = new Anthropic({ apiKey })
   const resend    = new Resend(process.env.RESEND_API_KEY!)
   const toEmail   = data.email as string
   const prenom    = data.prenom as string
