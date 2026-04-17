@@ -1,23 +1,10 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rateLimit'
 import { sendTelegramAlert } from '@/lib/telegram'
-import crypto from 'crypto'
-
-const AUTORESPONDER_URL    = process.env.AUTORESPONDER_URL
-const AUTORESPONDER_SECRET = process.env.AUTORESPONDER_SECRET ?? ''
-
-function fireAutoresponder(endpoint: string, payload: object): void {
-  if (!AUTORESPONDER_URL) return
-  const body = JSON.stringify(payload)
-  const sig  = crypto.createHmac('sha256', AUTORESPONDER_SECRET).update(body).digest('hex')
-  fetch(`${AUTORESPONDER_URL}${endpoint}`, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json', 'x-stripwork-signature': sig },
-    body,
-  }).catch(err => console.error(`[autoresponder] ${endpoint} error:`, err))
-}
+import { sendAutoresponse } from '@/lib/autoresponder'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const DEST_EMAIL = process.env.DIAGNOSTIC_RECIPIENT_EMAIL
@@ -157,8 +144,8 @@ export async function POST(req: NextRequest) {
       `🏢 ${answerLabel('equipe', answers.equipe)} · ${answerLabel('heures', answers.heures)}`
     )
 
-    // Autoréponse au lead (fire-and-forget)
-    fireAutoresponder('/webhook/qualify', { prenom, email, telephone, page, enjeu_label, answers })
+    // Autoréponse au lead — s'exécute après que la réponse est envoyée au client
+    after(() => sendAutoresponse('qualify', { prenom, email, telephone, page, enjeu_label, answers }))
 
     return NextResponse.json({ ok: true })
 
