@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
 </html>`
 
     const { error, data: sendData } = await resend.emails.send({
-      from: 'Stripwork Contact <onboarding@resend.dev>',
+      from: 'Mathieu — Stripwork <mathieu@stripwork.com>',
       to: DEST_EMAIL as string,
       subject: `Nouveau contact — ${data.page || 'Automatisation'} — ${data.prenom}`,
       html,

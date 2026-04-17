@@ -3,6 +3,21 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rateLimit'
 import { sendTelegramAlert } from '@/lib/telegram'
+import crypto from 'crypto'
+
+const AUTORESPONDER_URL    = process.env.AUTORESPONDER_URL
+const AUTORESPONDER_SECRET = process.env.AUTORESPONDER_SECRET ?? ''
+
+function fireAutoresponder(endpoint: string, payload: object): void {
+  if (!AUTORESPONDER_URL) return
+  const body = JSON.stringify(payload)
+  const sig  = crypto.createHmac('sha256', AUTORESPONDER_SECRET).update(body).digest('hex')
+  fetch(`${AUTORESPONDER_URL}${endpoint}`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'x-stripwork-signature': sig },
+    body,
+  }).catch(err => console.error(`[autoresponder] ${endpoint} error:`, err))
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const DEST_EMAIL = process.env.DIAGNOSTIC_RECIPIENT_EMAIL
@@ -121,7 +136,7 @@ export async function POST(req: NextRequest) {
 </html>`
 
     const { error, data: sendData } = await resend.emails.send({
-      from: 'Stripwork Leads <onboarding@resend.dev>',
+      from: 'Mathieu — Stripwork <mathieu@stripwork.com>',
       to: DEST_EMAIL as string,
       subject: `Lead qualifié — ${senjeu || spage || 'Catalogue'} — ${sp}`,
       html,
@@ -141,6 +156,9 @@ export async function POST(req: NextRequest) {
       `📞 ${st}\n` +
       `🏢 ${answerLabel('equipe', answers.equipe)} · ${answerLabel('heures', answers.heures)}`
     )
+
+    // Autoréponse au lead (fire-and-forget)
+    fireAutoresponder('/webhook/qualify', { prenom, email, telephone, page, enjeu_label, answers })
 
     return NextResponse.json({ ok: true })
 

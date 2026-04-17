@@ -3,6 +3,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rateLimit'
 import { sendTelegramAlert } from '@/lib/telegram'
+import crypto from 'crypto'
+
+const AUTORESPONDER_URL  = process.env.AUTORESPONDER_URL
+const AUTORESPONDER_SECRET = process.env.AUTORESPONDER_SECRET ?? ''
+
+/** Envoie le payload à l'autoresponder Python sans bloquer la réponse au client. */
+function fireAutoresponder(endpoint: string, payload: object): void {
+  if (!AUTORESPONDER_URL) return
+  const body = JSON.stringify(payload)
+  const sig  = crypto.createHmac('sha256', AUTORESPONDER_SECRET).update(body).digest('hex')
+  fetch(`${AUTORESPONDER_URL}${endpoint}`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'x-stripwork-signature': sig },
+    body,
+  }).catch(err => console.error(`[autoresponder] ${endpoint} error:`, err))
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -129,7 +145,7 @@ export async function POST(req: NextRequest) {
 
     // Envoi email
     const { error, data } = await resend.emails.send({
-      from: 'Stripwork Diagnostic <onboarding@resend.dev>',
+      from: 'Mathieu — Stripwork <mathieu@stripwork.com>',
       to: DEST_EMAIL as string,
       subject: `Nouveau diagnostic — ${validated.prenom} · Score ${validated.score}/16 · Profil ${validated.profile}`,
       html: buildEmailHtml(validated),
@@ -159,6 +175,9 @@ export async function POST(req: NextRequest) {
       `📞 ${validated.telephone || 'non renseigné'}\n` +
       `📊 Score : <b>${validated.score}/16</b> — Profil <b>${validated.profile}</b>`
     )
+
+    // Autoréponse au lead (fire-and-forget — n'impacte pas la réponse client)
+    fireAutoresponder('/webhook/diagnostic', validated)
 
     return NextResponse.json({ ok: true, id: data.id })
 
