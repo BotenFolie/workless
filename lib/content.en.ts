@@ -653,4 +653,10 @@ export const contentEN = {
       { title: 'Real-time monitoring dashboard', description: 'KPIs aggregated from your tools, available in one click for your decisions.' },
     ],
   } as Record<string, AutomationRec | AutomationRec[]>,
+
+  whatsapp: {
+    label:          'Chat on WhatsApp',
+    tooltip:        'Talk to a human, not a bot',
+    prefillMessage: 'Hi Mathieu, I\'d like to discuss my automation project.',
+  },
 }

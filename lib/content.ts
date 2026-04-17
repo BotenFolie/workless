@@ -691,6 +691,12 @@ export const contentFR = {
       { title: 'Dashboard de pilotage temps réel', description: 'KPIs agrégés depuis vos outils, disponibles en un clic pour vos décisions.' },
     ],
   } as Record<string, AutomationRec | AutomationRec[]>,
+
+  whatsapp: {
+    label:          'Discuter sur WhatsApp',
+    tooltip:        'Parlez à un humain, pas un robot',
+    prefillMessage: 'Bonjour Mathieu, je souhaite discuter de mon projet d\'automatisation.',
+  },
 }
 
 // Alias pour compatibilité serveur (schemas SEO, metadata)
