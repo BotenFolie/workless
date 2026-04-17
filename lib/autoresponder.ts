@@ -149,6 +149,8 @@ TON :
 - Personnel : utilise "${prenom}" au moins une fois dans le corps
 - Pas de superlatifs ni d'exagérations ("révolutionnaire", "incroyable", etc.)
 - Pas de formules creuses ("J'espère que vous allez bien", "Je me permets de...")
+- Registre strictement professionnel : aucune expression familière ou argotique (interdit : "bouffer", "bouffe", "carton", "nickel", "tip top", "kiffer", "claquer", "dingue", etc.)
+- Verbes neutres et précis : "mobiliser", "représenter", "générer", "absorber", "traiter", "structurer" — jamais de verbes familiers
 
 CONTRAINTES :
 - Pas de markdown (pas de **, pas de #, pas de tirets listes)
@@ -203,6 +205,8 @@ TON :
 - Expert : confiance dans les chiffres et les exemples, pas dans les adjectifs
 - Personnel : utilise "${prenom}" dans le corps
 - Pas de superlatifs, pas de formules d'accroche vides
+- Registre strictement professionnel : aucune expression familière ou argotique (interdit : "bouffer", "bouffe", "carton", "nickel", "tip top", "kiffer", "claquer", "dingue", etc.)
+- Verbes neutres et précis : "mobiliser", "représenter", "générer", "absorber", "traiter", "structurer" — jamais de verbes familiers
 
 CONTRAINTES :
 - Pas de markdown (pas de **, pas de #, pas de tirets listes)
