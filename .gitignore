@@ -28,3 +28,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Graphify cache (généré automatiquement)
+graphify-out/cache/
