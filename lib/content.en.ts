@@ -8,6 +8,7 @@ export const contentEN = {
   nav: {
     brand: 'Stripwork',
     links: [
+      { label: 'Work', href: '/realisations' },
       { label: 'About', href: '/a-propos' },
       { label: 'Diagnostic', href: '#cta' },
     ],

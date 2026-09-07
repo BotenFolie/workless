@@ -35,6 +35,7 @@ export const contentFR = {
   nav: {
     brand: 'Stripwork',
     links: [
+      { label: 'Réalisations', href: '/realisations' },
       { label: 'À propos', href: '/a-propos' },
       { label: 'Diagnostic', href: '#cta' },
     ],
