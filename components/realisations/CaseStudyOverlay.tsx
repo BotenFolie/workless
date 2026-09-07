@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { Realisation } from '@/lib/realisations'
 
 interface CaseStudyOverlayProps {
@@ -14,6 +14,43 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 // Étude de cas plein écran : ouvre sur le résultat (métrique héros),
 // puis Problème → Ce que j'ai construit → Stratégie → Résultat.
 export default function CaseStudyOverlay({ data, onClose }: CaseStudyOverlayProps) {
+  const reducedMotion = useReducedMotion()
+
+  // Scroll mesuré de la capture : la fenêtre ne dépasse jamais la hauteur réelle
+  // de l'image (donc jamais de vide noir), et le défilement s'arrête pile en bas.
+  const outerRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const [winH, setWinH] = useState<number>()
+  const [scrollPx, setScrollPx] = useState(0)
+
+  useEffect(() => {
+    const CHROME = 41 // hauteur de la barre navigateur
+    const measure = () => {
+      const outer = outerRef.current
+      const img = imgRef.current
+      if (!outer || !img) return
+      const avail = outer.clientHeight - CHROME
+      const imgH = img.offsetHeight
+      if (avail <= 0 || imgH <= 0) return
+      const h = Math.min(avail, imgH)
+      setWinH(h)
+      setScrollPx(Math.max(0, imgH - h))
+    }
+    const run = () => requestAnimationFrame(measure)
+    const img = imgRef.current
+    if (img?.complete) run()
+    img?.addEventListener('load', run)
+    window.addEventListener('resize', run)
+    const t = setTimeout(run, 120) // après l'animation d'ouverture
+    return () => {
+      img?.removeEventListener('load', run)
+      window.removeEventListener('resize', run)
+      clearTimeout(t)
+    }
+  }, [])
+
+  const doScroll = !reducedMotion && scrollPx > 8
+
   // Fermeture au clavier + verrouillage du scroll de fond
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -129,9 +166,12 @@ export default function CaseStudyOverlay({ data, onClose }: CaseStudyOverlayProp
             </a>
           </div>
 
-          {/* Colonne visuelle — capture qui défile lentement */}
+          {/* Colonne visuelle — capture qui défile (hauteur de fenêtre mesurée) */}
           <div className="order-1 md:order-2 md:sticky md:top-0 md:h-[calc(100vh-2rem)] md:max-h-[900px]">
-            <div className="relative h-64 overflow-hidden border-b border-white/10 bg-[#0d0d0d] md:h-full md:border-b-0 md:border-l">
+            <div
+              ref={outerRef}
+              className="relative h-64 overflow-hidden border-b border-white/10 bg-[#0d0d0d] md:h-full md:border-b-0 md:border-l"
+            >
               <div className="flex items-center gap-3 border-b border-white/[0.06] bg-[#161616] px-4 py-2.5">
                 <span className="flex gap-1.5">
                   <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
@@ -142,14 +182,22 @@ export default function CaseStudyOverlay({ data, onClose }: CaseStudyOverlayProp
                   {data.domain}
                 </span>
               </div>
-              <div className="relative h-[calc(100%-41px)] overflow-hidden">
+              <div
+                className="relative overflow-hidden"
+                style={{ height: winH ? `${winH}px` : 'calc(100% - 41px)' }}
+              >
                 <motion.img
+                  ref={imgRef}
                   src={data.image}
                   alt={`Aperçu complet du site ${data.name}`}
                   className="absolute inset-x-0 top-0 w-full"
                   draggable={false}
-                  animate={{ y: ['0%', '-60%', '0%'] }}
-                  transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity }}
+                  animate={doScroll ? { y: [0, -scrollPx, 0] } : { y: 0 }}
+                  transition={
+                    doScroll
+                      ? { duration: Math.max(10, scrollPx / 45), ease: 'easeInOut', repeat: Infinity }
+                      : { duration: 0 }
+                  }
                 />
               </div>
             </div>
