@@ -14,23 +14,31 @@ const DELAIS = ['Dès que possible', '1 à 3 mois', '3 mois +', 'Pas de deadline
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
-// Groupe de puces à choix unique
+// Groupe de puces — `selected` = valeurs actives, `onToggle` déclenché au clic.
+// Le parent décide du comportement (multi = toggle dans un tableau, unique = remplace).
 function ChipGroup({
-  label, options, value, onChange,
-}: { label: string; options: string[]; value: string; onChange: (v: string) => void }) {
+  label, hint, options, selected, onToggle,
+}: {
+  label: string
+  hint?: string
+  options: string[]
+  selected: string[]
+  onToggle: (opt: string) => void
+}) {
   return (
     <fieldset>
       <legend className="mb-3 font-inter text-xs font-semibold uppercase tracking-wide text-white/50">
         {label}
+        {hint && <span className="ml-2 font-normal normal-case tracking-normal text-neutral">— {hint}</span>}
       </legend>
       <div className="flex flex-wrap gap-2">
         {options.map(opt => {
-          const active = value === opt
+          const active = selected.includes(opt)
           return (
             <button
               key={opt}
               type="button"
-              onClick={() => onChange(active ? '' : opt)}
+              onClick={() => onToggle(opt)}
               aria-pressed={active}
               className={`rounded-full border px-4 py-2 font-inter text-sm transition-colors duration-200 ${
                 active
@@ -54,10 +62,17 @@ export default function RealisationsContactForm() {
   const [prenom, setPrenom]       = useState('')
   const [email, setEmail]         = useState('')
   const [telephone, setTelephone] = useState('')
-  const [projet, setProjet]       = useState('')
-  const [objectif, setObjectif]   = useState('')
-  const [budget, setBudget]       = useState('')
-  const [delai, setDelai]         = useState('')
+  const [projet, setProjet]       = useState<string[]>([]) // multi
+  const [objectif, setObjectif]   = useState<string[]>([]) // multi
+  const [budget, setBudget]       = useState('')           // unique
+  const [delai, setDelai]         = useState('')           // unique
+
+  // Toggle multi : ajoute/retire de la liste
+  const toggleMulti = (setter: React.Dispatch<React.SetStateAction<string[]>>) => (opt: string) =>
+    setter(prev => (prev.includes(opt) ? prev.filter(v => v !== opt) : [...prev, opt]))
+  // Toggle unique : sélectionne, ou déselectionne si déjà actif
+  const toggleSingle = (current: string, setter: (v: string) => void) => (opt: string) =>
+    setter(current === opt ? '' : opt)
   const [details, setDetails]     = useState('')
   const [rgpd, setRgpd]           = useState(false)
   const [hp, setHp]               = useState('') // honeypot
@@ -75,11 +90,11 @@ export default function RealisationsContactForm() {
 
     // Compile le brief dans le message
     const message = [
-      projet   && `Type de projet : ${projet}`,
-      objectif && `Objectif : ${objectif}`,
-      budget   && `Budget : ${budget}`,
-      delai    && `Délai : ${delai}`,
-      details.trim() && `\n${details.trim()}`,
+      projet.length   && `Type de projet : ${projet.join(', ')}`,
+      objectif.length && `Objectif : ${objectif.join(', ')}`,
+      budget          && `Budget : ${budget}`,
+      delai           && `Délai : ${delai}`,
+      details.trim()  && `\n${details.trim()}`,
     ].filter(Boolean).join('\n')
 
     try {
@@ -152,12 +167,24 @@ export default function RealisationsContactForm() {
         />
       </div>
 
-      <ChipGroup label="Type de projet" options={PROJETS} value={projet} onChange={setProjet} />
-      <ChipGroup label="Objectif principal" options={OBJECTIFS} value={objectif} onChange={setObjectif} />
+      <ChipGroup
+        label="Type de projet" hint="plusieurs choix possibles"
+        options={PROJETS} selected={projet} onToggle={toggleMulti(setProjet)}
+      />
+      <ChipGroup
+        label="Objectif principal" hint="plusieurs choix possibles"
+        options={OBJECTIFS} selected={objectif} onToggle={toggleMulti(setObjectif)}
+      />
 
       <div className="grid gap-8 sm:grid-cols-2">
-        <ChipGroup label="Budget indicatif" options={BUDGETS} value={budget} onChange={setBudget} />
-        <ChipGroup label="Échéance" options={DELAIS} value={delai} onChange={setDelai} />
+        <ChipGroup
+          label="Budget indicatif"
+          options={BUDGETS} selected={budget ? [budget] : []} onToggle={toggleSingle(budget, setBudget)}
+        />
+        <ChipGroup
+          label="Échéance"
+          options={DELAIS} selected={delai ? [delai] : []} onToggle={toggleSingle(delai, setDelai)}
+        />
       </div>
 
       <div>
