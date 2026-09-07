@@ -2,9 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { computeScore, getProfile, type QuizKey, type QuizAnswers, type ContactData, emptyQuiz } from '@/lib/diagnosticConfig'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { computeScore, getProfile, getStepIcon, type QuizKey, type QuizAnswers, type ContactData, emptyQuiz } from '@/lib/diagnosticConfig'
 import { useContent } from '@/lib/i18n'
+import QuizOption from './ui/QuizOption'
+import QuizProgressBar from './ui/QuizProgressBar'
+import RgpdCheckbox from './ui/RgpdCheckbox'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -14,6 +17,7 @@ export default function DiagnosticCard() {
   const router = useRouter()
   const c = useContent()
   const d = c.diagnostic
+  const reducedMotion = useReducedMotion()
 
   const [view, setView]       = useState<ViewId>('quiz')
   const [stepIdx, setStepIdx] = useState(0)
@@ -89,7 +93,6 @@ export default function DiagnosticCard() {
 
   const currentVal = step?.multi ? (quiz[step.key] as string[]) : quiz[step.key] as string
   const canAdvance = step?.multi && (currentVal as string[]).length > 0
-  const progress   = view === 'quiz' ? ((stepIdx + 1) / 7) * 100 : 100
 
   return (
     <div className="w-full bg-[#141414] border border-white/[0.08] flex flex-col overflow-hidden" style={{ height: 560 }}>
@@ -114,14 +117,7 @@ export default function DiagnosticCard() {
       </div>
 
       {/* Barre de progression */}
-      <div className="h-px bg-white/[0.04] flex-shrink-0">
-        <motion.div
-          className="h-full bg-accent origin-left"
-          animate={{ scaleX: progress / 100 }}
-          transition={{ duration: 0.3, ease: EASE }}
-          style={{ transformOrigin: 'left' }}
-        />
-      </div>
+      <QuizProgressBar current={view === 'quiz' ? stepIdx + 1 : 7} total={7} label={`Étape ${view === 'quiz' ? stepIdx + 1 : 7} sur 7`} />
 
       {/* Contenu */}
       <div className="flex-1 overflow-y-auto">
@@ -145,7 +141,7 @@ export default function DiagnosticCard() {
                 {step.question}
               </h3>
               {'hint' in step && step.hint && (
-                <p className="font-inter text-[10px] text-neutral/40 mb-4">{step.hint}</p>
+                <p className="font-inter text-[10px] text-muted mb-4">{step.hint}</p>
               )}
               {!('hint' in step && step.hint) && <div className="mb-4" />}
 
@@ -156,38 +152,15 @@ export default function DiagnosticCard() {
                     : (justSelected === opt.value || currentVal === opt.value)
 
                   return (
-                    <motion.button
+                    <QuizOption
                       key={opt.value}
+                      icon={getStepIcon(step.key as QuizKey, opt.value)}
+                      label={opt.label}
+                      selected={isSelected}
+                      multi={step.multi}
+                      size="sm"
                       onClick={() => handleOption(step.key as QuizKey, opt.value, step.multi)}
-                      whileTap={{ scale: 0.98 }}
-                      className={`w-full text-left border px-3.5 py-2.5 flex items-center gap-3 transition-all duration-200 ${
-                        isSelected
-                          ? 'border-accent/60 bg-accent/[0.06]'
-                          : 'border-white/[0.07] hover:border-white/20 hover:bg-white/[0.02]'
-                      }`}
-                    >
-                      <span className="text-base flex-shrink-0 w-6 text-center leading-none">{opt.icon}</span>
-                      <span className={`font-inter text-xs font-medium transition-colors duration-150 ${
-                        isSelected ? 'text-surface' : 'text-surface/65'
-                      }`}>
-                        {opt.label}
-                      </span>
-                      {step.multi ? (
-                        <span className={`ml-auto flex-shrink-0 w-3.5 h-3.5 border flex items-center justify-center text-[8px] transition-all ${
-                          isSelected ? 'border-accent bg-accent text-bg' : 'border-white/20'
-                        }`}>
-                          {isSelected && '✓'}
-                        </span>
-                      ) : (
-                        <motion.span
-                          className="ml-auto text-accent text-[10px] flex-shrink-0"
-                          animate={{ opacity: isSelected ? 1 : 0, scale: isSelected ? 1 : 0.5 }}
-                          transition={{ duration: 0.12 }}
-                        >
-                          ✓
-                        </motion.span>
-                      )}
-                    </motion.button>
+                    />
                   )
                 })}
               </div>

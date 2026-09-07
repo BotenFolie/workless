@@ -33,7 +33,7 @@ export default function CTAFinal() {
           <RevealOnScroll delay={0.3}>
             <MagneticButton>
               <button
-                onClick={open}
+                onClick={() => open('cta-final')}
                 className="inline-flex items-center gap-3 font-inter font-semibold text-bg bg-accent px-8 py-4 md:px-10 md:py-5 rounded-sm text-base hover:bg-white transition-colors duration-200 group"
               >
                 {c.ctaFinal.cta}

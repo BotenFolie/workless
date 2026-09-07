@@ -104,7 +104,7 @@ export default function Nav() {
           </div>
 
           <button
-            onClick={open}
+            onClick={() => open('nav')}
             className="font-inter font-semibold text-sm text-bg bg-accent px-5 py-2.5 rounded-sm hover:bg-white transition-colors duration-200"
           >
             {c.nav.cta}

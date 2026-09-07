@@ -76,7 +76,7 @@ export default function Pricing() {
                 </ul>
 
                 <button
-                  onClick={open}
+                  onClick={() => open('pricing')}
                   className={`w-full font-inter font-semibold text-sm py-3.5 transition-colors duration-200 ${
                     plan.highlight
                       ? 'bg-accent text-bg hover:bg-white'

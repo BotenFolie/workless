@@ -13,7 +13,7 @@ export type DiagStep = {
   multi: boolean
   question: string
   hint?: string
-  options: Array<{ value: string; icon: string; label: string }>
+  options: Array<{ value: string; label: string }>
 }
 
 export type StatEntry = {
@@ -484,6 +484,7 @@ export const contentFR = {
     title: 'Diagnostic Stripwork',
     freeLabel: 'Diagnostic gratuit',
     back: '← Retour',
+    close: 'Fermer',
     questionLabel: (n: number) => `Question ${n} sur 6`,
     lastStep: 'Dernière étape',
     whereToSend: 'Où envoyer votre analyse ?',
@@ -513,11 +514,11 @@ export const contentFR = {
         question: 'Où perdez-vous le plus de temps en ce moment ?',
         hint: 'Plusieurs choix possibles',
         options: [
-          { value: 'reporting',    icon: '📊', label: 'Analyse & reporting' },
-          { value: 'emails',       icon: '✉️',  label: 'Rédaction & emails' },
-          { value: 'decisions',    icon: '⏳', label: 'Prises de décision lentes' },
-          { value: 'organisation', icon: '🗂️', label: 'Organisation interne' },
-          { value: 'autre',        icon: '💬', label: 'Autre chose' },
+          { value: 'reporting',    label: 'Analyse & reporting' },
+          { value: 'emails',       label: 'Rédaction & emails' },
+          { value: 'decisions',    label: 'Prises de décision lentes' },
+          { value: 'organisation', label: 'Organisation interne' },
+          { value: 'autre',        label: 'Autre chose' },
         ],
       },
       {
@@ -526,10 +527,10 @@ export const contentFR = {
         multi: false,
         question: "Combien d'heures disparaissent chaque semaine ?",
         options: [
-          { value: 'moins-5h', icon: '🟡', label: 'Moins de 5h' },
-          { value: '5-10h',    icon: '🟠', label: '5 à 10h' },
-          { value: '10-20h',   icon: '🔴', label: '10 à 20h' },
-          { value: '20h+',     icon: '🚨', label: 'Plus de 20h — chaque semaine' },
+          { value: 'moins-5h', label: 'Moins de 5h' },
+          { value: '5-10h',    label: '5 à 10h' },
+          { value: '10-20h',   label: '10 à 20h' },
+          { value: '20h+',     label: 'Plus de 20h — chaque semaine' },
         ],
       },
       {
@@ -538,10 +539,10 @@ export const contentFR = {
         multi: false,
         question: 'Combien de personnes sont concernées par ce problème ?',
         options: [
-          { value: '1-2',  icon: '👤', label: '1 à 2 personnes' },
-          { value: '3-5',  icon: '👥', label: '3 à 5 personnes' },
-          { value: '5-10', icon: '🏘️', label: '5 à 10 personnes' },
-          { value: '10+',  icon: '🏢', label: 'Plus de 10 personnes' },
+          { value: '1-2',  label: '1 à 2 personnes' },
+          { value: '3-5',  label: '3 à 5 personnes' },
+          { value: '5-10', label: '5 à 10 personnes' },
+          { value: '10+',  label: 'Plus de 10 personnes' },
         ],
       },
       {
@@ -551,10 +552,10 @@ export const contentFR = {
         question: 'Si vous supprimiez cette charge, quels seraient les bénéfices ?',
         hint: 'Plusieurs choix possibles',
         options: [
-          { value: 'temps',     icon: '⚡',   label: 'Gagner du temps' },
-          { value: 'pression',  icon: '😮‍💨', label: 'Réduire la pression' },
-          { value: 'decisions', icon: '🎯',  label: 'Accélérer les décisions' },
-          { value: 'recruter',  icon: '💰',  label: 'Éviter de recruter' },
+          { value: 'temps',     label: 'Gagner du temps' },
+          { value: 'pression',  label: 'Réduire la pression' },
+          { value: 'decisions', label: 'Accélérer les décisions' },
+          { value: 'recruter',  label: 'Éviter de recruter' },
         ],
       },
       {
@@ -563,9 +564,9 @@ export const contentFR = {
         multi: false,
         question: "Avez-vous déjà essayé d'optimiser ces tâches ?",
         options: [
-          { value: 'jamais',        icon: '🌱', label: 'Non, pas encore essayé' },
-          { value: 'partiellement', icon: '🔧', label: 'Oui, partiellement' },
-          { value: 'echec',         icon: '💥', label: 'Oui, mais sans succès' },
+          { value: 'jamais',        label: 'Non, pas encore essayé' },
+          { value: 'partiellement', label: 'Oui, partiellement' },
+          { value: 'echec',         label: 'Oui, mais sans succès' },
         ],
       },
       {
@@ -574,9 +575,9 @@ export const contentFR = {
         multi: false,
         question: 'Quel est votre objectif principal ?',
         options: [
-          { value: 'tester',      icon: '🔍', label: 'Tester une première amélioration' },
-          { value: 'ameliorer',   icon: '📈', label: "Améliorer l'efficacité globale" },
-          { value: 'transformer', icon: '🚀', label: "Transformer l'organisation" },
+          { value: 'tester',      label: 'Tester une première amélioration' },
+          { value: 'ameliorer',   label: "Améliorer l'efficacité globale" },
+          { value: 'transformer', label: "Transformer l'organisation" },
         ],
       },
     ] as DiagStep[],

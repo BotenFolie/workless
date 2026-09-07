@@ -131,7 +131,7 @@ export default function AutomationsCatalog() {
         {/* CTA */}
         <div className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
           <button
-            onClick={open}
+            onClick={() => open('catalogue')}
             className="w-full sm:w-auto font-inter font-semibold text-sm text-bg bg-accent px-7 py-3 rounded-sm hover:bg-white transition-colors duration-200"
           >
             {cta}

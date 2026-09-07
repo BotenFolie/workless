@@ -1,13 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { X } from 'lucide-react'
 import { useDiagnostic } from '@/lib/diagnosticContext'
 import { useContent } from '@/lib/i18n'
-import { computeScore, getProfile, type QuizKey, type QuizAnswers } from '@/lib/diagnosticConfig'
+import { computeScore, getProfile, getStepIcon, type QuizKey, type QuizAnswers } from '@/lib/diagnosticConfig'
+import QuizOption from './ui/QuizOption'
+import QuizProgressBar from './ui/QuizProgressBar'
+import RgpdCheckbox from './ui/RgpdCheckbox'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,10 +34,11 @@ const emptyQuiz: QuizAnswers = {
 // ─── Composant principal ──────────────────────────────────────────────────────
 
 export default function DiagnosticModal() {
-  const { isOpen, close } = useDiagnostic()
+  const { isOpen, source, close } = useDiagnostic()
   const router = useRouter()
   const c = useContent()
   const d = c.diagnostic
+  const reducedMotion = useReducedMotion()
 
   const [view, setView]         = useState<ViewId>('quiz')
   const [stepIdx, setStepIdx]   = useState(0)
@@ -44,9 +50,51 @@ export default function DiagnosticModal() {
   const [loading, setLoading]   = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  const panelRef = useRef<HTMLDivElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
+  const titleId = 'diagnostic-modal-title'
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
+  }, [isOpen])
+
+  // Focus trap + Escape + retour de focus à la fermeture
+  useEffect(() => {
+    if (!isOpen) return
+
+    lastFocusedRef.current = document.activeElement as HTMLElement | null
+    const panel = panelRef.current
+    const firstFocusable = panel?.querySelector<HTMLElement>(FOCUSABLE)
+    firstFocusable?.focus()
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        handleClose()
+        return
+      }
+      if (e.key !== 'Tab' || !panel) return
+
+      const focusables = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE))
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      lastFocusedRef.current?.focus()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   const handleClose = () => {
@@ -99,6 +147,7 @@ export default function DiagnosticModal() {
           probleme:  quiz.probleme.join(', '),
           intention: quiz.intention.join(', '),
           ...contact, score, profile,
+          source: source ?? '',
           _hp: '',
         }),
       })
@@ -135,7 +184,7 @@ export default function DiagnosticModal() {
           <motion.div
             key="backdrop"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: reducedMotion ? 0 : 0.3 }}
             onClick={handleClose}
             className="fixed inset-0 z-[9993] bg-black/80 backdrop-blur-sm"
           />
@@ -143,8 +192,14 @@ export default function DiagnosticModal() {
           {/* Panel */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.4, ease: EASE }}
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            initial={{ opacity: 0, y: reducedMotion ? 0 : 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reducedMotion ? 0 : 20 }}
+            transition={{ duration: reducedMotion ? 0.15 : 0.4, ease: EASE }}
             className="fixed inset-x-3 top-3 bottom-3 sm:inset-x-4 sm:top-[5vh] sm:bottom-[5vh] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-xl z-[9994] bg-[#161616] border border-white/[0.12] flex flex-col overflow-hidden"
           >
             {/* Header */}
@@ -158,7 +213,7 @@ export default function DiagnosticModal() {
                     {d.back}
                   </button>
                 ) : (
-                  <span className="font-grotesk font-bold text-surface text-sm tracking-tight">
+                  <span id={titleId} className="font-grotesk font-bold text-surface text-sm tracking-tight">
                     {d.title}
                   </span>
                 )}
@@ -171,25 +226,17 @@ export default function DiagnosticModal() {
                 )}
                 <button
                   onClick={handleClose}
-                  className="w-7 h-7 flex items-center justify-center text-neutral/50 hover:text-surface transition-colors duration-200 text-sm"
-                  aria-label="Fermer"
+                  className="w-7 h-7 flex items-center justify-center text-neutral/50 hover:text-surface transition-colors duration-200"
+                  aria-label={d.close ?? 'Fermer'}
                 >
-                  ✕
+                  <X className="w-4 h-4" strokeWidth={1.75} aria-hidden="true" />
                 </button>
               </div>
             </div>
 
             {/* Barre de progression */}
             {view !== 'result' && (
-              <div className="h-px bg-white/[0.06] flex-shrink-0">
-                <motion.div
-                  className="h-full bg-accent origin-left"
-                  animate={{ scaleX: progressPct / 100 }}
-                  initial={{ scaleX: 0 }}
-                  transition={{ duration: 0.35, ease: EASE }}
-                  style={{ transformOrigin: 'left' }}
-                />
-              </div>
+              <QuizProgressBar current={stepIdx + 1} total={7} label={`Étape ${stepIdx + 1} sur 7`} />
             )}
 
             {/* Contenu */}
@@ -201,10 +248,10 @@ export default function DiagnosticModal() {
                   <motion.div
                     key={`q-${stepIdx}`}
                     custom={direction}
-                    initial={{ opacity: 0, x: direction * 24 }}
+                    initial={{ opacity: 0, x: reducedMotion ? 0 : direction * 24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction * -24 }}
-                    transition={{ duration: 0.22, ease: EASE }}
+                    exit={{ opacity: 0, x: reducedMotion ? 0 : direction * -24 }}
+                    transition={{ duration: reducedMotion ? 0.1 : 0.22, ease: EASE }}
                     className="px-5 md:px-8 pt-8 pb-10"
                   >
                     <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-3">
@@ -214,7 +261,7 @@ export default function DiagnosticModal() {
                       {step.question}
                     </h2>
                     {'hint' in step && step.hint && (
-                      <p className="font-inter text-xs text-neutral/40 mb-6">{step.hint}</p>
+                      <p className="font-inter text-xs text-muted mb-6">{step.hint}</p>
                     )}
                     {!('hint' in step && step.hint) && <div className="mb-6" />}
 
@@ -225,39 +272,14 @@ export default function DiagnosticModal() {
                           : (justSelected === opt.value || currentValue === opt.value)
 
                         return (
-                          <motion.button
+                          <QuizOption
                             key={opt.value}
+                            icon={getStepIcon(step.key, opt.value)}
+                            label={opt.label}
+                            selected={isSelected}
+                            multi={step.multi}
                             onClick={() => handleOptionClick(step.key as QuizKey, opt.value, step.multi)}
-                            whileTap={{ scale: 0.985 }}
-                            className={`w-full text-left border px-4 py-3.5 flex items-center gap-4 transition-all duration-200 ${
-                              isSelected
-                                ? 'border-accent/70 bg-accent/[0.07]'
-                                : 'border-white/[0.09] hover:border-white/25 hover:bg-white/[0.025]'
-                            }`}
-                          >
-                            <span className="text-lg flex-shrink-0 w-7 text-center leading-none">{opt.icon}</span>
-                            <span className={`font-inter text-sm font-medium transition-colors duration-200 ${
-                              isSelected ? 'text-surface' : 'text-surface/75'
-                            }`}>
-                              {opt.label}
-                            </span>
-                            {step.multi ? (
-                              <span className={`ml-auto flex-shrink-0 w-4 h-4 border flex items-center justify-center text-[10px] transition-all duration-200 ${
-                                isSelected ? 'border-accent bg-accent text-bg' : 'border-white/20'
-                              }`}>
-                                {isSelected && '✓'}
-                              </span>
-                            ) : (
-                              <motion.span
-                                className="ml-auto text-accent text-xs flex-shrink-0"
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: isSelected ? 1 : 0, scale: isSelected ? 1 : 0.5 }}
-                                transition={{ duration: 0.15 }}
-                              >
-                                ✓
-                              </motion.span>
-                            )}
-                          </motion.button>
+                          />
                         )
                       })}
                     </div>
@@ -278,10 +300,10 @@ export default function DiagnosticModal() {
                 {view === 'contact' && (
                   <motion.div
                     key="contact"
-                    initial={{ opacity: 0, x: 24 }}
+                    initial={{ opacity: 0, x: reducedMotion ? 0 : 24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -24 }}
-                    transition={{ duration: 0.22, ease: EASE }}
+                    exit={{ opacity: 0, x: reducedMotion ? 0 : -24 }}
+                    transition={{ duration: reducedMotion ? 0.1 : 0.22, ease: EASE }}
                     className="px-5 md:px-8 pt-8 pb-10"
                   >
                     <p className="font-inter text-[10px] font-semibold tracking-[0.15em] uppercase text-accent mb-3">
@@ -290,7 +312,7 @@ export default function DiagnosticModal() {
                     <h2 className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-2">
                       {d.whereToSend}
                     </h2>
-                    <p className="font-inter text-neutral text-sm mb-7">
+                    <p className="font-inter text-muted text-sm mb-7">
                       {d.personalizedSummary}
                     </p>
 
@@ -302,10 +324,10 @@ export default function DiagnosticModal() {
                         { key: 'telephone'  as const, type: 'tel',   required: false },
                       ] as const).map(f => (
                         <div key={f.key}>
-                          <label className="block font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/40 mb-2">
+                          <label className="block font-inter text-[10px] font-semibold tracking-[0.12em] uppercase text-surface/60 mb-2">
                             {d.fields[f.key].label}
                             {!f.required && (
-                              <span className="normal-case font-normal tracking-normal ml-1 text-surface/25">
+                              <span className="normal-case font-normal tracking-normal ml-1 text-surface/35">
                                 {d.optional}
                               </span>
                             )}
@@ -321,17 +343,7 @@ export default function DiagnosticModal() {
                         </div>
                       ))}
 
-                      <label className="flex items-start gap-3 cursor-pointer pt-1">
-                        <span className={`mt-0.5 w-4 h-4 border flex-shrink-0 flex items-center justify-center text-[10px] transition-all duration-200 ${
-                          rgpd ? 'border-accent bg-accent text-bg' : 'border-white/30'
-                        }`}>
-                          {rgpd && '✓'}
-                        </span>
-                        <input type="checkbox" className="sr-only" checked={rgpd} onChange={e => setRgpd(e.target.checked)} required />
-                        <span className="font-inter text-neutral/50 text-xs leading-relaxed">
-                          {d.rgpd}
-                        </span>
-                      </label>
+                      <RgpdCheckbox checked={rgpd} onChange={setRgpd} label={d.rgpd} />
 
                       {submitError && (
                         <p className="font-inter text-xs text-red-400 text-center">{submitError}</p>
@@ -350,7 +362,7 @@ export default function DiagnosticModal() {
                         ) : d.submit}
                       </button>
 
-                      <p className="font-inter text-neutral/30 text-xs text-center">
+                      <p className="font-inter text-muted text-xs text-center">
                         {d.noNewsletter}
                       </p>
                     </form>
@@ -365,15 +377,15 @@ export default function DiagnosticModal() {
                   return (
                     <motion.div
                       key="result"
-                      initial={{ opacity: 0, y: 16 }}
+                      initial={{ opacity: 0, y: reducedMotion ? 0 : 16 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, ease: EASE }}
+                      transition={{ duration: reducedMotion ? 0.1 : 0.4, ease: EASE }}
                       className="px-5 md:px-8 pt-10 pb-12"
                     >
                       <motion.div
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.05, duration: 0.3, ease: EASE }}
+                        transition={{ delay: reducedMotion ? 0 : 0.05, duration: reducedMotion ? 0.1 : 0.3, ease: EASE }}
                         className={`inline-flex items-center border px-3 py-1.5 mb-6 ${
                           profileType === 'high'   ? 'border-accent/40 bg-accent/[0.06]' :
                           profileType === 'medium' ? 'border-white/20 bg-white/[0.03]' :
@@ -388,43 +400,43 @@ export default function DiagnosticModal() {
                       </motion.div>
 
                       <motion.h3
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.12, duration: 0.35, ease: EASE }}
+                        transition={{ delay: reducedMotion ? 0 : 0.12, duration: reducedMotion ? 0.1 : 0.35, ease: EASE }}
                         className="font-grotesk font-bold text-surface text-xl md:text-2xl leading-tight tracking-tight mb-4"
                       >
                         {res.headline(contact.prenom)}
                       </motion.h3>
 
                       <motion.p
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.18, duration: 0.35, ease: EASE }}
-                        className="font-inter text-neutral text-sm leading-relaxed mb-8"
+                        transition={{ delay: reducedMotion ? 0 : 0.18, duration: reducedMotion ? 0.1 : 0.35, ease: EASE }}
+                        className="font-inter text-muted text-sm leading-relaxed mb-8"
                       >
                         {res.body}
                       </motion.p>
 
                       {res.stats.length > 0 && (
                         <motion.div
-                          initial={{ opacity: 0, y: 8 }}
+                          initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.24, duration: 0.35, ease: EASE }}
+                          transition={{ delay: reducedMotion ? 0 : 0.24, duration: reducedMotion ? 0.1 : 0.35, ease: EASE }}
                           className="grid grid-cols-3 gap-2 mb-8"
                         >
                           {res.stats.map((s) => (
                             <div key={s.label} className="border border-white/[0.08] bg-white/[0.02] px-3 py-3.5">
                               <p className="font-inter text-xs font-bold text-surface mb-0.5">{s.getValue(quiz)}</p>
-                              <p className="font-inter text-[10px] text-neutral/50 leading-snug">{s.label}</p>
+                              <p className="font-inter text-[10px] text-muted leading-snug">{s.label}</p>
                             </div>
                           ))}
                         </motion.div>
                       )}
 
                       <motion.div
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.35, ease: EASE }}
+                        transition={{ delay: reducedMotion ? 0 : 0.3, duration: reducedMotion ? 0.1 : 0.35, ease: EASE }}
                         className="space-y-3"
                       >
                         <button className="w-full bg-accent text-bg font-inter font-semibold py-4 hover:bg-white transition-colors duration-200">
@@ -432,7 +444,7 @@ export default function DiagnosticModal() {
                         </button>
                         <button
                           onClick={handleClose}
-                          className="w-full font-inter text-xs text-neutral/40 hover:text-neutral/70 transition-colors duration-200 py-2"
+                          className="w-full font-inter text-xs text-muted hover:text-surface/70 transition-colors duration-200 py-2"
                         >
                           {d.back.replace('← ', '')}
                         </button>

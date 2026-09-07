@@ -1,82 +1,43 @@
 // Config partagée entre DiagnosticModal (overlay) et DiagnosticCard (embedded)
 
-export const QUIZ_STEPS = [
-  {
-    id: 1,
-    key: 'probleme' as const,
-    multi: true,
-    question: 'Où perdez-vous le plus de temps ?',
-    hint: 'Plusieurs choix possibles',
-    options: [
-      { value: 'reporting',    icon: '📊', label: 'Analyse & reporting' },
-      { value: 'emails',       icon: '✉️',  label: 'Rédaction & emails' },
-      { value: 'decisions',    icon: '⏳', label: 'Décisions lentes' },
-      { value: 'organisation', icon: '🗂️', label: 'Organisation interne' },
-      { value: 'autre',        icon: '💬', label: 'Autre chose' },
-    ],
-  },
-  {
-    id: 2,
-    key: 'heures' as const,
-    multi: false,
-    question: "Combien d'heures perdues par semaine ?",
-    options: [
-      { value: 'moins-5h', icon: '🟡', label: 'Moins de 5h' },
-      { value: '5-10h',    icon: '🟠', label: '5 à 10h' },
-      { value: '10-20h',   icon: '🔴', label: '10 à 20h' },
-      { value: '20h+',     icon: '🚨', label: 'Plus de 20h' },
-    ],
-  },
-  {
-    id: 3,
-    key: 'personnes' as const,
-    multi: false,
-    question: 'Combien de personnes concernées ?',
-    options: [
-      { value: '1-2',  icon: '👤', label: '1 à 2 personnes' },
-      { value: '3-5',  icon: '👥', label: '3 à 5 personnes' },
-      { value: '5-10', icon: '🏘️', label: '5 à 10 personnes' },
-      { value: '10+',  icon: '🏢', label: 'Plus de 10' },
-    ],
-  },
-  {
-    id: 4,
-    key: 'intention' as const,
-    multi: true,
-    question: 'Quel serait le premier bénéfice ?',
-    hint: 'Plusieurs choix possibles',
-    options: [
-      { value: 'temps',     icon: '⚡', label: 'Gagner du temps' },
-      { value: 'pression',  icon: '😮‍💨', label: 'Réduire la pression' },
-      { value: 'decisions', icon: '🎯', label: 'Accélérer les décisions' },
-      { value: 'recruter',  icon: '💰', label: 'Éviter de recruter' },
-    ],
-  },
-  {
-    id: 5,
-    key: 'maturite' as const,
-    multi: false,
-    question: 'Avez-vous déjà essayé d\'optimiser ?',
-    options: [
-      { value: 'jamais',        icon: '🌱', label: 'Non, pas encore' },
-      { value: 'partiellement', icon: '🔧', label: 'Oui, partiellement' },
-      { value: 'echec',         icon: '💥', label: 'Oui, sans succès' },
-    ],
-  },
-  {
-    id: 6,
-    key: 'objectif' as const,
-    multi: false,
-    question: 'Quel est votre objectif principal ?',
-    options: [
-      { value: 'tester',      icon: '🔍', label: 'Tester une amélioration' },
-      { value: 'ameliorer',   icon: '📈', label: 'Améliorer l\'efficacité' },
-      { value: 'transformer', icon: '🚀', label: 'Transformer l\'org' },
-    ],
-  },
-]
+import {
+  BarChart3, Mail, Hourglass, FolderOpen, MessageCircle,
+  Timer, AlertTriangle, User, Users, Building2,
+  Zap, Wind, Target, Coins, Sprout, Wrench, AlertOctagon,
+  Search, TrendingUp, Rocket,
+  type LucideIcon,
+} from 'lucide-react'
 
 export type QuizKey = 'probleme' | 'heures' | 'personnes' | 'intention' | 'maturite' | 'objectif'
+
+// Icônes indépendantes de la langue → source unique ici (jamais dupliquées dans les fichiers content i18n).
+// Clé = step key, puis option value. Les composants lisent le label/texte depuis le content, l'icône depuis cette map.
+export const STEP_ICONS: Record<QuizKey, Record<string, LucideIcon>> = {
+  probleme: {
+    reporting: BarChart3, emails: Mail, decisions: Hourglass,
+    organisation: FolderOpen, autre: MessageCircle,
+  },
+  heures: {
+    'moins-5h': Timer, '5-10h': Timer, '10-20h': Timer, '20h+': AlertTriangle,
+  },
+  personnes: {
+    '1-2': User, '3-5': Users, '5-10': Users, '10+': Building2,
+  },
+  intention: {
+    temps: Zap, pression: Wind, decisions: Target, recruter: Coins,
+  },
+  maturite: {
+    jamais: Sprout, partiellement: Wrench, echec: AlertOctagon,
+  },
+  objectif: {
+    tester: Search, ameliorer: TrendingUp, transformer: Rocket,
+  },
+}
+
+// Retourne l'icône d'une option ; fallback MessageCircle si valeur inconnue (jamais undefined → pas de crash rendu)
+export function getStepIcon(key: QuizKey, value: string): LucideIcon {
+  return STEP_ICONS[key]?.[value] ?? MessageCircle
+}
 
 export type QuizAnswers = {
   probleme:  string[]

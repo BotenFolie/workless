@@ -20,6 +20,7 @@ const LABELS: Record<string, string> = {
   objectif:   'Objectif principal',
   entreprise: 'Entreprise',
   telephone:  'Téléphone',
+  source:     'Entrée diagnostic',
 }
 
 const PROFILE_LABELS: Record<string, string> = {
@@ -42,6 +43,7 @@ const DiagnosticSchema = z.object({
   objectif:   z.enum(['tester', 'ameliorer', 'transformer']),
   score:      z.number().int().min(0).max(16),
   profile:    z.enum(['high', 'medium', 'low']),
+  source:     z.string().max(100).optional().default(''),
 })
 
 type ValidatedData = z.infer<typeof DiagnosticSchema>

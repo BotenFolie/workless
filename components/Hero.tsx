@@ -94,7 +94,7 @@ export default function Hero() {
             >
               <MagneticButton>
                 <button
-                  onClick={open}
+                  onClick={() => open('hero')}
                   className="inline-flex items-center gap-2 font-inter font-semibold text-bg bg-accent px-8 py-4 rounded-sm text-base hover:bg-white transition-colors duration-200 group"
                 >
                   {c.hero.cta}
