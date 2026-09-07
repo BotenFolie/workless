@@ -6,6 +6,13 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { REALISATIONS, type Realisation } from '@/lib/realisations'
 import ProjectObject from './ProjectObject'
 import CaseStudyOverlay from './CaseStudyOverlay'
+import RealisationsContactForm from './RealisationsContactForm'
+
+// Palette de disciplines affichée sous le hero
+const CAPABILITIES = [
+  'Sites web', 'Landing pages', 'Applications iOS', 'SEO', 'SEA',
+  'Tracking', 'Automatisation', 'Design produit',
+]
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
@@ -54,8 +61,8 @@ export default function AtelierExperience() {
         </Link>
       </header>
 
-      {/* Hero */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-16 md:px-10 md:pb-24 md:pt-24">
+      {/* Hero — centré */}
+      <section className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 pb-16 pt-16 text-center md:pb-24 md:pt-24">
         <motion.p
           {...enter({ y: 12 })}
           transition={{ duration: 0.6, ease: EASE }}
@@ -66,7 +73,7 @@ export default function AtelierExperience() {
         <motion.h1
           {...enter({ y: 20 })}
           transition={{ duration: 0.7, ease: EASE, delay: 0.05 }}
-          className="mt-5 max-w-4xl font-grotesk text-5xl font-bold leading-[0.95] tracking-tight text-surface md:text-7xl"
+          className="mt-5 font-grotesk text-5xl font-bold leading-[0.95] tracking-tight text-surface md:text-7xl"
         >
           Je construis des sites
           <br />
@@ -75,10 +82,35 @@ export default function AtelierExperience() {
         <motion.p
           {...enter({ y: 16 })}
           transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
-          className="mt-6 max-w-xl font-inter text-base leading-relaxed text-muted md:text-lg"
+          className="mt-6 max-w-2xl font-inter text-base leading-relaxed text-muted md:text-lg"
         >
-          Pas des vitrines — des machines à convertir. Survolez un projet pour le
-          faire vivre, cliquez pour l&apos;étude de cas.
+          Sites vitrines, landing pages et applications iOS — conçus, développés et
+          optimisés pour un seul objectif : convertir. Du design au SEO/SEA jusqu&apos;à
+          l&apos;automatisation et au tracking, je prends chaque projet de A à Z.
+        </motion.p>
+
+        {/* Capacités */}
+        <motion.ul
+          {...enter({ y: 16 })}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.18 }}
+          className="mt-8 flex max-w-2xl flex-wrap justify-center gap-2"
+        >
+          {CAPABILITIES.map(cap => (
+            <li
+              key={cap}
+              className="rounded-full border border-white/12 px-3.5 py-1.5 font-inter text-xs font-medium text-white/70"
+            >
+              {cap}
+            </li>
+          ))}
+        </motion.ul>
+
+        <motion.p
+          {...enter({ y: 16 })}
+          transition={{ duration: 0.7, ease: EASE, delay: 0.24 }}
+          className="mt-10 font-inter text-sm text-neutral"
+        >
+          Survolez un projet pour le faire vivre, cliquez pour l&apos;étude de cas.
         </motion.p>
       </section>
 
@@ -100,23 +132,21 @@ export default function AtelierExperience() {
         </div>
       </section>
 
-      {/* CTA de clôture */}
-      <section className="relative z-10 border-t border-white/[0.07] px-6 py-24 md:px-10">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-grotesk text-4xl font-bold tracking-tight text-surface md:text-5xl">
-            Le prochain, c&apos;est le vôtre.
-          </h2>
-          <p className="mx-auto mt-5 max-w-lg font-inter text-base text-muted">
-            Un site, une landing, une app à lancer ? On regarde ensemble ce qui,
-            chez vous, mérite de mieux convertir.
-          </p>
-          <Link
-            href="/#cta"
-            className="mt-9 inline-flex items-center gap-2 rounded-sm bg-accent px-8 py-4 font-inter text-base font-semibold text-bg transition-colors duration-200 hover:bg-white"
-          >
-            Démarrer un projet
-            <span aria-hidden>→</span>
-          </Link>
+      {/* CTA de clôture — questionnaire dédié */}
+      <section id="contact" className="relative z-10 border-t border-white/[0.07] px-6 py-24 md:px-10">
+        <div className="mx-auto max-w-2xl">
+          <div className="text-center">
+            <h2 className="font-grotesk text-4xl font-bold tracking-tight text-surface md:text-5xl">
+              Le prochain, c&apos;est le vôtre.
+            </h2>
+            <p className="mx-auto mt-5 max-w-lg font-inter text-base text-muted">
+              Parlez-moi de votre projet en 30 secondes. Je reviens vers vous pour
+              en discuter — par email ou téléphone.
+            </p>
+          </div>
+          <div className="mt-12">
+            <RealisationsContactForm />
+          </div>
         </div>
       </section>
 
