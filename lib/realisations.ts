@@ -69,6 +69,29 @@ export const REALISATIONS: Realisation[] = [
     rotation: 4,
   },
   {
+    slug: 'bachcostablanca',
+    name: 'Bach Costa Blanca',
+    domain: 'bachcostablanca.com',
+    url: 'https://bachcostablanca.com',
+    image: '/realisations/bachcostablanca.jpg',
+    category: 'Site vitrine · Fleurs de Bach · Espagne',
+    tags: ['Website', 'SEO'],
+    heroMetric: '1re page',
+    heroLabel: 'Google sur « Fleurs de Bach · Costa Blanca »',
+    accent: '#D4A23C',
+    accentInk: '#1A2438',
+    problem:
+      "Une praticienne francophone installée sur la Costa Blanca, sans site — donc introuvable pour les expatriés qui cherchaient un accompagnement dans leur langue.",
+    built:
+      "Un site vitrine élégant et rassurant : bilan émotionnel, protocole de séances, réservation — le tout dans une direction artistique soignée (navy & or).",
+    strategy:
+      "Une architecture SEO pensée pour une niche géolocalisée précise — langue, région, pratique — là où la concurrence est faible mais l'intention forte.",
+    result:
+      "Positionné en première page Google sur les requêtes clés de la Costa Blanca : une visibilité qui amène des clients sans budget publicitaire.",
+    span: 12,
+    rotation: -2,
+  },
+  {
     slug: 'verifam',
     name: 'Verifam',
     domain: 'verifam.app',
@@ -113,28 +136,5 @@ export const REALISATIONS: Realisation[] = [
       "Une app iOS aboutie et son site de lancement, prêts pour l'App Store — l'intérêt transformé en installations.",
     span: 7,
     rotation: 3,
-  },
-  {
-    slug: 'bachcostablanca',
-    name: 'Bach Costa Blanca',
-    domain: 'bachcostablanca.com',
-    url: 'https://bachcostablanca.com',
-    image: '/realisations/bachcostablanca.jpg',
-    category: 'Site vitrine · Fleurs de Bach · Espagne',
-    tags: ['Website', 'SEO'],
-    heroMetric: '1re page',
-    heroLabel: 'Google sur « Fleurs de Bach · Costa Blanca »',
-    accent: '#D4A23C',
-    accentInk: '#1A2438',
-    problem:
-      "Une praticienne francophone installée sur la Costa Blanca, sans site — donc introuvable pour les expatriés qui cherchaient un accompagnement dans leur langue.",
-    built:
-      "Un site vitrine élégant et rassurant : bilan émotionnel, protocole de séances, réservation — le tout dans une direction artistique soignée (navy & or).",
-    strategy:
-      "Une architecture SEO pensée pour une niche géolocalisée précise — langue, région, pratique — là où la concurrence est faible mais l'intention forte.",
-    result:
-      "Positionné en première page Google sur les requêtes clés de la Costa Blanca : une visibilité qui amène des clients sans budget publicitaire.",
-    span: 12,
-    rotation: -2,
   },
 ]
