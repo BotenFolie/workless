@@ -137,4 +137,50 @@ export const REALISATIONS: Realisation[] = [
     span: 7,
     rotation: 3,
   },
+  {
+    slug: 'voyance',
+    name: 'Eric Brunet',
+    domain: 'voyance-eric-brunet.vercel.app',
+    url: 'https://voyance-eric-brunet.vercel.app',
+    image: '/realisations/voyance.jpg',
+    category: 'Site vitrine · Voyance & tarologie · Lyon',
+    tags: ['Website', 'Design', 'SEO'],
+    heroMetric: 'RDV en ligne',
+    heroLabel: 'la curiosité transformée en prise de rendez-vous',
+    accent: '#B02A3A',
+    accentInk: '#FFFFFF',
+    problem:
+      "La voyance traîne une image de méfiance en ligne : difficile, pour un praticien sérieux, de se démarquer et d'inspirer confiance dès la première seconde.",
+    built:
+      "Un site vitrine à la direction artistique soignée — cartes de tarot interactives qui se retournent au survol, animations au scroll — pour incarner une voyance haut de gamme et rassurante.",
+    strategy:
+      "Une expérience mémorable qui installe la crédibilité immédiatement, couplée à un SEO local (« voyant médium Lyon ») et un parcours direct vers la prise de rendez-vous.",
+    result:
+      "Un site qui distingue Éric de la concurrence et transforme la curiosité en rendez-vous.",
+    span: 7,
+    rotation: -3,
+  },
+  {
+    slug: 'corgier',
+    name: 'Corgier Chaudronnerie',
+    domain: 'corgier-chaudronnerie.vercel.app',
+    url: 'https://corgier-chaudronnerie.vercel.app',
+    image: '/realisations/corgier.jpg',
+    category: 'Site vitrine · Chaudronnerie industrielle · Trévoux',
+    tags: ['Website', 'SEO'],
+    heroMetric: 'Devis en ligne',
+    heroLabel: 'le savoir-faire atelier, enfin visible et contactable',
+    accent: '#E85D1E',
+    accentInk: '#1A1A1A',
+    problem:
+      "Une chaudronnerie reconnue localement mais quasi invisible en ligne, sans moyen simple pour un prospect de découvrir l'atelier et de demander un devis.",
+    built:
+      "Un site vitrine industriel et impactant : expertises, réalisations, atelier — avec un parcours clair vers la demande de projet.",
+    strategy:
+      "Une direction artistique brute et premium (acier, orange, grands titres) qui traduit le savoir-faire, et un SEO local sur les métiers (chaudronnerie, métallerie, tuyauterie) autour de Lyon.",
+    result:
+      "Une vitrine à la hauteur de l'atelier, qui capte les demandes de devis B2B.",
+    span: 5,
+    rotation: 4,
+  },
 ]
