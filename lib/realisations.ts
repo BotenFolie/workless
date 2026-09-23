@@ -183,4 +183,73 @@ export const REALISATIONS: Realisation[] = [
     span: 5,
     rotation: 4,
   },
+  {
+    slug: 'sbpaysagiste',
+    name: 'SB Paysagiste',
+    domain: 'sb-paysagiste.vercel.app',
+    url: 'https://sb-paysagiste.vercel.app',
+    image: '/realisations/sbpaysagiste.jpg',
+    category: 'Site vitrine · Paysagiste · Ouest lyonnais',
+    tags: ['Website', 'Design 3D', 'SEO'],
+    heroMetric: '5,0 ★',
+    heroLabel: 'la note Google mise en avant dès le premier écran',
+    accent: '#9A5A36',
+    accentInk: '#FFFFFF',
+    problem:
+      "Un paysagiste au travail soigné, mais difficile de faire comprendre en ligne ce qu'il transforme vraiment : un terrain brut qui devient un jardin.",
+    built:
+      "Un site vitrine autour d'une scène 3D pilotée au scroll : le terrain se prépare, se structure, se construit puis se végétalise sous les yeux du visiteur — avec avant/après, réalisations et avis Google.",
+    strategy:
+      "Montrer le métier plutôt que le décrire, appuyer la confiance par les vrais avis clients, et un SEO local sur la création et l'entretien de jardins autour de Tassin-la-Demi-Lune.",
+    result:
+      "Une vitrine qui fait vivre le chantier et oriente chaque visiteur vers la demande de devis.",
+    span: 5,
+    rotation: -4,
+  },
+  {
+    slug: 'lbeg',
+    name: 'LBEG',
+    domain: 'lbeg.vercel.app',
+    url: 'https://lbeg.vercel.app',
+    image: '/realisations/lbeg.jpg',
+    category: 'Site vitrine · Électricien · Lyon',
+    tags: ['Website', 'Design 3D', 'SEO'],
+    heroMetric: 'Sous tension',
+    heroLabel: 'un site qu\'on allume, comme une installation',
+    accent: '#C8834A',
+    accentInk: '#141414',
+    problem:
+      "Un électricien lyonnais apprécié de ses clients, mais sans vitrine pour se distinguer dans un secteur où tous les sites se ressemblent.",
+    built:
+      "Un site à la direction artistique « Sous tension » : câble cuivre en 3D, interrupteur qui met le site sous tension, menu en tableau de disjoncteurs — et un parcours dépannage pensé pour l'urgence.",
+    strategy:
+      "Une expérience mémorable au service de la clarté : quatre métiers lisibles, avis Google réels, demande de devis avec photos et SEO local sur Lyon.",
+    result:
+      "Un site qui se retient et transforme les visiteurs en demandes de devis ou d'intervention.",
+    span: 7,
+    rotation: 3,
+  },
+  {
+    slug: 'marieoracle',
+    name: 'Marie Oracle',
+    domain: 'marie-oracle.vercel.app',
+    url: 'https://marie-oracle.vercel.app',
+    image: '/realisations/marieoracle.jpg',
+    category: 'Refonte site vitrine · Tarot & voyance · Lyon',
+    tags: ['Website', 'Design', 'SEO'],
+    heroMetric: 'Refonte',
+    heroLabel: 'd\'une page générique à un site qui donne envie de la rencontrer',
+    accent: '#6A2029',
+    accentInk: '#FFFFFF',
+    problem:
+      "Un ancien site générique qui ne disait rien de Marie : impossible de sentir, avant de réserver, qui allait vous recevoir.",
+    built:
+      "Une refonte complète, chaleureuse et éditoriale : Marie au centre, situations d'accompagnement, cartes de tarot qui se retournent au survol, déroulé de séance, FAQ et prise de rendez-vous.",
+    strategy:
+      "Rassurer avant de vendre : la personne d'abord, l'offre ensuite, un ton humain et un SEO local sur le tarot et la voyance à Lyon et à distance.",
+    result:
+      "Un site qui incarne Marie et accompagne naturellement le visiteur jusqu'à la prise de rendez-vous.",
+    span: 12,
+    rotation: -2,
+  },
 ]
