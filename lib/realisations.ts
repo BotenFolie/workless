@@ -235,20 +235,20 @@ export const REALISATIONS: Realisation[] = [
     domain: 'sb-paysagiste.vercel.app',
     url: 'https://sb-paysagiste.vercel.app',
     image: '/realisations/sbpaysagiste.jpg',
-    category: 'Site vitrine · Paysagiste · Ouest lyonnais',
-    tags: ['Website', 'Design 3D', 'SEO'],
-    heroMetric: '5,0 ★',
-    heroLabel: 'la note Google mise en avant dès le premier écran',
+    category: 'Site vitrine avec animation 3D sur mesure · Paysagiste',
+    tags: ['WebGL', 'Website', 'SEO'],
+    heroMetric: 'Animation 3D',
+    heroLabel: 'le jardin se construit sous les yeux du visiteur, au fil du scroll',
     accent: '#9A5A36',
     accentInk: '#FFFFFF',
     problem:
       "Un paysagiste au travail soigné, mais difficile de faire comprendre en ligne ce qu'il transforme vraiment : un terrain brut qui devient un jardin.",
     built:
-      "Un site vitrine autour d'une scène 3D pilotée au scroll : le terrain se prépare, se structure, se construit puis se végétalise sous les yeux du visiteur — avec avant/après, réalisations et avis Google.",
+      "Une animation 3D créée sur mesure, pilotée par le scroll : une seule scène où le terrain brut se prépare, se structure, se construit puis se végétalise jusqu'au jardin fini — réversible, étape par étape. Autour : avant/après, réalisations et avis Google.",
     strategy:
-      "Montrer le métier plutôt que le décrire, appuyer la confiance par les vrais avis clients, et un SEO local sur la création et l'entretien de jardins autour de Tassin-la-Demi-Lune.",
+      "Montrer le métier plutôt que le décrire : le visiteur vit le chantier au lieu de lire une liste de prestations. La confiance est appuyée par les vrais avis clients et un SEO local autour de Tassin-la-Demi-Lune.",
     result:
-      "Une vitrine qui fait vivre le chantier et oriente chaque visiteur vers la demande de devis.",
+      "Une expérience qui marque dès le premier scroll, distingue SB Paysagiste de la concurrence et oriente chaque visiteur vers la demande de devis.",
     span: 12,
     rotation: -2,
   },
