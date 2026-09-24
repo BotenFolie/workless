@@ -1,5 +1,6 @@
 // Pages intérieures : services, métiers, réalisations, tarifs, abonnements, parrainage, studio…
 
+import ServiceFeature from '../ServiceFeature'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -66,13 +67,29 @@ export function ServiceView({ locale, routeKey }: V) {
       <JsonLd data={[serviceJsonLd(s.h1, s.metaDesc, url, locale), crumbs(routeKey, locale), faqJsonLd(s.faq)]} />
       <RunHead locale={locale} current={routeKey} />
       <PageHead h1={s.h1} lead={s.lead} long={s.h1.length > 34}>
+        {s.facts && (
+          <dl className="facts">
+            {s.facts.map((x) => (
+              <div key={x.k}>
+                <dt className="mono">{x.k}</dt>
+                <dd>{x.v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
         <CtaRow locale={locale} secondary={{ href: href('tarifs', locale), label: labelOf('tarifs', locale) }} />
       </PageHead>
 
-      <section className="band band--white" aria-labelledby="pts-h">
+      <section className="band band--white" aria-labelledby={s.feature ? undefined : 'pts-h'}>
         <div className="wrap">
-          <Rubrique id="pts-h" h={sp.points} />
-          <Points items={s.points} />
+          {s.feature ? (
+            <ServiceFeature feature={s.feature} locale={locale} ctaHref={href('audit', locale)} ctaLabel={ui(locale).ctaLong} />
+          ) : (
+            <>
+              <Rubrique id="pts-h" h={sp.points} />
+              <Points items={s.points} />
+            </>
+          )}
           {s.sections?.map((sec) => (
             <div key={sec.h} className="prose" style={{ marginTop: 48 }}>
               <h2>{sec.h}</h2>

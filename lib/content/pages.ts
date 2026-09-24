@@ -43,7 +43,7 @@ const FR = {
         'Phase Neutre', 'Pro Tableau', 'Relais Électricité', 'Secteur Élec', 'Tension Plus', 'Volt Artisan',
       ],
     },
-    studioH: 'Trois personnes. Un seul interlocuteur.',
+    studioH: 'Votre visibilité sur internet est entre de bonnes mains.',
     studioP:
       'Souvent, le site, le référencement et la publicité sont confiés à trois prestataires qui ne se parlent pas. Chez Stripwork, c’est la même équipe, du design aux campagnes.',
     servicesH: 'Ce que le studio fait pour vous',
@@ -270,7 +270,7 @@ const ES: PagesDict = {
         'Pro Cuadros', 'Relé Electricidad', 'Sector Eléctrico', 'Tensión Plus', 'Voltio Artesano', 'Watt Hogar',
       ],
     },
-    studioH: 'Tres personas. Un único interlocutor.',
+    studioH: 'Su visibilidad en internet está en buenas manos.',
     studioP:
       'A menudo la web, el posicionamiento y la publicidad dependen de tres proveedores que no hablan entre sí. En Stripwork es el mismo equipo, del diseño a las campañas.',
     servicesH: 'Lo que el estudio hace por usted',

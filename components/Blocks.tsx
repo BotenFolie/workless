@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import LeadForm from './LeadForm'
-import { IconArrow, IconExternal } from './Icons'
+import { IconArrow, IconChevron, IconExternal } from './Icons'
 import { breadcrumbChain, href, ROUTES, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { ui } from '@/lib/ui'
@@ -277,27 +277,33 @@ export function PlansList({ locale, only }: { locale: Locale; only?: string }) {
   )
 }
 
-/** Équipe : une fiche d'annuaire par personne (monogramme, nom, rôle, mission) */
+/** Équipe : trois fiches compactes, la mission se déplie au clic */
 export function TeamList({ locale, headingAs = 'h3' }: { locale: Locale; headingAs?: 'h2' | 'h3' }) {
   const H = headingAs
+  const more = locale === 'fr' ? 'Son rôle' : 'Su papel'
   return (
-    <ol className="team">
-      {TEAM.map((m, i) => (
+    <ul className="team">
+      {TEAM.map((m) => (
         <li key={m.name} className="member">
-          <span className="member__idx mono" aria-hidden="true">
-            {String(i + 1).padStart(2, '0')} / {String(TEAM.length).padStart(2, '0')}
-          </span>
-          <span className="member__mono" aria-hidden="true">
-            {m.initials}
-          </span>
-          <div className="member__id">
-            <H className="member__name">{m.name}</H>
-            <p className="member__role mono">{m.role[locale]}</p>
-          </div>
-          <p className="member__does">{m.does[locale]}</p>
+          <details>
+            <summary>
+              <span className="member__mono" aria-hidden="true">
+                {m.initials}
+              </span>
+              <span className="member__id">
+                <H className="member__name">{m.name}</H>
+                <span className="member__role mono">{m.role[locale]}</span>
+              </span>
+              <span className="member__more mono">
+                {more}
+                <IconChevron className="member__chev" />
+              </span>
+            </summary>
+            <p className="member__does">{m.does[locale]}</p>
+          </details>
         </li>
       ))}
-    </ol>
+    </ul>
   )
 }
 

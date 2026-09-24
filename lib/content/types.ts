@@ -16,7 +16,107 @@ export type ServiceContent = {
   pricing?: { kind: 'offers' } | { kind: 'plan'; id: string }
   proof: string[]
   faq: Faq[]
+  /** Repères clés affichés sous le chapô (prix, délai, conditions) */
+  facts?: Fact[]
+  /** Bloc signature propre à la page (remplace la liste de points) */
+  feature?: Feature
 }
+
+export type Fact = { k: string; v: string }
+
+/** Blocs signature des sous-services : chaque page a sa propre mise en scène */
+export type Feature =
+  | {
+      kind: 'sitemap'
+      h: string
+      p: string
+      tiers: { essentiel: string; signature: string }
+      includedIn: { all: string; signature: string }
+      nodes: { id: string; name: string; role: string; tier: 'all' | 'signature'; parent?: string }[]
+      everyPageH: string
+      everyPage: Point[]
+    }
+  | {
+      kind: 'anatomy'
+      h: string
+      p: string
+      zones: { block: 'hero' | 'cta' | 'proof' | 'offer' | 'form'; t: string; d: string }[]
+      hiddenH: string
+      hidden: Point[]
+      mock: { title: string; cta: string; proof: string; offer: string; form: string; send: string }
+    }
+  | {
+      kind: 'redirects'
+      h: string
+      p: string
+      tableCaption: string
+      cols: { from: string; to: string; status: string }
+      rows: { from: string; to: string; note?: string }[]
+      tested: string
+      phases: { h: string; items: Point[] }[]
+    }
+  | {
+      kind: 'report'
+      h: string
+      p: string
+      docTitle: string
+      tabs: { name: string; intro: string; checks: string[] }[]
+      planTab: string
+      planIntro: string
+      plan: { level: string; items: string[] }[]
+      example: string
+    }
+  | {
+      kind: 'localpack'
+      h: string
+      p: string
+      search: string
+      you: { name: string; category: string; zone: string; hours: string; reviews: string; actions: string[] }
+      others: { name: string; category: string }[]
+      code: string
+      notes: { part: 'fiche' | 'avis' | 'pages' | 'nap' | 'data'; t: string; d: string }[]
+      illustration: string
+    }
+  | {
+      kind: 'aiAnswer'
+      h: string
+      p: string
+      assistant: string
+      question: string
+      answer: { text: string; part?: 'direct' | 'identity' | 'data' | 'elsewhere'; cite?: number }[]
+      sources: { label: string; part: 'data' | 'elsewhere' }[]
+      notes: { part: 'direct' | 'identity' | 'data' | 'elsewhere'; t: string; d: string }[]
+      illustration: string
+    }
+  | {
+      kind: 'adsChain'
+      h: string
+      p: string
+      ad: { sponsored: string; url: string; title: string; desc: string; call: string }
+      steps: Point[]
+      budgetH: string
+      budgetP: string
+      ours: string
+      google: string
+      slider: string
+      total: string
+      perMonth: string
+      illustration: string
+    }
+  | {
+      kind: 'selfCheck'
+      h: string
+      p: string
+      answers: { yes: string; no: string; unsure: string }
+      questions: { q: string; why: string }[]
+      result: { none: string; some: string; all: string; cta: string }
+      termsH: string
+      termsCaption: string
+      termsCols: { term: string; verdict: string }
+      terms: { term: string; useful: boolean; why: string }[]
+      useful: string
+      wasted: string
+    }
 
 export type MetierContent = {
   metaTitle: string
