@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   applicationName: 'Stripwork',
 }
 
-export const viewport: Viewport = { themeColor: '#f3cd15' }
+export const viewport: Viewport = { themeColor: '#ffffff' }
 
 export default function EsLayout({ children }: { children: ReactNode }) {
   return <RootDoc locale="es">{children}</RootDoc>

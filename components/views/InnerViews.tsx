@@ -398,7 +398,7 @@ export function TarifsView({ locale, routeKey }: V) {
       <section className="band band--ink" aria-labelledby="plans-h">
         <div className="wrap split">
           <div className="stack">
-            <h2 id="plans-h" className="rubrique__h" style={{ borderBottomColor: 'var(--yellow)' }}>
+            <h2 id="plans-h" className="rubrique__h" style={{ borderBottomColor: 'var(--bg)' }}>
               {p.plansTeaser}
             </h2>
           </div>

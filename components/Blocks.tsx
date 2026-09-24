@@ -278,7 +278,7 @@ export function FinalCta({ locale, h, p }: { locale: Locale; h: string; p: strin
     <section className="band band--ink" aria-labelledby="final-h">
       <div className="wrap split">
         <div className="stack">
-          <h2 id="final-h" className="rubrique__h" style={{ borderBottomColor: 'var(--yellow)' }}>
+          <h2 id="final-h" className="rubrique__h" style={{ borderBottomColor: 'var(--bg)' }}>
             {h}
           </h2>
           <p className="rubrique__p">{p}</p>

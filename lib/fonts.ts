@@ -1,25 +1,17 @@
-// Polices : Anybody (titres, axe de largeur), Schibsted Grotesk (texte), Martian Mono (données)
+// Polices : Geist (titres + texte), Geist Mono (chiffres, positions, prix)
 
-import { Anybody, Martian_Mono, Schibsted_Grotesk } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 
-export const anybody = Anybody({
+export const geist = Geist({
   subsets: ['latin'],
-  axes: ['wdth'],
-  style: ['normal'],
-  variable: '--font-anybody',
+  variable: '--font-geist',
   display: 'swap',
 })
 
-export const schibsted = Schibsted_Grotesk({
+export const geistMono = Geist_Mono({
   subsets: ['latin'],
-  variable: '--font-schibsted',
+  variable: '--font-geist-mono',
   display: 'swap',
 })
 
-export const martian = Martian_Mono({
-  subsets: ['latin'],
-  variable: '--font-martian',
-  display: 'swap',
-})
-
-export const fontVars = `${anybody.variable} ${schibsted.variable} ${martian.variable}`
+export const fontVars = `${geist.variable} ${geistMono.variable}`

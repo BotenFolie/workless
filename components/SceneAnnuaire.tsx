@@ -21,6 +21,7 @@ type SceneText = {
   call: string
   callSub: string
   others: string[]
+  live: string
 }
 
 type Props = {
@@ -217,6 +218,7 @@ export default function SceneAnnuaire(props: Props) {
                     <i />
                   </span>
                   <span className="site__url">{scene.url}</span>
+                  <span className="site__live">● {scene.live}</span>
                 </div>
                 <div className="site__body">
                   <div className="site__copy">
@@ -231,6 +233,7 @@ export default function SceneAnnuaire(props: Props) {
               </div>
             </div>
 
+            <span className="mark" />
             <svg className="pen" viewBox="0 0 100 40" preserveAspectRatio="none">
               <path d="M8 22 C 6 8, 40 2, 70 4 S 99 14, 96 24 S 60 39, 30 37 S 2 30, 9 16" />
             </svg>
