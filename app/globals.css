@@ -144,18 +144,24 @@ ol {
   white-space: nowrap;
 }
 
+/* Lien d'évitement : invisible, sauf au focus clavier (pas au toucher sur mobile) */
 .skip {
-  position: absolute;
+  position: fixed;
   left: 8px;
-  top: -60px;
+  top: 8px;
   z-index: 100;
   background: var(--ink);
   color: var(--bg);
   padding: 10px 14px;
+  transform: translateY(-200%);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.skip:focus {
-  top: 8px;
+.skip:focus-visible {
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* --- Mise en page ----------------------------------------------------------- */
