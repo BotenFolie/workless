@@ -547,7 +547,7 @@ ol {
     gap: 3px;
   }
 
-  .thumbs a {
+  .thumbs .thumb__tab {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -569,11 +569,11 @@ ol {
       width 0.3s var(--ease-out);
   }
 
-  .thumbs a:hover {
+  .thumbs .thumb__tab:hover {
     background: var(--bg);
   }
 
-  .thumbs a[data-active='true'] {
+  .thumbs .thumb__tab[data-active='true'] {
     background: var(--ink);
     color: var(--bg);
     width: calc(var(--thumb-w) + 6px);
@@ -2841,7 +2841,7 @@ a:hover {
 
 /* Onglets de tranche : fins, index d'annuaire */
 @media (min-width: 1180px) {
-  .thumbs a {
+  .thumbs .thumb__tab {
     border-color: var(--line);
     background: var(--bg);
     font-weight: 500;
@@ -2849,13 +2849,126 @@ a:hover {
     letter-spacing: 0.02em;
   }
 
-  .thumbs a:hover {
+  .thumb:hover .thumb__tab,
+  .thumb:focus-within .thumb__tab {
     background: var(--hl);
+    color: var(--ink);
   }
 
-  .thumbs a[data-active='true'] {
+  .thumbs .thumb__tab[data-active='true'] {
     background: var(--ink);
     color: var(--bg);
+  }
+
+  /* Volet des sous-pages : s'ouvre à gauche de l'onglet au survol ou au clavier */
+  .thumb {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .thumb__fly {
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 0;
+    width: 260px;
+    display: grid;
+    gap: 4px;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(8px);
+    transition:
+      opacity 0.2s var(--ease-out),
+      transform 0.25s var(--ease-out),
+      visibility 0s linear 0.25s;
+  }
+
+  /* Pont invisible entre l'onglet et le volet : le survol ne se perd pas */
+  .thumb__fly::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    width: 12px;
+  }
+
+  .thumb:hover .thumb__fly,
+  .thumb:focus-within .thumb__fly {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .thumb__parent {
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+    padding: 4px 8px 10px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .thumb__parent:hover,
+  .thumb__parent[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .thumb__fly ul {
+    display: grid;
+  }
+
+  .thumb__fly li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 40px;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: background 0.15s var(--ease-out);
+  }
+
+  .thumb__fly li a:hover,
+  .thumb__fly li a:focus-visible {
+    background: var(--panel);
+  }
+
+  .thumb__fly li a[aria-current='page'] {
+    background: var(--hl);
+    font-weight: 700;
+  }
+
+  .thumb__arrow {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    opacity: 0.35;
+    transition: opacity 0.15s, transform 0.2s var(--ease-out);
+  }
+
+  .thumb__fly li a:hover .thumb__arrow {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+}
+
+@media (min-width: 1180px) and (prefers-reduced-motion: reduce) {
+  .thumb__fly,
+  .thumb__arrow {
+    transition: none;
   }
 }
 

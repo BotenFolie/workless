@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import Header from './Header'
-import { breadcrumbChain, getRoute, href, routesOfKind, type Locale } from '@/lib/routes'
+import { breadcrumbChain, getRoute, href, ROUTES, routesOfKind, type Locale } from '@/lib/routes'
+import { IconArrow } from './Icons'
 import { labelOf } from '@/lib/labels'
 import { ui } from '@/lib/ui'
 import { STUDIO } from '@/lib/site'
@@ -17,6 +18,12 @@ function sectionOf(key: string): string {
   if (root.startsWith('r-')) return 'realisations'
   if (root === 'abonnements' || root === 'parrainage') return 'tarifs'
   return root
+}
+
+/** Sous-pages proposées dans le volet d'un onglet de tranche */
+function subPagesOf(key: string, locale: Locale): string[] {
+  if (key === 'tarifs') return ['abonnements', 'parrainage']
+  return ROUTES.filter((r) => r.parent === key && r.kind === 'service' && r.paths[locale]).map((r) => r.key)
 }
 
 export default function Shell({ locale, current, children }: Props) {
@@ -53,11 +60,33 @@ export default function Shell({ locale, current, children }: Props) {
       />
 
       <nav className="thumbs" aria-label={locale === 'fr' ? 'Index' : 'Índice'}>
-        {t.nav.map((n) => (
-          <Link key={n.key} href={href(n.key, locale)} data-active={section === n.key}>
-            {n.label}
-          </Link>
-        ))}
+        {t.nav.map((n) => {
+          const subs = subPagesOf(n.key, locale)
+          return (
+            <div key={n.key} className="thumb">
+              <Link className="thumb__tab" href={href(n.key, locale)} data-active={section === n.key}>
+                {n.label}
+              </Link>
+              {subs.length > 0 && (
+                <div className="thumb__fly">
+                  <Link className="thumb__parent" href={href(n.key, locale)} aria-current={current === n.key ? 'page' : undefined}>
+                    {labelOf(n.key, locale)}
+                  </Link>
+                  <ul>
+                    {subs.map((k) => (
+                      <li key={k}>
+                        <Link href={href(k, locale)} aria-current={current === k ? 'page' : undefined}>
+                          <span>{labelOf(k, locale)}</span>
+                          <IconArrow className="thumb__arrow" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </nav>
 
       <main id="contenu">{children}</main>
