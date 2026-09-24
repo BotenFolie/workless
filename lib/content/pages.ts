@@ -18,7 +18,7 @@ const FR = {
     steps: [
       { t: 'Perdu dans la liste', d: 'Votre entreprise existe, mais au milieu des autres, personne ne la remarque.' },
       { t: 'L’audit', d: 'On repère ce qui vous rend invisible : pas de site, fiche Google incomplète, mauvaises recherches.' },
-      { t: 'Le design', d: 'Sybille dessine une identité qui ressemble à votre métier. On vous remarque enfin.' },
+      { t: 'Le design', d: 'Eva dessine une identité qui ressemble à votre métier. On vous remarque enfin.' },
       { t: 'La mise en ligne', d: 'Mathieu et Louis codent un site rapide, référencé dès le premier jour.' },
       { t: 'SEO & Google Ads', d: 'Référencement et campagnes font remonter votre entreprise dans les recherches de votre zone.' },
       { t: 'Le téléphone sonne', d: 'Les demandes arrivent, et chacune est mesurée.' },
@@ -142,9 +142,9 @@ const FR = {
     cta: 'Vous êtes recommandé par un client ? Indiquez son nom dans le formulaire d’audit.',
   },
   studio: {
-    metaTitle: 'Le studio Stripwork : design, développement, SEO et Google Ads',
+    metaTitle: 'Le studio Stripwork : agence web, SEO et Google Ads à taille humaine',
     metaDesc:
-      'Stripwork est un studio de trois personnes : Sybille Guinard (direction artistique), Mathieu Jannolfo (développement, SEO & SEA), Louis Jannolfo (développement, data).',
+      'Stripwork est un studio de trois personnes : Eva Latour (direction artistique), Mathieu Jannolfo (développement, SEO & SEA), Louis Jannolfo (développement, data).',
     label: 'Le studio',
     h1: 'Le studio Stripwork',
     lead: 'Trois personnes, trois métiers complémentaires, une seule équipe qui suit votre projet du premier croquis au premier appel.',
@@ -245,7 +245,7 @@ const ES: PagesDict = {
     steps: [
       { t: 'Perdido en la lista', d: 'Su empresa existe, pero entre tantas otras nadie la ve.' },
       { t: 'La auditoría', d: 'Detectamos lo que le hace invisible: sin web, ficha de Google incompleta, búsquedas equivocadas.' },
-      { t: 'El diseño', d: 'Sybille diseña una identidad que se parece a su oficio. Por fin le ven.' },
+      { t: 'El diseño', d: 'Eva diseña una identidad que se parece a su oficio. Por fin le ven.' },
       { t: 'La publicación', d: 'Mathieu y Louis programan una web rápida, posicionada desde el primer día.' },
       { t: 'SEO y Google Ads', d: 'Posicionamiento y campañas hacen subir su empresa en las búsquedas de su zona.' },
       { t: 'Suena el teléfono', d: 'Llegan las peticiones, y cada una queda medida.' },
@@ -369,9 +369,9 @@ const ES: PagesDict = {
     cta: '¿Le recomienda un cliente? Indique su nombre en el formulario de auditoría.',
   },
   studio: {
-    metaTitle: 'El estudio Stripwork: diseño, desarrollo, SEO y Google Ads',
+    metaTitle: 'El estudio Stripwork: agencia web, SEO y Google Ads a escala humana',
     metaDesc:
-      'Stripwork es un estudio de tres personas: Sybille Guinard (dirección de arte), Mathieu Jannolfo (desarrollo, SEO y SEM), Louis Jannolfo (desarrollo, datos).',
+      'Stripwork es un estudio de tres personas: Eva Latour (dirección de arte), Mathieu Jannolfo (desarrollo, SEO y SEM), Louis Jannolfo (desarrollo, datos).',
     label: 'El estudio',
     h1: 'El estudio Stripwork',
     lead: 'Tres personas, tres oficios complementarios y un único equipo que sigue su proyecto del primer boceto a la primera llamada.',

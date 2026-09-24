@@ -5,15 +5,15 @@ import type { Content } from './types'
 const es: Content = {
   services: {
     creation: {
-      metaTitle: 'Diseño web para pymes y autónomos desde 1199 € | Stripwork',
+      metaTitle: 'Agencia de diseño web para pymes y autónomos desde 1199 € | Stripwork',
       metaDesc:
-        'Diseño de páginas web a medida para autónomos, comercios y pymes: diseño propio de su sector, SEO desde el primer día, pensada para recibir llamadas. Desde 1199 € + IVA.',
+        'Agencia de diseño web para autónomos, comercios y pymes: páginas web a medida, diseño propio de su sector, SEO desde el primer día, pensada para recibir llamadas. Desde 1199 € + IVA.',
       label: 'Diseño web',
       h1: 'Diseño de páginas web',
       lead:
-        'Una web diseñada para su oficio, rápida, posicionada desde el lanzamiento y construida para que suene el teléfono. Desde 1199 € + IVA.',
+        'Una web diseñada para su oficio, rápida, posicionada desde el lanzamiento y construida para que suene el teléfono. Desde 1199 € + IVA, con una agencia web que también gestiona su SEO y sus campañas de Google Ads.',
       points: [
-        { t: 'Diseñada para usted', d: 'Sin plantillas. Sybille, nuestra directora de arte, parte de su oficio, su logotipo y sus clientes.' },
+        { t: 'Diseñada para usted', d: 'Sin plantillas. Eva, nuestra directora de arte, parte de su oficio, su logotipo y sus clientes.' },
         { t: 'Posicionada desde el inicio', d: 'Estructura, etiquetas, datos estructurados y velocidad: el SEO forma parte de la construcción, no se añade después.' },
         { t: 'Rápida, sin plugins', d: 'Webs programadas en Next.js: sin WordPress que actualizar ni extensiones que fallen, y rápidas en el móvil.' },
         { t: 'Hecha para el contacto', d: 'Teléfono, formulario y ficha de Google accesibles en cada pantalla. Nadie tiene que buscar cómo llamarle.' },
@@ -85,7 +85,7 @@ const es: Content = {
       ],
     },
     refonte: {
-      metaTitle: 'Rediseño web sin perder posicionamiento | Stripwork',
+      metaTitle: 'Rediseño web sin perder posicionamiento | Agencia web Stripwork',
       metaDesc:
         'Rediseño completo de su web: nuevo diseño a medida, contenido recuperado y redirecciones 301 de todas las páginas antiguas para conservar su posicionamiento. Desde 1199 € + IVA.',
       label: 'Rediseño web',
@@ -108,7 +108,7 @@ const es: Content = {
         },
       ],
       pricing: { kind: 'offers' },
-      proof: ['voyance', 'marieoracle'],
+      proof: ['maintenancecaladoise', 'marieoracle'],
       faq: [
         { q: '¿Perderé mi posicionamiento?', a: 'Es el riesgo de un rediseño mal hecho. Inventariamos todas sus páginas antiguas y las redirigimos una a una; está incluido en cada rediseño.' },
         { q: '¿Conservo mi dominio?', a: 'Sí. Solo cambia la web; su dominio y sus correos siguen igual.' },
@@ -131,20 +131,20 @@ const es: Content = {
         { t: 'Después del cambio', d: 'Sitemap enviado a Google y vigilancia de errores e indexación.' },
       ],
       pricing: { kind: 'offers' },
-      proof: ['voyance'],
+      proof: ['maintenancecaladoise'],
       faq: [
         { q: '¿La migración se cobra aparte?', a: 'No, forma parte de cada rediseño.' },
         { q: '¿Se moverá mi tráfico?', a: 'Es normal que haya variaciones las primeras semanas. Un buen plan de redirecciones limita las pérdidas; nadie honesto puede prometer cero variaciones.' },
       ],
     },
     seo: {
-      metaTitle: 'Posicionamiento SEO para pymes y autónomos | Stripwork',
+      metaTitle: 'Agencia SEO: posicionamiento web para pymes y autónomos | Stripwork',
       metaDesc:
-        'Posicionamiento web para pymes y autónomos: SEO técnico, páginas por servicio y ciudad, ficha de Google y posicionamiento en IA. Incluido en cada web y como plan mensual.',
+        'Agencia SEO para pymes y autónomos: posicionamiento web, SEO técnico, páginas por servicio y ciudad, ficha de Google y posicionamiento en IA. Incluido en cada web y como plan mensual.',
       label: 'Posicionamiento SEO',
       h1: 'Posicionamiento SEO',
       lead:
-        'Que le encuentren en Google los clientes que buscan exactamente lo que usted hace, donde lo hace. Técnica, contenidos, ficha de Google: nos encargamos.',
+        'Que le encuentren en Google los clientes que buscan exactamente lo que usted hace, donde lo hace. Técnica, contenidos, ficha de Google: una agencia de posicionamiento que se encarga de todo, del código de la web al seguimiento de posiciones.',
       points: [
         { t: 'SEO técnico', d: 'Indexación, velocidad, móvil, etiquetas, datos estructurados: la base sin la que nada posiciona.' },
         { t: 'Páginas que responden', d: 'Una página por servicio y por zona, escrita a partir de lo que sus clientes buscan de verdad.' },
@@ -239,9 +239,9 @@ const es: Content = {
       ],
     },
     ads: {
-      metaTitle: 'Gestión de Google Ads para pymes | Stripwork',
+      metaTitle: 'Agencia Google Ads: gestión de campañas para pymes | Stripwork',
       metaDesc:
-        'Campañas de Google Ads creadas y gestionadas por el estudio que hizo su web: palabras clave locales, anuncios, landing page y medición de llamadas. 400 € + IVA al mes, sin incluir inversión.',
+        'Agencia Google Ads para pymes: campañas creadas y gestionadas por el estudio que hizo su web: palabras clave locales, anuncios, landing page y medición de llamadas. 400 € + IVA al mes, sin incluir inversión.',
       label: 'Google Ads',
       h1: 'Gestión de Google Ads',
       lead:
@@ -322,8 +322,8 @@ const es: Content = {
         { t: 'Marcas y equipos', d: 'Las calderas, bombas de calor y equipos de aire que instala o mantiene.' },
         { t: 'Petición con foto', d: 'El cliente adjunta una foto de la placa del equipo: llega con la pieza correcta.' },
       ],
-      proof: [],
-      live: ['Maintenance Caladoise', 'BP Maintenance'],
+      proof: ['maintenancecaladoise'],
+      live: ['BP Maintenance'],
       faq: [
         { q: '¿Hace falta una página por municipio?', a: 'Solo en los municipios donde trabaja de verdad y hay algo útil que decir. Diez páginas iguales con otro nombre de ciudad perjudican más que ayudan.' },
       ],
@@ -391,8 +391,8 @@ const es: Content = {
         { t: 'Zona y temporada', d: 'Los municipios cubiertos y lo que se hace en cada estación.' },
         { t: 'Presupuesto con fotos', d: 'El cliente envía fotos de su terreno con la petición.' },
       ],
-      proof: ['sbpaysagiste'],
-      live: ['Du Vert au Balcon'],
+      proof: ['sbpaysagiste', 'duvertaubalcon'],
+      live: [],
       faq: [
         { q: 'No tengo buenas fotos de mis trabajos.', a: 'Le indicamos qué fotografiar y cómo desde el próximo trabajo. Las fotos reales siempre ganan a las de banco.' },
       ],

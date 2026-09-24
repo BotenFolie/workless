@@ -5,15 +5,15 @@ import type { Content } from './types'
 const fr: Content = {
   services: {
     creation: {
-      metaTitle: 'Création de site internet pour TPE et PME dès 1 199 € HT | Stripwork',
+      metaTitle: 'Agence web : création de site internet pour TPE et PME dès 1 199 € HT | Stripwork',
       metaDesc:
-        'Création de site internet sur mesure pour artisans, indépendants et PME : design dédié à votre métier, SEO dès la conception, pensé pour les appels. Dès 1 199 € HT.',
+        'Agence web pour artisans, indépendants et PME : création de site internet sur mesure, design dédié à votre métier, SEO dès la conception, pensé pour les appels. Dès 1 199 € HT.',
       label: 'Création de site internet',
       h1: 'Création de site internet',
       lead:
-        'Un site dessiné pour votre métier, rapide, référencé dès la mise en ligne et construit pour faire sonner le téléphone. À partir de 1 199 € HT.',
+        'Un site dessiné pour votre métier, rapide, référencé dès la mise en ligne et construit pour faire sonner le téléphone. À partir de 1 199 € HT, par une agence web qui gère aussi votre SEO et vos campagnes Google Ads.',
       points: [
-        { t: 'Dessiné pour vous', d: 'Aucun modèle. Sybille, notre directrice artistique, part de votre métier, de votre logo et de vos clients.' },
+        { t: 'Dessiné pour vous', d: 'Aucun modèle. Eva, notre directrice artistique, part de votre métier, de votre logo et de vos clients.' },
         { t: 'Référencé dès le départ', d: 'Structure des pages, balises, données structurées et vitesse : le SEO est intégré à la construction, pas ajouté après.' },
         { t: 'Rapide, sans plugin', d: 'Sites codés sur Next.js : pas de WordPress à mettre à jour, pas d’extension qui casse, un site qui s’affiche vite sur mobile.' },
         { t: 'Construit pour le contact', d: 'Téléphone, formulaire et fiche Google accessibles à chaque écran. Le visiteur n’a jamais à chercher comment vous joindre.' },
@@ -85,7 +85,7 @@ const fr: Content = {
       ],
     },
     refonte: {
-      metaTitle: 'Refonte de site internet sans perte de référencement | Stripwork',
+      metaTitle: 'Refonte de site internet sans perte de référencement | Agence web Stripwork',
       metaDesc:
         'Refonte complète de votre site : nouveau design sur mesure, contenu repris, redirections 301 de toutes les anciennes pages pour garder votre référencement. Dès 1 199 € HT.',
       label: 'Refonte de site internet',
@@ -108,7 +108,7 @@ const fr: Content = {
         },
       ],
       pricing: { kind: 'offers' },
-      proof: ['voyance', 'marieoracle'],
+      proof: ['maintenancecaladoise', 'marieoracle'],
       faq: [
         { q: 'Vais-je perdre mon référencement ?', a: 'C’est le risque d’une refonte mal faite. On inventorie toutes vos anciennes pages et on les redirige une par une ; c’est inclus dans chaque refonte.' },
         { q: 'Je garde mon nom de domaine ?', a: 'Oui. Seul le site change ; votre domaine et vos e-mails restent les mêmes.' },
@@ -131,20 +131,20 @@ const fr: Content = {
         { t: 'Après la bascule', d: 'Plan du site envoyé à Google, surveillance des erreurs et de l’indexation.' },
       ],
       pricing: { kind: 'offers' },
-      proof: ['voyance'],
+      proof: ['maintenancecaladoise'],
       faq: [
         { q: 'La migration est-elle facturée à part ?', a: 'Non, elle fait partie de chaque refonte.' },
         { q: 'Mon trafic va-t-il bouger ?', a: 'Des variations sont normales les premières semaines après une refonte. Un plan de redirection propre limite les pertes ; personne d’honnête ne peut promettre zéro variation.' },
       ],
     },
     seo: {
-      metaTitle: 'Référencement SEO pour TPE et PME | Stripwork',
+      metaTitle: 'Agence SEO : référencement naturel pour TPE et PME | Stripwork',
       metaDesc:
-        'Référencement naturel pour TPE et PME : SEO technique, pages métier et ville, fiche Google, référencement IA. Intégré à chaque site, puis en suivi mensuel.',
+        'Agence SEO pour TPE et PME : référencement naturel, SEO technique, pages métier et ville, fiche Google, référencement IA. Intégré à chaque site, puis en suivi mensuel.',
       label: 'Référencement SEO',
       h1: 'Référencement SEO',
       lead:
-        'Être trouvé sur Google par les clients qui cherchent exactement ce que vous faites, là où vous le faites. Technique, contenus, fiche Google : on s’en occupe.',
+        'Être trouvé sur Google par les clients qui cherchent exactement ce que vous faites, là où vous le faites. Technique, contenus, fiche Google : une agence de référencement naturel qui s’occupe de tout, du code du site au suivi des positions.',
       points: [
         { t: 'SEO technique', d: 'Indexation, vitesse, mobile, balises, données structurées : les fondations sans lesquelles rien ne se positionne.' },
         { t: 'Pages qui répondent', d: 'Une page par service et par zone, rédigée à partir de ce que vos clients tapent vraiment.' },
@@ -241,9 +241,9 @@ const fr: Content = {
       ],
     },
     ads: {
-      metaTitle: 'Gestion Google Ads pour TPE et PME | Stripwork',
+      metaTitle: 'Agence Google Ads : gestion de campagnes pour TPE et PME | Stripwork',
       metaDesc:
-        'Campagnes Google Ads créées et pilotées par le studio qui a fait votre site : mots-clés locaux, annonces, landing page, suivi des appels. 400 € HT par mois, hors budget publicitaire.',
+        'Agence Google Ads pour TPE et PME : campagnes créées et pilotées par le studio qui a fait votre site : mots-clés locaux, annonces, landing page, suivi des appels. 400 € HT par mois, hors budget publicitaire.',
       label: 'Google Ads',
       h1: 'Gestion Google Ads',
       lead:
@@ -324,8 +324,8 @@ const fr: Content = {
         { t: 'Marques et équipements', d: 'Les chaudières, pompes à chaleur et climatisations que vous installez ou entretenez.' },
         { t: 'Demande avec photo', d: 'Le client joint une photo de la plaque de sa chaudière : vous arrivez avec la bonne pièce.' },
       ],
-      proof: [],
-      live: ['Maintenance Caladoise', 'BP Maintenance'],
+      proof: ['maintenancecaladoise'],
+      live: ['BP Maintenance'],
       faq: [
         { q: 'Faut-il une page par commune ?', a: 'Seulement pour les communes où vous intervenez vraiment et où il y a quelque chose d’utile à dire. Dix pages identiques qui changent le nom de la ville nuisent plus qu’elles n’aident.' },
         { q: 'Google Ads est-il utile pour un chauffagiste ?', a: 'Pour le dépannage, souvent oui : la recherche est urgente et locale. On règle les horaires de diffusion sur vos disponibilités réelles.' },
@@ -440,8 +440,8 @@ const fr: Content = {
         { t: 'Zone et saison', d: 'Les communes couvertes et ce qui se fait à chaque saison.' },
         { t: 'Devis avec photos', d: 'Le client envoie des photos de son terrain dès la demande.' },
       ],
-      proof: ['sbpaysagiste'],
-      live: ['Du Vert au Balcon'],
+      proof: ['sbpaysagiste', 'duvertaubalcon'],
+      live: [],
       faq: [
         { q: 'Je n’ai pas de belles photos de mes chantiers.', a: 'On vous indique quoi photographier et comment, dès le prochain chantier. Les photos réelles battent toujours les images de banque.' },
       ],

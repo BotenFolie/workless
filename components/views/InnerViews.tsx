@@ -16,6 +16,7 @@ import {
   Rubrique,
   RunHead,
   StampCard,
+  TeamList,
 } from '../Blocks'
 import LeadForm from '../LeadForm'
 import { IconArrow, IconExternal, IconSearch } from '../Icons'
@@ -23,7 +24,7 @@ import { getRoute, href, ROUTES, routesOfKind, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { content, pages } from '@/lib/content'
 import { REALISATIONS, getRealisation } from '@/lib/realisations'
-import { STUDIO, TEAM } from '@/lib/site'
+import { STUDIO } from '@/lib/site'
 import { absolute, articleJsonLd, breadcrumbJsonLd, faqJsonLd, orgJsonLd, serviceJsonLd } from '@/lib/seo'
 import { ui } from '@/lib/ui'
 
@@ -488,18 +489,7 @@ export function StudioView({ locale, routeKey }: V) {
       <PageHead h1={p.h1} lead={p.lead} />
       <section className="band band--white" aria-label={p.h1}>
         <div className="wrap">
-          <ul className="team">
-            {TEAM.map((m) => (
-              <li key={m.name} className="member">
-                <span className="member__mono" aria-hidden="true">
-                  {m.initials}
-                </span>
-                <h2 className="member__name">{m.name}</h2>
-                <p className="member__role mono">{m.role[locale]}</p>
-                <p className="member__does">{m.does[locale]}</p>
-              </li>
-            ))}
-          </ul>
+          <TeamList locale={locale} headingAs="h2" />
         </div>
       </section>
       <section className="band band--paper" aria-labelledby="how-h">

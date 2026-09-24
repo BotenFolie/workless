@@ -58,7 +58,7 @@ const METIERS: RouteDef[] = [
   { key: 'm-terapeutas', kind: 'metier', ref: 'terapeutas', parent: 'creation', paths: { es: '/es/diseno-web/terapeutas' } },
 ]
 
-const REALISATION_SLUGS = ['mghypnose', 'sbpaysagiste', 'lbeg', 'corgier', 'bachcostablanca', 'voyance', 'marieoracle', 'verifam', 'backtrack']
+const REALISATION_SLUGS = ['mghypnose', 'sbpaysagiste', 'lbeg', 'corgier', 'maintenancecaladoise', 'duvertaubalcon', 'bachcostablanca', 'marieoracle', 'verifam']
 
 const ARTICLES: RouteDef[] = [
   { key: 'a-prix', kind: 'article', ref: 'prix', parent: 'conseils', paths: { fr: '/conseils/prix-site-vitrine', es: '/es/blog/precio-pagina-web' } },

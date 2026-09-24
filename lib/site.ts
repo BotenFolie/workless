@@ -14,8 +14,8 @@ export const STUDIO = {
 
 export const TEAM: { name: string; initials: string; role: T; does: T }[] = [
   {
-    name: 'Sybille Guinard',
-    initials: 'SG',
+    name: 'Eva Latour',
+    initials: 'EL',
     role: { fr: 'Direction artistique', es: 'Dirección de arte' },
     does: {
       fr: 'Conçoit l’identité visuelle et l’interface de chaque site à partir du métier, du positionnement et de la clientèle de l’entreprise : direction artistique, typographie, hiérarchie des contenus et scène signature. Aucun modèle, aucun thème acheté.',

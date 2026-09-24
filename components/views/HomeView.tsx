@@ -3,11 +3,10 @@
 import Link from 'next/link'
 import { IconArrow } from '../Icons'
 import SceneAnnuaire from '../SceneAnnuaire'
-import { CtaRow, EncartGrid, FaqList, FinalCta, JsonLd, LiveList, OffersGrid, Rubrique } from '../Blocks'
+import { CtaRow, EncartGrid, FaqList, FinalCta, JsonLd, LiveList, OffersGrid, Rubrique, TeamList } from '../Blocks'
 import { href, routesOfKind, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { content, pages } from '@/lib/content'
-import { TEAM } from '@/lib/site'
 import { faqJsonLd, orgJsonLd } from '@/lib/seo'
 import { ui } from '@/lib/ui'
 
@@ -26,7 +25,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
     .filter((r) => r.paths[locale])
     .sort((a, b) => labelOf(a.key, locale).localeCompare(labelOf(b.key, locale), locale))
 
-  const work = locale === 'fr' ? ['sbpaysagiste', 'mghypnose', 'lbeg', 'corgier', 'voyance', 'bachcostablanca'] : ['bachcostablanca', 'mghypnose', 'lbeg', 'corgier', 'voyance', 'sbpaysagiste']
+  const work = locale === 'fr' ? ['sbpaysagiste', 'maintenancecaladoise', 'mghypnose', 'duvertaubalcon', 'lbeg', 'corgier'] : ['bachcostablanca', 'duvertaubalcon', 'mghypnose', 'maintenancecaladoise', 'lbeg', 'sbpaysagiste']
 
   return (
     <>
@@ -53,18 +52,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
             </h2>
             <p className="rubrique__p">{p.studioP}</p>
           </div>
-          <ul className="team">
-            {TEAM.map((m) => (
-              <li key={m.name} className="member">
-                <span className="member__mono" aria-hidden="true">
-                  {m.initials}
-                </span>
-                <h3 className="member__name">{m.name}</h3>
-                <p className="member__role mono">{m.role[locale]}</p>
-                <p className="member__does">{m.does[locale]}</p>
-              </li>
-            ))}
-          </ul>
+          <TeamList locale={locale} />
         </div>
       </section>
 

@@ -1209,59 +1209,106 @@ a.leader:hover .leader__name {
   color: var(--ink-2);
 }
 
-/* --- Équipe ---------------------------------------------------------------------- */
+/* --- Équipe : fiches d'annuaire en lignes -------------------------------------- */
 
 .team {
   display: grid;
   border-top: var(--rule);
 }
 
-@media (min-width: 900px) {
-  .team {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .member + .member {
-    border-left: var(--hair);
-    padding-left: 28px;
-  }
-
-  .member {
-    padding-right: 28px;
-  }
-}
-
 .member {
   display: grid;
-  gap: 10px;
-  align-content: start;
-  padding-block: 24px;
+  grid-template-columns: auto 1fr;
+  gap: 14px 18px;
+  align-items: start;
+  padding-block: 28px;
   border-bottom: var(--hair);
+  position: relative;
+}
+
+.member__idx {
+  display: none;
+  position: absolute;
+  right: 0;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
 }
 
 .member__mono {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
   background: var(--ink);
   color: var(--bg);
+  border-radius: 4px;
   font-family: var(--f-display);
-  font-weight: 900;
-  font-size: 1.6rem;
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.04em;
+  transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out);
+}
+
+.member__id {
+  display: grid;
+  gap: 8px;
+  align-content: start;
 }
 
 .member__name {
-  font-size: 1.9rem;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
   line-height: 0.95;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 
 .member__role {
-  color: var(--ink-2);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
 }
 
 .member__does {
+  grid-column: 1 / -1;
   color: var(--ink-2);
+  font-size: 1.02rem;
+  line-height: 1.55;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.member:hover .member__mono {
+  background: var(--hl);
+  color: var(--ink);
+}
+
+@media (min-width: 900px) {
+  .member {
+    grid-template-columns: 88px minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 0 40px;
+    padding-block: 40px;
+  }
+
+  .member__mono {
+    width: 88px;
+    font-size: 1.9rem;
+  }
+
+  .member__idx {
+    display: block;
+    top: 40px;
+  }
+
+  .member__does {
+    grid-column: 3;
+    padding-right: 64px;
+    font-size: 1.08rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member__mono {
+    transition: none;
+  }
 }
 
 /* --- Formulaire --------------------------------------------------------------- */
@@ -2983,29 +3030,6 @@ a.leader:hover .leader__arrow {
 
 .faq details[open] summary::after {
   color: var(--ink);
-}
-
-/* Équipe */
-.team {
-  border-top-width: 1px;
-}
-
-.member + .member {
-  border-left-color: var(--line);
-}
-
-.member__mono {
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  border-radius: 4px;
-}
-
-.member__name {
-  font-size: 1.5rem;
-}
-
-.member__role {
-  color: var(--ink-soft);
 }
 
 /* Formulaires */

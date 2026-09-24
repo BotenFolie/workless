@@ -8,7 +8,7 @@ import { IconArrow, IconExternal } from './Icons'
 import { breadcrumbChain, href, ROUTES, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { ui } from '@/lib/ui'
-import { formatPrice, OFFERS, PLANS, PRICE_UNIT, REFERRAL_MAX, STUDIO } from '@/lib/site'
+import { formatPrice, OFFERS, PLANS, PRICE_UNIT, REFERRAL_MAX, STUDIO, TEAM } from '@/lib/site'
 import { getRealisation, LIVE_SITES, type Realisation } from '@/lib/realisations'
 import type { Faq, Point } from '@/lib/content/types'
 import { pages } from '@/lib/content'
@@ -274,6 +274,30 @@ export function PlansList({ locale, only }: { locale: Locale; only?: string }) {
         </article>
       ))}
     </div>
+  )
+}
+
+/** Équipe : une fiche d'annuaire par personne (monogramme, nom, rôle, mission) */
+export function TeamList({ locale, headingAs = 'h3' }: { locale: Locale; headingAs?: 'h2' | 'h3' }) {
+  const H = headingAs
+  return (
+    <ol className="team">
+      {TEAM.map((m, i) => (
+        <li key={m.name} className="member">
+          <span className="member__idx mono" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')} / {String(TEAM.length).padStart(2, '0')}
+          </span>
+          <span className="member__mono" aria-hidden="true">
+            {m.initials}
+          </span>
+          <div className="member__id">
+            <H className="member__name">{m.name}</H>
+            <p className="member__role mono">{m.role[locale]}</p>
+          </div>
+          <p className="member__does">{m.does[locale]}</p>
+        </li>
+      ))}
+    </ol>
   )
 }
 

@@ -2,6 +2,11 @@ import type { NextConfig } from 'next'
 
 // Anciennes URLs du site Stripwork (offre automatisation) → équivalents les plus proches
 const OLD_TO_NEW: [string, string][] = [
+  // Études de cas retirées (2026-09-25)
+  ['/realisations/voyance', '/realisations'],
+  ['/realisations/backtrack', '/realisations'],
+  ['/es/proyectos/voyance', '/es/proyectos'],
+  ['/es/proyectos/backtrack', '/es/proyectos'],
   ['/automatisation-leads', '/'],
   ['/relance-commerciale-automatique', '/'],
   ['/reactivation-clients-automatique', '/'],
