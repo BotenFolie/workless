@@ -1,7 +1,7 @@
 'use client'
 
 // Scène signature : une page d'annuaire où une entrée perdue devient un site en tête de rubrique.
-// Un seul état `progress` 0→1 piloté par le scroll (réversible), étapes cliquables, « Rejouer ».
+// Un seul état `progress` 0→1 en lecture automatique (pause hors écran), étapes cliquables, « Rejouer ».
 
 import { useEffect, useRef, type ReactNode } from 'react'
 import { IconBolt, IconPhone, IconReplay } from './Icons'
@@ -36,15 +36,17 @@ type Props = {
   ctas: ReactNode
 }
 
-/** Plages de progression de chaque étape (début, fin) */
+/** Plages de progression de chaque étape (début, fin) ; les écarts = temps de pause lisible */
 const RANGES: [number, number][] = [
-  [0.02, 0.12],
-  [0.12, 0.3],
-  [0.3, 0.48],
-  [0.48, 0.64],
-  [0.64, 0.82],
-  [0.82, 0.96],
+  [0.02, 0.09],
+  [0.13, 0.27],
+  [0.31, 0.45],
+  [0.49, 0.61],
+  [0.65, 0.79],
+  [0.83, 0.94],
 ]
+/** Durée d'une lecture complète (ms) */
+const DURATION = 15000
 const TARGET_INDEX = 5
 const START_RANK = 27
 
@@ -68,27 +70,20 @@ export default function SceneAnnuaire(props: Props) {
     const hero = heroRef.current
     if (!hero || !document.documentElement.classList.contains('scrub')) return
 
+    // État unique de la scène : progress 0→1, lu automatiquement
+    let progress = 0
     let frame = 0
-    let autoplay = 0
+    let last = 0
+    let visible = true
     let lastStep = -1
 
-    const scrollRange = () => {
-      const stick = hero.querySelector<HTMLElement>('.hero__stick')
-      const top = hero.getBoundingClientRect().top + window.scrollY
-      const range = hero.offsetHeight - (stick?.offsetHeight ?? window.innerHeight)
-      return { top, range: Math.max(range, 1) }
-    }
-
     const render = () => {
-      frame = 0
-      const { top, range } = scrollRange()
-      const p = clamp01((window.scrollY - top) / range)
       RANGES.forEach(([a, b], i) => {
-        hero.style.setProperty(`--s${i + 1}`, clamp01((p - a) / (b - a)).toFixed(4))
+        hero.style.setProperty(`--s${i + 1}`, clamp01((progress - a) / (b - a)).toFixed(4))
       })
-      const s5 = clamp01((p - RANGES[4][0]) / (RANGES[4][1] - RANGES[4][0]))
+      const s5 = clamp01((progress - RANGES[4][0]) / (RANGES[4][1] - RANGES[4][0]))
       if (rankRef.current) rankRef.current.textContent = String(Math.round(START_RANK - (START_RANK - 1) * s5))
-      const step = stepFromProgress(p)
+      const step = stepFromProgress(progress)
       if (step !== lastStep) {
         lastStep = step
         hero.dataset.step = String(step)
@@ -100,63 +95,66 @@ export default function SceneAnnuaire(props: Props) {
       }
     }
 
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(render)
+    const tick = (now: number) => {
+      const dt = last ? now - last : 0
+      last = now
+      progress = Math.min(1, progress + dt / DURATION)
+      render()
+      frame = progress < 1 && visible ? requestAnimationFrame(tick) : 0
+      if (!frame) last = 0
     }
 
-    const stopAutoplay = () => {
-      if (autoplay) cancelAnimationFrame(autoplay)
-      autoplay = 0
-    }
-
-    const goTo = (p: number, smooth: boolean) => {
-      stopAutoplay()
-      const { top, range } = scrollRange()
-      window.scrollTo({ top: top + range * p, behavior: smooth ? 'smooth' : 'auto' })
-    }
-
-    // Lecture automatique de toute la scène (Rejouer), interrompue par l'utilisateur
     const play = () => {
-      goTo(0, false)
-      const { top, range } = scrollRange()
-      const start = performance.now()
-      const duration = 9000
-      const tick = (now: number) => {
-        const t = clamp01((now - start) / duration)
-        window.scrollTo({ top: top + range * t * RANGES[5][1], behavior: 'auto' })
-        autoplay = t < 1 ? requestAnimationFrame(tick) : 0
-      }
-      autoplay = requestAnimationFrame(tick)
+      if (!frame && visible && progress < 1) frame = requestAnimationFrame(tick)
     }
+
+    const stop = () => {
+      if (frame) cancelAnimationFrame(frame)
+      frame = 0
+      last = 0
+    }
+
+    // Pause hors écran ou onglet masqué, reprise au retour
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && !document.hidden
+      if (visible) play()
+      else stop()
+    })
+    io.observe(hero)
+    const onVisibility = () => {
+      visible = !document.hidden
+      if (visible) play()
+      else stop()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
 
     const onClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement
       const btn = target.closest<HTMLButtonElement>('.stepbtn')
       if (btn) {
-        const i = Number(btn.dataset.i)
-        goTo(RANGES[i][1] - 0.01, true)
+        stop()
+        progress = RANGES[Number(btn.dataset.i)][0]
+        render()
+        play()
         return
       }
-      if (target.closest('.replay')) play()
+      if (target.closest('.replay')) {
+        stop()
+        progress = 0
+        render()
+        play()
+      }
     }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    window.addEventListener('wheel', stopAutoplay, { passive: true })
-    window.addEventListener('touchstart', stopAutoplay, { passive: true })
-    window.addEventListener('keydown', stopAutoplay)
     hero.addEventListener('click', onClick)
+
     render()
+    play()
 
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      window.removeEventListener('wheel', stopAutoplay)
-      window.removeEventListener('touchstart', stopAutoplay)
-      window.removeEventListener('keydown', stopAutoplay)
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibility)
       hero.removeEventListener('click', onClick)
-      if (frame) cancelAnimationFrame(frame)
-      stopAutoplay()
+      stop()
     }
   }, [])
 

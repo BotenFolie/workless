@@ -22,7 +22,7 @@ Concept : avant il fallait être dans l'annuaire, aujourd'hui en tête de Google
 
 ## Composants
 
-- **Scène signature** (`components/SceneAnnuaire.tsx`) : une page d'annuaire, une entrée fictive. `--p` 0→1 au scroll → `--s1…--s6`. Ligne perdue → surlignée en jaune (audit) → encart (design) → site (mise en ligne) → position 27→1 (SEO/Ads) → appel entrant. Barre d'étapes cliquable + Rejouer. Sans JS / mouvement réduit : état final figé, étapes en liste.
+- **Scène signature** (`components/SceneAnnuaire.tsx`) : une page d'annuaire, une entrée fictive. `progress` 0→1 en lecture automatique (15 s, pause hors écran) → `--s1…--s6`. Ligne perdue → surlignée en jaune (audit) → encart (design) → site (mise en ligne) → position 27→1 (SEO/Ads) → appel entrant. Barre d'étapes cliquable + Rejouer. Sans JS / mouvement réduit : état final figé, étapes en liste.
 - **Leader** : ligne d'annuaire nom … points de conduite … valeur.
 - **Encart** : réalisation encadrée (capture + métrique surlignée).
 - **Offres** : grille de 3 annonces, Signature en encre. **Abonnements** : lignes séparées de la grille.

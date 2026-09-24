@@ -1670,7 +1670,6 @@ a.leader:hover .leader__name {
 }
 
 .scrub .hero {
-  height: 560vh;
   --s1: 0;
   --s2: 0;
   --s3: 0;
@@ -1687,9 +1686,8 @@ a.leader:hover .leader__name {
 }
 
 .scrub .hero .hero__stick {
-  position: sticky;
-  top: var(--header-h);
   height: calc(100svh - var(--header-h));
+  min-height: 560px;
 }
 
 html:not(.scrub) .hero .hero__stick,
