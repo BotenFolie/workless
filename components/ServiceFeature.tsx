@@ -659,7 +659,7 @@ function SelfCheck({ f, ctaHref, ctaLabel }: { f: Of<'selfCheck'>; ctaHref: stri
   return (
     <div className="feat">
       <Head id={hid} h={f.h} p={f.p} />
-      <div className="check">
+      <div className="diag">
         <ol className="check__list">
           {f.questions.map((q, i) => (
             <li key={q.q} className="check__q" data-ans={ans[i] ?? undefined}>
@@ -809,7 +809,7 @@ function RefonteCheck({ f, ctaHref, ctaLabel }: { f: Of<'refonteCheck'>; ctaHref
   return (
     <div className="feat">
       <Head id={hid} h={f.h} p={f.p} />
-      <div className="check">
+      <div className="diag">
         <ul className="signs">
           {f.signs.map((sg, i) => (
             <li key={sg}>

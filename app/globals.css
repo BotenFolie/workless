@@ -4913,19 +4913,19 @@ a.leader:hover .leader__arrow {
 
 /* --- Audit Google Ads : autodiagnostic + termes -------------------------------- */
 
-.check {
+.diag {
   display: grid;
   gap: 24px;
 }
 
 @media (min-width: 1000px) {
-  .check {
+  .diag {
     grid-template-columns: minmax(0, 1fr) 320px;
     gap: 48px;
     align-items: start;
   }
 
-  .check__result {
+  .diag .check__result {
     position: sticky;
     top: calc(var(--header-h) + 24px);
   }
@@ -6057,4 +6057,25 @@ tr[data-useful] .terms__v svg {
 
 .pay .budget__legend dt {
   white-space: normal;
+}
+
+/* Mobile : le verdict de l'autodiagnostic reste visible en bas pendant qu'on répond */
+@media (max-width: 999px) {
+  .diag .check__result {
+    position: sticky;
+    bottom: 12px;
+    z-index: 5;
+    padding: 14px 16px;
+    gap: 8px;
+    box-shadow: 0 16px 36px -18px rgb(0 0 0 / 0.45);
+  }
+
+  .diag .check__msg {
+    font-size: 1rem;
+  }
+
+  .diag .check__result .btn {
+    min-height: 44px;
+    padding-block: 10px;
+  }
 }
