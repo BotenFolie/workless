@@ -8,7 +8,7 @@ import { IconArrow, IconExternal } from './Icons'
 import { breadcrumbChain, href, ROUTES, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { ui } from '@/lib/ui'
-import { formatPrice, OFFERS, PLANS, PRICE_UNIT, STUDIO } from '@/lib/site'
+import { formatPrice, OFFERS, PLANS, PRICE_UNIT, REFERRAL_MAX, STUDIO } from '@/lib/site'
 import { getRealisation, LIVE_SITES, type Realisation } from '@/lib/realisations'
 import type { Faq, Point } from '@/lib/content/types'
 import { pages } from '@/lib/content'
@@ -184,9 +184,11 @@ export function LiveList({ locale, names }: { locale: Locale; names?: string[] }
 }
 
 /** Grille des trois offres projet */
-export function OffersGrid({ locale }: { locale: Locale }) {
+export function OffersGrid({ locale, headingAs = 'h3' }: { locale: Locale; headingAs?: 'h2' | 'h3' }) {
   const t = ui(locale)
   const p = pages(locale).tarifs
+  const parr = pages(locale).parrainage
+  const ParrH = headingAs
   return (
     <>
       <div className="offers">
@@ -200,6 +202,18 @@ export function OffersGrid({ locale }: { locale: Locale }) {
               <span className="offer__num">{formatPrice(o.price, locale)}</span>
               <span className="mono">{PRICE_UNIT[locale]}</span>
             </p>
+            <Link className="offer__deal" href={href('parrainage', locale)}>
+              <span className="offer__stamp" aria-hidden="true">
+                -{REFERRAL_MAX * 100}%
+              </span>
+              <span>
+                {o.from && `${p.dealFrom} `}
+                <strong>
+                  {formatPrice(o.price * (1 - REFERRAL_MAX), locale)} {PRICE_UNIT[locale]}
+                </strong>{' '}
+                {p.deal}
+              </span>
+            </Link>
             <div className="stack" style={{ gap: 14 }}>
               <p className="offer__pitch">{o.pitch[locale]}</p>
               <ul>
@@ -215,6 +229,22 @@ export function OffersGrid({ locale }: { locale: Locale }) {
         ))}
       </div>
       <p className="offer-note mono">{p.payment}</p>
+      <div className="split" style={{ marginTop: 56 }}>
+        <div className="stack">
+          <ParrH className="svc__h">{parr.h1}</ParrH>
+          <p className="rubrique__p">{parr.lead}</p>
+          <p>
+            <Link className="more" href={href('parrainage', locale)}>
+              {labelOf('parrainage', locale)}
+            </Link>{' '}
+            ·{' '}
+            <Link className="more" href={href('abonnements', locale)}>
+              {p.plansTeaser}
+            </Link>
+          </p>
+        </div>
+        <StampCard locale={locale} />
+      </div>
     </>
   )
 }

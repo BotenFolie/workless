@@ -969,7 +969,7 @@ a.leader:hover .leader__name {
 
 .offer {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr auto;
   gap: 16px;
   padding: 24px;
   border: var(--rule);
@@ -2915,6 +2915,60 @@ a.leader:hover .leader__arrow {
   font-weight: 800;
   letter-spacing: -0.04em;
   transform: rotate(-8deg);
+}
+
+/* Remise parrainage dans chaque offre : mini-tampon + prix après -50 % */
+.offer__deal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  text-decoration: none;
+  color: inherit;
+}
+
+.offer__deal strong {
+  font-weight: 800;
+  background: var(--hl);
+  color: var(--ink);
+  padding: 0 4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.offer__stamp {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--hl);
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: -0.04em;
+  transform: rotate(-8deg);
+  transition: transform 0.2s ease;
+}
+
+.offer__deal:hover .offer__stamp,
+.offer__deal:focus-visible .offer__stamp {
+  transform: rotate(0deg) scale(1.06);
+}
+
+.offer__deal:hover span:last-child {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer__stamp {
+    transition: none;
+  }
 }
 
 /* FAQ */

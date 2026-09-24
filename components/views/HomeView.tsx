@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { IconArrow } from '../Icons'
 import SceneAnnuaire from '../SceneAnnuaire'
-import { CtaRow, EncartGrid, FaqList, FinalCta, JsonLd, LiveList, OffersGrid, Rubrique, StampCard } from '../Blocks'
+import { CtaRow, EncartGrid, FaqList, FinalCta, JsonLd, LiveList, OffersGrid, Rubrique } from '../Blocks'
 import { href, routesOfKind, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { content, pages } from '@/lib/content'
@@ -156,22 +156,6 @@ export default function HomeView({ locale }: { locale: Locale }) {
             <p className="rubrique__p">{p.pricesP}</p>
           </div>
           <OffersGrid locale={locale} />
-          <div className="split" style={{ marginTop: 56 }}>
-            <div className="stack">
-              <h3 className="svc__h">{pages(locale).parrainage.h1}</h3>
-              <p className="rubrique__p">{pages(locale).parrainage.lead}</p>
-              <p>
-                <Link className="more" href={href('parrainage', locale)}>
-                  {labelOf('parrainage', locale)}
-                </Link>{' '}
-                ·{' '}
-                <Link className="more" href={href('abonnements', locale)}>
-                  {pages(locale).tarifs.plansTeaser}
-                </Link>
-              </p>
-            </div>
-            <StampCard locale={locale} />
-          </div>
         </div>
       </section>
 

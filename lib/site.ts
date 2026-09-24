@@ -18,8 +18,8 @@ export const TEAM: { name: string; initials: string; role: T; does: T }[] = [
     initials: 'SG',
     role: { fr: 'Direction artistique', es: 'Dirección de arte' },
     does: {
-      fr: 'Dessine chaque site pour le métier du client : identité, typographies, scène signature.',
-      es: 'Diseña cada web según el oficio del cliente: identidad, tipografías, escena propia.',
+      fr: 'Conçoit l’identité visuelle et l’interface de chaque site à partir du métier, du positionnement et de la clientèle de l’entreprise : direction artistique, typographie, hiérarchie des contenus et scène signature. Aucun modèle, aucun thème acheté.',
+      es: 'Concibe la identidad visual y la interfaz de cada web a partir del oficio, el posicionamiento y la clientela de la empresa: dirección de arte, tipografía, jerarquía de contenidos y escena propia. Sin plantillas ni temas comprados.',
     },
   },
   {
@@ -27,8 +27,8 @@ export const TEAM: { name: string; initials: string; role: T; does: T }[] = [
     initials: 'MJ',
     role: { fr: 'Développeur web · expert SEO & SEA', es: 'Desarrollador web · experto SEO y SEM' },
     does: {
-      fr: 'Code le site, construit son référencement et pilote les campagnes Google Ads.',
-      es: 'Programa la web, construye su posicionamiento y gestiona las campañas de Google Ads.',
+      fr: 'Développe le site et en garantit la qualité technique (vitesse, indexation, données structurées). Définit la stratégie de référencement naturel, de l’architecture des pages au SEO local, puis conçoit, pilote et optimise les campagnes Google Ads.',
+      es: 'Desarrolla la web y garantiza su calidad técnica (velocidad, indexación, datos estructurados). Define la estrategia de posicionamiento orgánico, de la arquitectura de páginas al SEO local, y diseña, gestiona y optimiza las campañas de Google Ads.',
     },
   },
   {
@@ -36,8 +36,8 @@ export const TEAM: { name: string; initials: string; role: T; does: T }[] = [
     initials: 'LJ',
     role: { fr: 'Développeur web · data analyse', es: 'Desarrollador web · análisis de datos' },
     does: {
-      fr: 'Développe, installe le suivi des appels et formulaires, lit les chiffres et ajuste.',
-      es: 'Desarrolla, mide llamadas y formularios, interpreta los datos y ajusta.',
+      fr: 'Développe le site et met en place la mesure : suivi des appels, des formulaires et des conversions (GA4, Google Tag Manager). Analyse les données pour orienter les décisions SEO et Google Ads sur des chiffres réels, pas des impressions.',
+      es: 'Desarrolla la web e implanta la medición: seguimiento de llamadas, formularios y conversiones (GA4, Google Tag Manager). Analiza los datos para que las decisiones de SEO y Google Ads se basen en cifras reales, no en impresiones.',
     },
   },
 ]
@@ -168,5 +168,9 @@ export const PLANS: Plan[] = [
 export const PRICE_UNIT: T = { fr: '€ HT', es: '€ + IVA' }
 
 export function formatPrice(n: number, locale: Locale): string {
-  return new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'es-ES').format(n)
+  const cents = Number.isInteger(n) ? 0 : 2
+  return new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'es-ES', { minimumFractionDigits: cents }).format(n)
 }
+
+/** Remise maximale du parrainage (5 RDV tenus = -50 % du prix du site) */
+export const REFERRAL_MAX = 0.5

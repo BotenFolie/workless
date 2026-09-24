@@ -356,7 +356,7 @@ export function TarifsView({ locale, routeKey }: V) {
       <PageHead h1={p.h1} lead={p.lead} long />
       <section className="band band--white" aria-label={p.h1}>
         <div className="wrap">
-          <OffersGrid locale={locale} />
+          <OffersGrid locale={locale} headingAs="h2" />
           <div className="split" style={{ marginTop: 56 }}>
             <div className="stack">
               <h2 className="svc__h">{p.included}</h2>
@@ -375,23 +375,6 @@ export function TarifsView({ locale, routeKey }: V) {
               </ul>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="band band--yellow" aria-labelledby="parr-h">
-        <div className="wrap split">
-          <div className="stack">
-            <h2 id="parr-h" className="rubrique__h">
-              {pages(locale).parrainage.h1}
-            </h2>
-            <p className="rubrique__p">{pages(locale).parrainage.lead}</p>
-            <p>
-              <Link className="more" href={href('parrainage', locale)}>
-                {labelOf('parrainage', locale)}
-              </Link>
-            </p>
-          </div>
-          <StampCard locale={locale} />
         </div>
       </section>
 

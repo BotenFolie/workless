@@ -90,6 +90,8 @@ const FR = {
     plansTeaserP: 'Les abonnements sont indépendants du prix du site. Ils se prennent quand vous voulez, ensemble ou séparément.',
     plansLink: 'Voir les abonnements',
     choose: 'Choisir',
+    deal: 'avec 5 parrainages',
+    dealFrom: 'dès',
     faq: [
       { q: 'Les prix sont-ils HT ?', a: 'Oui, tous nos prix sont affichés hors taxes.' },
       { q: 'Une refonte coûte-t-elle plus cher ?', a: 'Non. Même grille ; la migration SEO et les redirections sont incluses.' },
@@ -315,6 +317,8 @@ const ES: PagesDict = {
     plansTeaserP: 'Los planes mensuales son independientes del precio de la web. Se contratan cuando quiera, juntos o por separado.',
     plansLink: 'Ver los planes mensuales',
     choose: 'Elegir',
+    deal: 'con 5 referidos',
+    dealFrom: 'desde',
     faq: [
       { q: '¿Los precios incluyen IVA?', a: 'No, todos nuestros precios se muestran sin IVA.' },
       { q: '¿Un rediseño cuesta más?', a: 'No. Misma tarifa; la migración SEO y las redirecciones están incluidas.' },
