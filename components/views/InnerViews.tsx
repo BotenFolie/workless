@@ -1,10 +1,12 @@
 // Pages intérieures : services, métiers, réalisations, tarifs, abonnements, parrainage, studio…
 
 import ServiceFeature from '../ServiceFeature'
+import { OfferCompare, PayCalc, WorkFilter } from '../PageTools'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
   CtaRow,
+  Encart,
   EncartGrid,
   FaqList,
   FinalCta,
@@ -25,7 +27,7 @@ import { getRoute, href, ROUTES, routesOfKind, type Locale } from '@/lib/routes'
 import { labelOf } from '@/lib/labels'
 import { content, pages } from '@/lib/content'
 import { REALISATIONS, getRealisation } from '@/lib/realisations'
-import { STUDIO } from '@/lib/site'
+import { formatPrice, OFFERS, PRICE_UNIT, STUDIO } from '@/lib/site'
 import { absolute, articleJsonLd, breadcrumbJsonLd, faqJsonLd, orgJsonLd, serviceJsonLd } from '@/lib/seo'
 import { ui } from '@/lib/ui'
 
@@ -83,7 +85,17 @@ export function ServiceView({ locale, routeKey }: V) {
       <section className="band band--white" aria-labelledby={s.feature ? undefined : 'pts-h'}>
         <div className="wrap">
           {s.feature ? (
-            <ServiceFeature feature={s.feature} locale={locale} ctaHref={href('audit', locale)} ctaLabel={ui(locale).ctaLong} />
+            <div className="feats">
+              {(Array.isArray(s.feature) ? s.feature : [s.feature]).map((f, i) => (
+                <ServiceFeature key={i} feature={f} locale={locale} ctaHref={href('audit', locale)} ctaLabel={ui(locale).ctaLong} />
+              ))}
+              {s.keepPoints && (
+                <div className="feat">
+                  <Rubrique id="pts-h" h={sp.points} />
+                  <Points items={s.points} />
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <Rubrique id="pts-h" h={sp.points} />
@@ -270,6 +282,30 @@ export function MetierView({ locale, routeKey }: V) {
 
 /* --- Réalisations ------------------------------------------------------------- */
 
+/** Regroupe les étiquettes des études de cas en quelques filtres lisibles */
+function groupsOf(tags: string[]): string[] {
+  const g = new Set<string>()
+  for (const t of tags) {
+    if (t === 'Site vitrine' || t === 'Site B2B') g.add('vitrine')
+    if (t === 'Landing page') g.add('landing')
+    if (t === 'Refonte') g.add('refonte')
+    if (t.includes('3D')) g.add('3d')
+    if (t === 'Google Ads') g.add('ads')
+  }
+  return [...g]
+}
+
+function workFilters(locale: Locale) {
+  const fr = locale === 'fr'
+  return [
+    { id: 'vitrine', label: fr ? 'Sites vitrines' : 'Webs corporativas' },
+    { id: 'landing', label: 'Landing pages' },
+    { id: 'refonte', label: fr ? 'Refontes' : 'Rediseños' },
+    { id: '3d', label: fr ? 'Animation 3D' : 'Animación 3D' },
+    { id: 'ads', label: 'Google Ads' },
+  ]
+}
+
 export function RealisationsView({ locale, routeKey }: V) {
   const p = pages(locale).realisations
   const web = REALISATIONS.filter((r) => r.kind === 'web').map((r) => r.slug)
@@ -281,7 +317,14 @@ export function RealisationsView({ locale, routeKey }: V) {
       <PageHead h1={p.h1} lead={p.lead} />
       <section className="band band--ink" aria-label={p.h1}>
         <div className="wrap">
-          <EncartGrid slugs={web} locale={locale} />
+          <WorkFilter
+            locale={locale}
+            filters={workFilters(locale)}
+            items={web.map((slug, i) => {
+              const r = getRealisation(slug)!
+              return { slug, groups: groupsOf(r.tags), node: <Encart r={r} locale={locale} priority={i < 2} /> }
+            })}
+          />
           <div className="stack" style={{ marginTop: 64 }}>
             <h2 className="svc__h">{pages(locale).home.liveH}</h2>
             <LiveList locale={locale} />
@@ -365,6 +408,27 @@ export function RealisationView({ locale, routeKey }: V) {
 
 /* --- Tarifs, abonnements, parrainage ----------------------------------------- */
 
+/** Colonnes et lignes du comparatif, dérivées des offres (source unique : lib/site.ts) */
+function compareCols(locale: Locale) {
+  return OFFERS.map((o) => ({
+    id: o.id,
+    name: o.name[locale],
+    price: `${o.from ? (locale === 'fr' ? 'dès ' : 'desde ') : ''}${formatPrice(o.price, locale)} ${PRICE_UNIT[locale]}`,
+    main: o.id === 'signature',
+  }))
+}
+
+function compareRows(locale: Locale) {
+  const [ess, sig, sur] = OFFERS.map((o) => o.includes[locale])
+  const fr = locale === 'fr'
+  const pages = { label: fr ? 'Nombre de pages' : 'Número de páginas', cells: [fr ? 'Jusqu’à 5' : 'Hasta 5', fr ? 'Jusqu’à 10' : 'Hasta 10', fr ? 'Sur devis' : 'Con presupuesto'] }
+  // Lignes communes (sans la ligne « pages »), puis ajouts Signature, puis ajouts Sur mesure
+  const base = ess.slice(1).map((label) => ({ label, cells: [true, true, true] as (string | boolean)[] }))
+  const sigExtra = sig.slice(2).map((label) => ({ label, cells: [false, true, true] as (string | boolean)[] }))
+  const surExtra = sur.slice(1).map((label) => ({ label, cells: [false, false, true] as (string | boolean)[] }))
+  return [pages, ...base, ...sigExtra, ...surExtra]
+}
+
 export function TarifsView({ locale, routeKey }: V) {
   const p = pages(locale).tarifs
   return (
@@ -375,7 +439,14 @@ export function TarifsView({ locale, routeKey }: V) {
       <section className="band band--white" aria-label={p.h1}>
         <div className="wrap">
           <OffersGrid locale={locale} headingAs="h2" />
-          <div className="split" style={{ marginTop: 56 }}>
+          <div className="feats" style={{ marginTop: 'clamp(64px, 9vw, 112px)' }}>
+            <PayCalc
+              locale={locale}
+              offers={OFFERS.filter((o) => !o.from).map((o) => ({ id: o.id, name: o.name[locale], price: o.price }))}
+            />
+            <OfferCompare locale={locale} cols={compareCols(locale)} rows={compareRows(locale)} />
+          </div>
+          <div className="split" style={{ marginTop: 'clamp(64px, 9vw, 112px)' }}>
             <div className="stack">
               <h2 className="svc__h">{p.included}</h2>
               <ul className="prose">

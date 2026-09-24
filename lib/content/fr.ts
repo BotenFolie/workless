@@ -20,15 +20,6 @@ const fr: Content = {
         { t: 'Mesuré', d: 'Appels et formulaires sont suivis : vous savez ce que le site vous rapporte.' },
         { t: 'Un seul interlocuteur', d: 'Le même trio conçoit le site, le référence et gère vos campagnes. Rien ne se perd entre deux prestataires.' },
       ],
-      sections: [
-        {
-          h: 'Comment se déroule un projet',
-          p: [
-            'Tout commence par un audit gratuit de votre présence en ligne : site actuel, fiche Google, concurrents. On en parle au téléphone, puis on vous envoie un devis clair.',
-            'À la commande, vous réglez 50 % d’acompte. On conçoit le site, vous le validez, on le met en ligne et vous réglez le solde. Si vous nous recommandez à d’autres entreprises, chaque rendez-vous tenu retire 10 % du prix du site, déduits de ce solde.',
-          ],
-        },
-      ],
       pricing: { kind: 'offers' },
       proof: ['sbpaysagiste', 'lbeg', 'corgier'],
       faq: [
@@ -36,6 +27,43 @@ const fr: Content = {
         { q: 'Pourrai-je modifier mon site moi-même ?', a: 'Nos sites n’ont pas de back-office de type WordPress : c’est ce qui les rend rapides et sûrs. Les modifications sont comprises dans le forfait hébergement & maintenance, ou faites à la demande.' },
         { q: 'Le nom de domaine est-il compris ?', a: 'Le nom de domaine est acheté à votre nom et à vos frais : il vous appartient. On s’occupe de le configurer.' },
         { q: 'Et si je n’ai pas de photos ?', a: 'Vos vraies photos (équipe, chantiers, local) convainquent toujours mieux que des images de banque. On vous dit lesquelles prendre ; en attendant, on prévoit leur emplacement.' },
+      ],
+      facts: [
+        { k: 'Prix', v: 'Dès 1 199 € HT, affiché avant de commencer' },
+        { k: 'Paiement', v: '50 % à la commande, 50 % à la mise en ligne' },
+        { k: 'Toujours inclus', v: 'Design sur mesure, SEO technique, mise en ligne' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'formatPicker',
+          h: 'Quel site pour votre entreprise ?',
+          p: 'Trois questions, une recommandation. Elle se met à jour à chaque réponse.',
+          questions: [
+            { q: 'Qu’attendez-vous d’abord de votre site ?', options: [{ id: 'found', label: 'Être trouvé sur Google, dans la durée' }, { id: 'ads', label: 'Recevoir les contacts d’une campagne Google Ads' }, { id: 'both', label: 'Les deux' }] },
+            { q: 'Combien de services ou de zones avez-vous à présenter ?', options: [{ id: '2-4', label: '2 à 4' }, { id: '1', label: 'Un seul' }, { id: '5+', label: '5 ou plus' }] },
+            { q: 'Site en plusieurs langues, ou clientèle B2B avec beaucoup de contenu technique ?', options: [{ id: 'no', label: 'Non' }, { id: 'yes', label: 'Oui' }] },
+          ],
+          resultLabel: 'Notre recommandation',
+          results: {
+            landing: { name: 'Landing page', price: 'Offre Essentiel · 1 199 € HT', why: 'Une page, un objectif : l’appel ou la demande de devis. Le bon format pour alimenter une campagne Google Ads.', route: 'landing', link: 'Voir la landing page' },
+            essentiel: { name: 'Site vitrine Essentiel', price: '1 199 € HT · jusqu’à 5 pages', why: 'Le site qui vous rend trouvable et joignable : vos services, vos réalisations, votre contact, avec tout le SEO technique.', route: 'vitrine', link: 'Voir le site vitrine' },
+            signature: { name: 'Site vitrine Signature', price: '1 590 € HT · jusqu’à 10 pages', why: 'Une page par service et par ville, les textes SEO rédigés et une animation propre à votre métier.', route: 'vitrine', link: 'Voir le site vitrine' },
+            surmesure: { name: 'Sur mesure', price: 'Dès 2 300 € HT · sur devis', why: 'Pour les PME, le B2B et les sites en plusieurs langues : contenu dense, expertises, études de cas.', route: 'tarifs', link: 'Voir les tarifs' },
+          },
+        },
+        {
+          kind: 'journey',
+          h: 'Comment se déroule un projet',
+          p: 'Pas de surprise : chaque étape est connue à l’avance, et vous ne payez le solde qu’une fois le site en ligne.',
+          steps: [
+            { t: 'Audit gratuit', d: 'Votre site actuel, votre fiche Google, vos concurrents. On en parle au téléphone.' },
+            { t: 'Devis clair', d: 'L’offre, le nombre de pages et le délai, fixés noir sur blanc.' },
+            { t: 'Commande', d: 'Vous validez le devis, on démarre.', money: 'Acompte 50 %' },
+            { t: 'Conception', d: 'Eva dessine, Mathieu et Louis développent. Vous validez avant la mise en ligne.' },
+            { t: 'Mise en ligne', d: 'Le site part en ligne, les contacts sont suivis dès le premier jour.', money: 'Solde 50 %, −10 % par parrainage' },
+          ],
+        },
       ],
     },
     vitrine: {
@@ -153,20 +181,58 @@ const fr: Content = {
         { t: 'Plus rapide', d: 'Un site moderne, léger, qui s’affiche vite sur mobile.' },
         { t: 'Mesure avant / après', d: 'Suivi des contacts dès la mise en ligne, pour comparer.' },
       ],
-      sections: [
-        {
-          h: 'WordPress, Wix, site d’agence daté',
-          p: [
-            'Quel que soit l’outil de votre site actuel, on reprend son contenu utile et on le remplace par un site plus rapide, sans plugin à maintenir. Vous gardez votre nom de domaine et votre adresse e-mail.',
-          ],
-        },
-      ],
       pricing: { kind: 'offers' },
       proof: ['maintenancecaladoise', 'marieoracle'],
       faq: [
         { q: 'Vais-je perdre mon référencement ?', a: 'C’est le risque d’une refonte mal faite. On inventorie toutes vos anciennes pages et on les redirige une par une ; c’est inclus dans chaque refonte.' },
         { q: 'Je garde mon nom de domaine ?', a: 'Oui. Seul le site change ; votre domaine et vos e-mails restent les mêmes.' },
         { q: 'Combien coûte une refonte ?', a: 'Le même prix qu’une création : Essentiel 1 199 € HT, Signature 1 590 € HT, Sur mesure dès 2 300 € HT. La migration SEO est incluse.' },
+      ],
+      facts: [
+        { k: 'Prix', v: 'Le même qu’une création, dès 1 199 € HT' },
+        { k: 'Migration SEO', v: 'Incluse dans chaque refonte' },
+        { k: 'Vous gardez', v: 'Votre nom de domaine et vos e-mails' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'refonteCheck',
+          h: 'Faut-il refaire votre site ?',
+          p: 'Cochez ce qui correspond à votre site actuel. Aucun de ces signes n’est grave seul ; plusieurs ensemble, ce sont des clients qui passent chez un concurrent.',
+          signs: [
+            'Il est pénible à lire sur un téléphone',
+            'Il met plusieurs secondes à s’afficher',
+            'Vous ne savez pas combien de contacts il vous apporte',
+            'Il n’apparaît pas quand on cherche votre métier et votre ville',
+            'Il ne ressemble plus à votre entreprise d’aujourd’hui',
+            'Il tourne sur un WordPress ou des extensions que personne ne met à jour',
+          ],
+          countLabel: 'signes cochés',
+          verdicts: {
+            none: 'Cochez les signes qui vous parlent : on vous dit si une refonte se justifie.',
+            few: 'Quelques points à corriger : une refonte n’est peut-être pas nécessaire. L’audit gratuit vous le dira franchement.',
+            many: 'Votre site vous coûte probablement des clients. Une refonte se justifie ; l’audit gratuit chiffre ce qu’il faut garder.',
+          },
+        },
+        {
+          kind: 'keepChange',
+          h: 'Ce qu’on garde, ce qui change',
+          p: 'Une refonte ne repart pas de zéro : tout ce qui vous rapporte déjà est conservé. WordPress, Wix ou site d’agence daté, la méthode est la même.',
+          keepH: 'Ce qu’on garde',
+          keep: [
+            { t: 'Votre nom de domaine', d: 'Votre adresse reste la même : vos clients vous retrouvent.' },
+            { t: 'Vos adresses e-mail', d: 'Seul le site change ; vos boîtes e-mail restent en place.' },
+            { t: 'Le référencement acquis', d: 'Chaque ancienne page est redirigée vers la nouvelle : Google et vos anciens liens suivent.' },
+            { t: 'Les contenus qui rapportent', d: 'Textes et pages qui se positionnent déjà sont repris ou améliorés, jamais supprimés au hasard.' },
+          ],
+          changeH: 'Ce qui change',
+          change: [
+            { t: 'Le design', d: 'Une identité qui ressemble enfin à votre entreprise, pas à un thème acheté.' },
+            { t: 'La vitesse', d: 'Un site léger, sans extension à maintenir, qui s’affiche vite sur mobile.' },
+            { t: 'La structure', d: 'Des pages organisées autour de ce que vos clients cherchent vraiment.' },
+            { t: 'La mesure', d: 'Appels et formulaires suivis dès la mise en ligne, pour comparer avant et après.' },
+          ],
+        },
       ],
     },
     migration: {
@@ -249,20 +315,49 @@ const fr: Content = {
         { t: 'Référencement IA', d: 'Un site clair et structuré, que ChatGPT, Perplexity et les réponses IA de Google comprennent et peuvent citer.' },
         { t: 'Suivi mensuel', d: 'Positions, visites, contacts : un point clair chaque mois, et les corrections qui vont avec.' },
       ],
-      sections: [
-        {
-          h: 'Inclus dans le site, puis en continu',
-          p: [
-            'Le SEO technique est compris dans chaque site que nous livrons. Pour aller plus loin (nouvelles pages, contenus, suivi des positions), le SEO continu est un abonnement mensuel sans lien avec le prix du site.',
-          ],
-        },
-      ],
       pricing: { kind: 'plan', id: 'seo' },
       proof: ['bachcostablanca', 'lbeg'],
       faq: [
         { q: 'En combien de temps voit-on des résultats ?', a: 'Selon la concurrence de votre métier et de votre ville, de quelques semaines à plusieurs mois. Personne ne peut garantir une position sur Google : méfiez-vous de qui le promet.' },
         { q: 'SEO ou Google Ads ?', a: 'Google Ads apporte des contacts tout de suite, tant que vous payez. Le SEO met plus de temps mais travaille ensuite sans budget publicitaire. Beaucoup de nos clients démarrent avec les deux.' },
         { q: 'Faites-vous du SEO sur un site que vous n’avez pas créé ?', a: 'Oui. On commence par un audit ; si le site freine le référencement, on vous le dit franchement.' },
+      ],
+      facts: [
+        { k: 'Inclus', v: 'SEO technique dans chaque site livré' },
+        { k: 'En continu', v: 'Abonnement SEO, 400 € HT / mois' },
+        { k: 'Ce qu’on ne promet pas', v: 'Une position garantie sur Google' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'serp',
+          h: 'Chaque zone de Google se travaille différemment',
+          p: 'Une recherche affiche quatre types de résultats. Survolez une zone : on vous dit comment y apparaître, et quelle page vous en dit plus.',
+          query: 'paysagiste lyon',
+          zones: [
+            { id: 'ads', label: 'Zone 1 · Annonces', t: 'Les annonces Google Ads', d: 'En haut de page dès les premiers jours, tant que la campagne tourne.', route: 'ads', link: 'Google Ads' },
+            { id: 'ai', label: 'Zone 2 · Réponse IA', t: 'Les réponses générées par l’IA', d: 'Google résume et cite des sources : un site clair et structuré a une chance d’en faire partie.', route: 'seoIa', link: 'Référencement IA' },
+            { id: 'map', label: 'Zone 3 · Carte', t: 'La carte et les trois entreprises', d: 'Là que se décident la plupart des appels locaux : fiche Google, avis, coordonnées cohérentes.', route: 'seoLocal', link: 'SEO local' },
+            { id: 'organic', label: 'Zone 4 · Résultats naturels', t: 'Les résultats naturels', d: 'Gratuits, durables : le fruit du SEO technique et de pages qui répondent aux recherches.', route: 'auditSeo', link: 'Commencer par un audit SEO' },
+          ],
+          mock: {
+            sponsored: 'Sponsorisé',
+            adTitle: 'Paysagiste à Lyon — Devis gratuit',
+            aiTitle: 'Aperçu IA',
+            aiText: 'Plusieurs paysagistes interviennent à Lyon, notamment pour l’aménagement de jardins et de terrasses…',
+            mapTitle: 'Entreprises',
+            places: ['Votre entreprise', 'Concurrent A', 'Concurrent B'],
+            organic: ['Paysagiste Lyon : création de jardins', 'Aménagement extérieur à Lyon'],
+          },
+          illustration: 'Illustration — résultats fictifs',
+        },
+        {
+          kind: 'split',
+          h: 'Inclus dans le site, puis en continu',
+          p: 'Le SEO technique fait partie de chaque site que nous livrons. Aller plus loin est un abonnement séparé, sans lien avec le prix du site.',
+          left: { tag: 'Compris dans le prix du site', h: 'Dans chaque site', items: ['Indexation, vitesse, affichage mobile', 'Balises et données structurées', 'Structure des pages pensée pour vos recherches', 'Optimisation de la fiche Google'] },
+          right: { tag: '400 € HT / mois', h: 'SEO continu', items: ['Nouvelles pages et nouveaux contenus', 'Suivi des positions, des visites et des contacts', 'Un point clair chaque mois, et les corrections qui vont avec'], route: 'abonnements', link: 'Voir les abonnements' },
+        },
       ],
     },
     auditSeo: {
@@ -448,6 +543,34 @@ const fr: Content = {
         { q: 'Quel budget publicitaire prévoir ?', a: 'Il dépend de votre métier, de votre zone et de la concurrence. Après l’audit, on vous propose un budget de départ chiffré ; il est payé directement à Google.' },
         { q: 'Le compte Google Ads m’appartient-il ?', a: 'Le compte est à votre nom : vous gardez l’historique et les données.' },
         { q: 'Vous gérez des campagnes existantes ?', a: 'Oui. On commence par un audit du compte pour voir où part le budget.' },
+      ],
+      facts: [
+        { k: 'Notre travail', v: '400 € HT / mois' },
+        { k: 'Budget publicitaire', v: 'Payé directement à Google' },
+        { k: 'Le compte', v: 'À votre nom, avec son historique' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'adsVsSeo',
+          h: 'Google Ads, SEO, ou les deux ?',
+          p: 'Les deux ne travaillent pas au même rythme. Choisissez une stratégie pour voir comment arrivent les contacts.',
+          ads: { name: 'Google Ads seul', d: 'Des contacts dès les premiers jours, tant que vous payez. Quand la campagne s’arrête, les contacts s’arrêtent aussi.' },
+          seo: { name: 'SEO seul', d: 'Plus lent à démarrer, de quelques semaines à plusieurs mois selon la concurrence, mais il travaille ensuite sans budget publicitaire.' },
+          both: { name: 'Les deux', d: 'Google Ads apporte des contacts tout de suite pendant que le référencement monte. C’est le choix de beaucoup de nos clients.' },
+          axis: { time: 'temps →', contacts: 'contacts' },
+          caption: 'Schéma de principe, sans échelle : chaque métier et chaque ville ont leur propre rythme.',
+        },
+        {
+          kind: 'router',
+          h: 'Par où commencer ?',
+          p: 'Selon votre situation, la première étape n’est pas la même.',
+          paths: [
+            { if: 'Vous n’avez jamais fait de publicité', t: 'Gestion de campagnes', d: 'On construit vos campagnes de zéro, on les suit et on les ajuste chaque mois.', route: 'adsGestion', link: 'Voir la gestion' },
+            { if: 'Vous avez déjà des campagnes', t: 'Audit Google Ads', d: 'On regarde gratuitement où part votre budget avant de toucher à quoi que ce soit.', route: 'adsAudit', link: 'Voir l’audit' },
+            { if: 'Vos annonces mènent à votre page d’accueil', t: 'Landing page', d: 'Une page dédiée qui reprend la promesse de l’annonce et mène à l’appel.', route: 'landing', link: 'Voir la landing page' },
+          ],
+        },
       ],
     },
     adsGestion: {

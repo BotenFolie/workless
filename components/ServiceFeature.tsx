@@ -6,6 +6,7 @@
 import Link from 'next/link'
 import { Fragment, useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import type { Feature } from '@/lib/content/types'
+import { href, type Locale } from '@/lib/routes'
 import { IconArrow, IconCheck, IconCross, IconPhone, IconPin, IconStar } from './Icons'
 
 type Props = { feature: Feature; ctaHref: string; ctaLabel: string; locale: 'fr' | 'es' }
@@ -29,6 +30,22 @@ export default function ServiceFeature(props: Props) {
       return <AdsChain f={f} locale={props.locale} />
     case 'selfCheck':
       return <SelfCheck f={f} ctaHref={props.ctaHref} ctaLabel={props.ctaLabel} />
+    case 'formatPicker':
+      return <FormatPicker f={f} locale={props.locale} />
+    case 'journey':
+      return <Journey f={f} />
+    case 'refonteCheck':
+      return <RefonteCheck f={f} ctaHref={props.ctaHref} ctaLabel={props.ctaLabel} />
+    case 'keepChange':
+      return <KeepChange f={f} />
+    case 'serp':
+      return <Serp f={f} locale={props.locale} />
+    case 'split':
+      return <Split f={f} locale={props.locale} />
+    case 'adsVsSeo':
+      return <AdsVsSeo f={f} />
+    case 'router':
+      return <Router f={f} locale={props.locale} />
   }
 }
 
@@ -704,6 +721,361 @@ function SelfCheck({ f, ctaHref, ctaLabel }: { f: Of<'selfCheck'>; ctaHref: stri
           </tbody>
         </table>
       </div>
+    </div>
+  )
+}
+
+/* ==========================================================================
+   Pages principales
+   ========================================================================== */
+
+/* --- Création : quel format pour vous ? ------------------------------------------ */
+
+function FormatPicker({ f, locale }: { f: Of<'formatPicker'>; locale: Locale }) {
+  const [ans, setAns] = useState(f.questions.map((q) => q.options[0].id))
+  const hid = useId()
+  const [goal, size, complex] = ans
+  const rec: keyof typeof f.results =
+    complex === 'yes' ? 'surmesure' : goal === 'ads' && size === '1' ? 'landing' : size === '5+' ? 'signature' : 'essentiel'
+  const r = f.results[rec]
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="picker">
+        <ol className="picker__qs">
+          {f.questions.map((q, i) => (
+            <li key={q.q} className="picker__q">
+              <p className="picker__text">{q.q}</p>
+              <div className="seg seg--wrap" role="radiogroup" aria-label={q.q}>
+                {q.options.map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={ans[i] === o.id}
+                    onClick={() => setAns((prev) => prev.map((x, j) => (j === i ? o.id : x)))}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div className="picker__result" aria-live="polite">
+          <p className="mono picker__label">{f.resultLabel}</p>
+          <p key={rec} className="picker__name">
+            {r.name}
+          </p>
+          <p className="picker__price mono">{r.price}</p>
+          <p className="picker__why">{r.why}</p>
+          <Link className="btn picker__btn" href={href(r.route, locale)}>
+            {r.link}
+            <IconArrow />
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* --- Création : le déroulé d'un projet ------------------------------------------- */
+
+function Journey({ f }: { f: Of<'journey'> }) {
+  const hid = useId()
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <ol className="chain" style={{ ['--n' as string]: f.steps.length }}>
+        {f.steps.map((s) => (
+          <li key={s.t} className="chain__step">
+            <h3 className="chain__t">{s.t}</h3>
+            <p className="chain__d">{s.d}</p>
+            {s.money && <p className="chain__money mono">{s.money}</p>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+/* --- Refonte : faut-il refaire votre site ? --------------------------------------- */
+
+function RefonteCheck({ f, ctaHref, ctaLabel }: { f: Of<'refonteCheck'>; ctaHref: string; ctaLabel: string }) {
+  const [on, setOn] = useState<boolean[]>(f.signs.map(() => false))
+  const hid = useId()
+  const n = on.filter(Boolean).length
+  const msg = n === 0 ? f.verdicts.none : n <= 2 ? f.verdicts.few : f.verdicts.many
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="check">
+        <ul className="signs">
+          {f.signs.map((sg, i) => (
+            <li key={sg}>
+              <label className="sign" data-on={on[i] || undefined}>
+                <input
+                  type="checkbox"
+                  checked={on[i]}
+                  onChange={() => setOn((prev) => prev.map((x, j) => (j === i ? !x : x)))}
+                />
+                <span className="sign__box" aria-hidden="true">
+                  <IconCheck />
+                </span>
+                <span>{sg}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+        <div className="check__result" aria-live="polite" data-done={n > 0 || undefined}>
+          <p className="check__count mono">
+            {n} / {f.signs.length} {f.countLabel}
+          </p>
+          <p className="check__msg">{msg}</p>
+          {n > 0 && (
+            <Link className="btn" href={ctaHref}>
+              {ctaLabel}
+              <IconArrow />
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* --- Refonte : ce qu'on garde, ce qui change -------------------------------------- */
+
+function KeepChange({ f }: { f: Of<'keepChange'> }) {
+  const hid = useId()
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="ledger">
+        <div className="ledger__col">
+          <h3 className="ledger__h">{f.keepH}</h3>
+          <ul>
+            {f.keep.map((k) => (
+              <li key={k.t}>
+                <span className="ledger__ic ledger__ic--keep" aria-hidden="true">
+                  <IconCheck />
+                </span>
+                <span>
+                  <strong>{k.t}</strong>
+                  {k.d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="ledger__col ledger__col--change">
+          <h3 className="ledger__h">{f.changeH}</h3>
+          <ul>
+            {f.change.map((k) => (
+              <li key={k.t}>
+                <span className="ledger__ic" aria-hidden="true">
+                  <IconArrow />
+                </span>
+                <span>
+                  <strong>{k.t}</strong>
+                  {k.d}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* --- SEO : une page de résultats Google, zone par zone ---------------------------- */
+
+function Serp({ f, locale }: { f: Of<'serp'>; locale: Locale }) {
+  const [on, setOn] = useState<string | null>(null)
+  const hid = useId()
+  const hl = (z: string) => (on === z ? true : undefined)
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="lpack">
+        <div className="serp" aria-hidden="true">
+          <div className="lpack__search">
+            <IconPin />
+            {f.query}
+          </div>
+          <div className="serp__zone" data-on={hl('ads')}>
+            <span className="serp__tag">{f.mock.sponsored}</span>
+            <b className="serp__link">{f.mock.adTitle}</b>
+            <i />
+          </div>
+          <div className="serp__zone serp__ai" data-on={hl('ai')}>
+            <b>{f.mock.aiTitle}</b>
+            <span>{f.mock.aiText}</span>
+          </div>
+          <div className="serp__zone" data-on={hl('map')}>
+            <b>{f.mock.mapTitle}</b>
+            <div className="serp__places">
+              {f.mock.places.map((p) => (
+                <span key={p}>
+                  <IconPin />
+                  {p}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="serp__zone" data-on={hl('organic')}>
+            {f.mock.organic.map((o) => (
+              <p key={o} className="serp__org">
+                <b className="serp__link">{o}</b>
+                <i />
+              </p>
+            ))}
+          </div>
+          <p className="lpack__illu mono">{f.illustration}</p>
+        </div>
+
+        <ul className="serp__notes">
+          {f.zones.map((z) => (
+            <li
+              key={z.id}
+              data-on={hl(z.id)}
+              onMouseEnter={() => setOn(z.id)}
+              onMouseLeave={() => setOn(null)}
+              onFocus={() => setOn(z.id)}
+              onBlur={() => setOn(null)}
+            >
+              <span className="mono serp__zl">{z.label}</span>
+              <span className="lpack__t">{z.t}</span>
+              <span className="lpack__d">{z.d}</span>
+              <Link className="more" href={href(z.route, locale)}>
+                {z.link}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+/* --- SEO : inclus dans le site / en continu -------------------------------------- */
+
+function Split({ f, locale }: { f: Of<'split'>; locale: Locale }) {
+  const hid = useId()
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="ledger">
+        <div className="ledger__col">
+          <p className="ledger__tag mono">{f.left.tag}</p>
+          <h3 className="ledger__h">{f.left.h}</h3>
+          <ul>
+            {f.left.items.map((x) => (
+              <li key={x}>
+                <span className="ledger__ic ledger__ic--keep" aria-hidden="true">
+                  <IconCheck />
+                </span>
+                <span>{x}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="ledger__col ledger__col--change">
+          <p className="ledger__tag mono">{f.right.tag}</p>
+          <h3 className="ledger__h">{f.right.h}</h3>
+          <ul>
+            {f.right.items.map((x) => (
+              <li key={x}>
+                <span className="ledger__ic" aria-hidden="true">
+                  <IconArrow />
+                </span>
+                <span>{x}</span>
+              </li>
+            ))}
+          </ul>
+          <Link className="more" href={href(f.right.route, locale)}>
+            {f.right.link}
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* --- Google Ads : Ads, SEO ou les deux (schéma de principe) ----------------------- */
+
+function AdsVsSeo({ f }: { f: Of<'adsVsSeo'> }) {
+  const [mode, setMode] = useState<'ads' | 'seo' | 'both'>('both')
+  const hid = useId()
+  const cur = f[mode]
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <div className="curve">
+        <div className="seg" role="group" aria-label={f.h}>
+          {(['ads', 'seo', 'both'] as const).map((m) => (
+            <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}>
+              {f[m].name}
+            </button>
+          ))}
+        </div>
+        <figure className="curve__fig" data-mode={mode}>
+          <svg viewBox="0 0 600 260" role="img" aria-label={f.caption}>
+            <path className="curve__axis" d="M40 20 V220 H580" />
+            <path className="curve__ads" d="M40 220 C58 220 66 120 92 116 L580 116" />
+            <path className="curve__seo" d="M40 220 C240 216 330 150 580 70" />
+            <path className="curve__both" d="M40 220 C58 220 66 118 92 112 C250 104 340 64 580 28" />
+            <text className="curve__lbl curve__lbl--both" x="572" y="18" textAnchor="end">
+              {f.both.name}
+            </text>
+            <text className="curve__lbl curve__lbl--seo" x="572" y="92" textAnchor="end">
+              {f.seo.name}
+            </text>
+            <text className="curve__lbl curve__lbl--ads" x="572" y="136" textAnchor="end">
+              {f.ads.name}
+            </text>
+            <text x="580" y="244" textAnchor="end">
+              {f.axis.time}
+            </text>
+            <text x="48" y="18">
+              {f.axis.contacts}
+            </text>
+          </svg>
+          <figcaption className="mono">{f.caption}</figcaption>
+        </figure>
+        <p key={mode} className="curve__d">
+          {cur.d}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/* --- Google Ads : par où commencer ----------------------------------------------- */
+
+function Router({ f, locale }: { f: Of<'router'>; locale: Locale }) {
+  const hid = useId()
+  return (
+    <div className="feat">
+      <Head id={hid} h={f.h} p={f.p} />
+      <ul className="router">
+        {f.paths.map((p) => (
+          <li key={p.route}>
+            <Link className="router__row" href={href(p.route, locale)}>
+              <span className="router__if mono">{p.if}</span>
+              <span className="router__body">
+                <span className="router__t">{p.t}</span>
+                <span className="router__d">{p.d}</span>
+              </span>
+              <span className="router__go">
+                {p.link}
+                <IconArrow />
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

@@ -20,15 +20,6 @@ const es: Content = {
         { t: 'Medida', d: 'Llamadas y formularios quedan registrados: sabe lo que le aporta la web.' },
         { t: 'Un único interlocutor', d: 'El mismo equipo de tres diseña la web, la posiciona y gestiona sus campañas. Nada se pierde entre proveedores.' },
       ],
-      sections: [
-        {
-          h: 'Cómo es un proyecto',
-          p: [
-            'Todo empieza con una auditoría gratuita de su presencia online: web actual, ficha de Google, competencia. Lo comentamos por teléfono y le enviamos un presupuesto claro.',
-            'Al encargar, abona el 50 % de anticipo. Diseñamos la web, usted la valida, la publicamos y abona el resto. Si nos recomienda a otras empresas, cada reunión realizada descuenta un 10 % del precio de la web, deducido de ese resto.',
-          ],
-        },
-      ],
       pricing: { kind: 'offers' },
       proof: ['bachcostablanca', 'sbpaysagiste', 'lbeg'],
       faq: [
@@ -36,6 +27,43 @@ const es: Content = {
         { q: '¿Podré modificar la web yo mismo?', a: 'Nuestras webs no tienen un panel tipo WordPress: por eso son rápidas y seguras. Los cambios están incluidos en el plan de alojamiento y mantenimiento, o se hacen bajo demanda.' },
         { q: '¿El dominio está incluido?', a: 'El dominio se compra a su nombre y a su cargo: es suyo. Nosotros lo configuramos.' },
         { q: '¿Y si no tengo fotos?', a: 'Sus fotos reales (equipo, trabajos, local) convencen más que las de banco. Le decimos cuáles hacer y, mientras tanto, reservamos su espacio.' },
+      ],
+      facts: [
+        { k: 'Precio', v: 'Desde 1199 € + IVA, publicado antes de empezar' },
+        { k: 'Pago', v: '50 % al encargar, 50 % en la publicación' },
+        { k: 'Siempre incluido', v: 'Diseño a medida, SEO técnico, publicación' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'formatPicker',
+          h: '¿Qué web necesita su empresa?',
+          p: 'Tres preguntas, una recomendación. Se actualiza con cada respuesta.',
+          questions: [
+            { q: '¿Qué espera ante todo de su web?', options: [{ id: 'found', label: 'Que me encuentren en Google, a largo plazo' }, { id: 'ads', label: 'Recibir los contactos de una campaña de Google Ads' }, { id: 'both', label: 'Las dos cosas' }] },
+            { q: '¿Cuántos servicios o zonas tiene que presentar?', options: [{ id: '2-4', label: 'De 2 a 4' }, { id: '1', label: 'Solo uno' }, { id: '5+', label: '5 o más' }] },
+            { q: '¿Web en varios idiomas, o clientela B2B con mucho contenido técnico?', options: [{ id: 'no', label: 'No' }, { id: 'yes', label: 'Sí' }] },
+          ],
+          resultLabel: 'Nuestra recomendación',
+          results: {
+            landing: { name: 'Landing page', price: 'Oferta Esencial · 1199 € + IVA', why: 'Una página, un objetivo: la llamada o la petición de presupuesto. El formato adecuado para una campaña de Google Ads.', route: 'landing', link: 'Ver la landing page' },
+            essentiel: { name: 'Web corporativa Esencial', price: '1199 € + IVA · hasta 5 páginas', why: 'La web que le hace encontrable y localizable: sus servicios, sus trabajos, su contacto, con todo el SEO técnico.', route: 'vitrine', link: 'Ver la web corporativa' },
+            signature: { name: 'Web corporativa Firma', price: '1590 € + IVA · hasta 10 páginas', why: 'Una página por servicio y por ciudad, textos SEO redactados y una animación propia de su oficio.', route: 'vitrine', link: 'Ver la web corporativa' },
+            surmesure: { name: 'A medida', price: 'Desde 2300 € + IVA · con presupuesto', why: 'Para pymes, B2B y webs en varios idiomas: contenido denso, especialidades, casos de éxito.', route: 'tarifs', link: 'Ver los precios' },
+          },
+        },
+        {
+          kind: 'journey',
+          h: 'Cómo se desarrolla un proyecto',
+          p: 'Sin sorpresas: conoce cada etapa de antemano y solo paga el resto cuando la web está publicada.',
+          steps: [
+            { t: 'Auditoría gratuita', d: 'Su web actual, su ficha de Google, sus competidores. Lo hablamos por teléfono.' },
+            { t: 'Presupuesto claro', d: 'La oferta, el número de páginas y el plazo, por escrito.' },
+            { t: 'Encargo', d: 'Valida el presupuesto y empezamos.', money: 'Anticipo 50 %' },
+            { t: 'Diseño y desarrollo', d: 'Eva diseña, Mathieu y Louis programan. Usted valida antes de publicar.' },
+            { t: 'Publicación', d: 'La web se publica y los contactos se miden desde el primer día.', money: 'Resto 50 %, −10 % por referido' },
+          ],
+        },
       ],
     },
     vitrine: {
@@ -153,20 +181,58 @@ const es: Content = {
         { t: 'Más rápida', d: 'Una web moderna y ligera, rápida en el móvil.' },
         { t: 'Medición antes / después', d: 'Contactos medidos desde el lanzamiento, para comparar.' },
       ],
-      sections: [
-        {
-          h: 'WordPress, Wix o una web anticuada',
-          p: [
-            'Sea cual sea la herramienta de su web actual, recuperamos el contenido útil y la sustituimos por una web más rápida, sin plugins que mantener. Conserva su dominio y su correo.',
-          ],
-        },
-      ],
       pricing: { kind: 'offers' },
       proof: ['maintenancecaladoise', 'marieoracle'],
       faq: [
         { q: '¿Perderé mi posicionamiento?', a: 'Es el riesgo de un rediseño mal hecho. Inventariamos todas sus páginas antiguas y las redirigimos una a una; está incluido en cada rediseño.' },
         { q: '¿Conservo mi dominio?', a: 'Sí. Solo cambia la web; su dominio y sus correos siguen igual.' },
         { q: '¿Cuánto cuesta un rediseño?', a: 'Lo mismo que una web nueva: Esencial 1199 €, Firma 1590 €, A medida desde 2300 € (+ IVA). La migración SEO está incluida.' },
+      ],
+      facts: [
+        { k: 'Precio', v: 'El mismo que una web nueva, desde 1199 € + IVA' },
+        { k: 'Migración SEO', v: 'Incluida en cada rediseño' },
+        { k: 'Conserva', v: 'Su dominio y sus correos' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'refonteCheck',
+          h: '¿Hay que rehacer su web?',
+          p: 'Marque lo que describe su web actual. Ninguna señal es grave por sí sola; varias juntas son clientes que se van a la competencia.',
+          signs: [
+            'Es incómoda de leer en el móvil',
+            'Tarda varios segundos en cargar',
+            'No sabe cuántos contactos le aporta',
+            'No aparece cuando se busca su oficio y su ciudad',
+            'Ya no se parece a su empresa de hoy',
+            'Funciona con un WordPress o plugins que nadie actualiza',
+          ],
+          countLabel: 'señales marcadas',
+          verdicts: {
+            none: 'Marque las señales que reconozca: le diremos si un rediseño tiene sentido.',
+            few: 'Algunos puntos a corregir: puede que no haga falta rediseñar. La auditoría gratuita se lo dirá con franqueza.',
+            many: 'Su web probablemente le está costando clientes. El rediseño tiene sentido; la auditoría gratuita detalla qué conservar.',
+          },
+        },
+        {
+          kind: 'keepChange',
+          h: 'Lo que se conserva, lo que cambia',
+          p: 'Un rediseño no empieza de cero: todo lo que ya le aporta resultados se conserva. WordPress, Wix o web de agencia anticuada, el método es el mismo.',
+          keepH: 'Lo que se conserva',
+          keep: [
+            { t: 'Su dominio', d: 'Su dirección no cambia: sus clientes le siguen encontrando.' },
+            { t: 'Sus correos', d: 'Solo cambia la web; sus buzones de correo se mantienen.' },
+            { t: 'El posicionamiento logrado', d: 'Cada página antigua se redirige a la nueva: Google y sus enlaces antiguos siguen funcionando.' },
+            { t: 'Los contenidos que rinden', d: 'Los textos y páginas que ya se posicionan se recuperan o mejoran, nunca se borran al azar.' },
+          ],
+          changeH: 'Lo que cambia',
+          change: [
+            { t: 'El diseño', d: 'Una identidad que por fin se parece a su empresa, no a un tema comprado.' },
+            { t: 'La velocidad', d: 'Una web ligera, sin plugins que mantener, que carga rápido en el móvil.' },
+            { t: 'La estructura', d: 'Páginas organizadas en torno a lo que sus clientes buscan de verdad.' },
+            { t: 'La medición', d: 'Llamadas y formularios medidos desde la publicación, para comparar antes y después.' },
+          ],
+        },
       ],
     },
     migration: {
@@ -249,20 +315,49 @@ const es: Content = {
         { t: 'Posicionamiento en IA', d: 'Una web clara y estructurada, que ChatGPT, Perplexity y las respuestas IA de Google entienden y pueden citar.' },
         { t: 'Seguimiento mensual', d: 'Posiciones, visitas y contactos: un informe claro cada mes, con las correcciones necesarias.' },
       ],
-      sections: [
-        {
-          h: 'Incluido en la web, y después de forma continua',
-          p: [
-            'El SEO técnico va incluido en cada web que entregamos. Para ir más allá (páginas nuevas, contenidos, seguimiento de posiciones), el SEO continuo es un plan mensual independiente del precio de la web.',
-          ],
-        },
-      ],
       pricing: { kind: 'plan', id: 'seo' },
       proof: ['bachcostablanca', 'lbeg'],
       faq: [
         { q: '¿Cuándo se ven resultados?', a: 'Según la competencia de su sector y su ciudad, de unas semanas a varios meses. Nadie puede garantizar una posición en Google: desconfíe de quien lo prometa.' },
         { q: '¿SEO o Google Ads?', a: 'Google Ads trae contactos enseguida, mientras paga. El SEO tarda más, pero después funciona sin presupuesto publicitario. Muchos clientes empiezan con ambos.' },
         { q: '¿Hacen SEO en una web que no han creado ustedes?', a: 'Sí. Empezamos con una auditoría; si la web frena el posicionamiento, se lo decimos con franqueza.' },
+      ],
+      facts: [
+        { k: 'Incluido', v: 'SEO técnico en cada web entregada' },
+        { k: 'Continuo', v: 'Plan SEO, 400 € + IVA / mes' },
+        { k: 'Lo que no prometemos', v: 'Una posición garantizada en Google' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'serp',
+          h: 'Cada zona de Google se trabaja de forma distinta',
+          p: 'Una búsqueda muestra cuatro tipos de resultados. Pase el cursor por una zona: le decimos cómo aparecer en ella y qué página lo explica.',
+          query: 'paisajista alicante',
+          zones: [
+            { id: 'ads', label: 'Zona 1 · Anuncios', t: 'Los anuncios de Google Ads', d: 'Arriba de la página desde los primeros días, mientras la campaña esté activa.', route: 'ads', link: 'Google Ads' },
+            { id: 'ai', label: 'Zona 2 · Respuesta IA', t: 'Las respuestas generadas por IA', d: 'Google resume y cita fuentes: una web clara y estructurada tiene opciones de estar entre ellas.', route: 'seoIa', link: 'Posicionamiento en IA' },
+            { id: 'map', label: 'Zona 3 · Mapa', t: 'El mapa y las tres empresas', d: 'Aquí se deciden la mayoría de las llamadas locales: ficha de Google, reseñas, datos coherentes.', route: 'seoLocal', link: 'SEO local' },
+            { id: 'organic', label: 'Zona 4 · Resultados orgánicos', t: 'Los resultados orgánicos', d: 'Gratuitos y duraderos: el fruto del SEO técnico y de páginas que responden a las búsquedas.', route: 'auditSeo', link: 'Empezar con una auditoría SEO' },
+          ],
+          mock: {
+            sponsored: 'Patrocinado',
+            adTitle: 'Paisajista en Alicante — Presupuesto gratis',
+            aiTitle: 'Vista creada con IA',
+            aiText: 'Varios paisajistas trabajan en Alicante, sobre todo en diseño de jardines y terrazas…',
+            mapTitle: 'Empresas',
+            places: ['Su empresa', 'Competidor A', 'Competidor B'],
+            organic: ['Paisajista en Alicante: diseño de jardines', 'Terrazas y exteriores en Alicante'],
+          },
+          illustration: 'Ilustración — resultados ficticios',
+        },
+        {
+          kind: 'split',
+          h: 'Incluido en la web, y después de forma continua',
+          p: 'El SEO técnico forma parte de cada web que entregamos. Ir más allá es un plan mensual aparte, independiente del precio de la web.',
+          left: { tag: 'Incluido en el precio de la web', h: 'En cada web', items: ['Indexación, velocidad, visualización en móvil', 'Etiquetas y datos estructurados', 'Estructura de páginas pensada para sus búsquedas', 'Optimización de la ficha de Google'] },
+          right: { tag: '400 € + IVA / mes', h: 'SEO continuo', items: ['Nuevas páginas y nuevos contenidos', 'Seguimiento de posiciones, visitas y contactos', 'Un informe claro cada mes, con las correcciones correspondientes'], route: 'abonnements', link: 'Ver los planes mensuales' },
+        },
       ],
     },
     auditSeo: {
@@ -446,6 +541,34 @@ const es: Content = {
         { q: '¿Qué presupuesto publicitario necesito?', a: 'Depende de su sector, su zona y la competencia. Tras la auditoría le proponemos un presupuesto inicial; se paga directamente a Google.' },
         { q: '¿La cuenta de Google Ads es mía?', a: 'La cuenta está a su nombre: conserva el historial y los datos.' },
         { q: '¿Gestionan campañas ya existentes?', a: 'Sí. Empezamos auditando la cuenta para ver adónde va el presupuesto.' },
+      ],
+      facts: [
+        { k: 'Nuestro trabajo', v: '400 € + IVA / mes' },
+        { k: 'Inversión publicitaria', v: 'Pagada directamente a Google' },
+        { k: 'La cuenta', v: 'A su nombre, con su historial' },
+      ],
+      keepPoints: true,
+      feature: [
+        {
+          kind: 'adsVsSeo',
+          h: '¿Google Ads, SEO, o los dos?',
+          p: 'No trabajan al mismo ritmo. Elija una estrategia para ver cómo llegan los contactos.',
+          ads: { name: 'Solo Google Ads', d: 'Contactos desde los primeros días, mientras paga. Cuando la campaña se detiene, los contactos también.' },
+          seo: { name: 'Solo SEO', d: 'Más lento al principio, de unas semanas a varios meses según la competencia, pero después trabaja sin inversión publicitaria.' },
+          both: { name: 'Los dos', d: 'Google Ads trae contactos enseguida mientras sube el posicionamiento. Es la elección de muchos de nuestros clientes.' },
+          axis: { time: 'tiempo →', contacts: 'contactos' },
+          caption: 'Esquema de principio, sin escala: cada oficio y cada ciudad tienen su propio ritmo.',
+        },
+        {
+          kind: 'router',
+          h: '¿Por dónde empezar?',
+          p: 'Según su situación, el primer paso no es el mismo.',
+          paths: [
+            { if: 'Nunca ha hecho publicidad', t: 'Gestión de campañas', d: 'Creamos sus campañas desde cero, las seguimos y las ajustamos cada mes.', route: 'adsGestion', link: 'Ver la gestión' },
+            { if: 'Ya tiene campañas', t: 'Auditoría de Google Ads', d: 'Revisamos gratis a dónde va su presupuesto antes de tocar nada.', route: 'adsAudit', link: 'Ver la auditoría' },
+            { if: 'Sus anuncios llevan a su página de inicio', t: 'Landing page', d: 'Una página dedicada que repite la promesa del anuncio y lleva a la llamada.', route: 'landing', link: 'Ver la landing page' },
+          ],
+        },
       ],
     },
     adsGestion: {

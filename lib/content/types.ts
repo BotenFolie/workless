@@ -18,8 +18,10 @@ export type ServiceContent = {
   faq: Faq[]
   /** Repères clés affichés sous le chapô (prix, délai, conditions) */
   facts?: Fact[]
-  /** Bloc signature propre à la page (remplace la liste de points) */
-  feature?: Feature
+  /** Bloc(s) signature propres à la page (remplacent la liste de points) */
+  feature?: Feature | Feature[]
+  /** Pages principales : garder la liste de points sous les blocs */
+  keepPoints?: boolean
 }
 
 export type Fact = { k: string; v: string }
@@ -116,6 +118,70 @@ export type Feature =
       terms: { term: string; useful: boolean; why: string }[]
       useful: string
       wasted: string
+    }
+
+  | {
+      kind: 'formatPicker'
+      h: string
+      p: string
+      questions: { q: string; options: { id: string; label: string }[] }[]
+      results: Record<'landing' | 'essentiel' | 'signature' | 'surmesure', { name: string; price: string; why: string; route: string; link: string }>
+      resultLabel: string
+    }
+  | {
+      kind: 'journey'
+      h: string
+      p: string
+      steps: { t: string; d: string; money?: string }[]
+    }
+  | {
+      kind: 'refonteCheck'
+      h: string
+      p: string
+      signs: string[]
+      verdicts: { none: string; few: string; many: string }
+      countLabel: string
+    }
+  | {
+      kind: 'keepChange'
+      h: string
+      p: string
+      keepH: string
+      keep: Point[]
+      changeH: string
+      change: Point[]
+    }
+  | {
+      kind: 'serp'
+      h: string
+      p: string
+      query: string
+      zones: { id: 'ads' | 'ai' | 'map' | 'organic'; label: string; t: string; d: string; route: string; link: string }[]
+      mock: { sponsored: string; adTitle: string; aiTitle: string; aiText: string; mapTitle: string; places: string[]; organic: string[] }
+      illustration: string
+    }
+  | {
+      kind: 'split'
+      h: string
+      p: string
+      left: { h: string; tag: string; items: string[] }
+      right: { h: string; tag: string; items: string[]; route: string; link: string }
+    }
+  | {
+      kind: 'adsVsSeo'
+      h: string
+      p: string
+      ads: { name: string; d: string }
+      seo: { name: string; d: string }
+      both: { name: string; d: string }
+      axis: { time: string; contacts: string }
+      caption: string
+    }
+  | {
+      kind: 'router'
+      h: string
+      p: string
+      paths: { if: string; t: string; d: string; route: string; link: string }[]
     }
 
 export type MetierContent = {
