@@ -1,0 +1,113 @@
+// Libellés d'interface communs FR / ES
+
+import type { Locale } from './routes'
+
+const FR = {
+  tagline: 'Studio · sites internet, SEO, Google Ads',
+  nav: [
+    { key: 'creation', label: 'Création' },
+    { key: 'refonte', label: 'Refonte' },
+    { key: 'seo', label: 'SEO' },
+    { key: 'ads', label: 'Google Ads' },
+    { key: 'realisations', label: 'Réalisations' },
+    { key: 'tarifs', label: 'Tarifs' },
+  ],
+  cta: 'Audit gratuit',
+  ctaLong: 'Demander l’audit gratuit',
+  call: 'Appeler',
+  menu: 'Menu',
+  close: 'Fermer',
+  langName: 'Français',
+  otherLang: 'ES',
+  otherLangLabel: 'Ver la web en español',
+  home: 'Accueil',
+  skip: 'Aller au contenu',
+  folio: 'p.',
+  seeSite: 'Voir le site',
+  seeCase: 'Lire l’étude de cas',
+  allWork: 'Toutes les réalisations',
+  faq: 'Questions fréquentes',
+  from: 'à partir de',
+  perProject: 'par projet',
+  footer: {
+    studio: 'Le studio',
+    services: 'Services',
+    metiers: 'Par métier',
+    info: 'Informations',
+    rights: 'Tous droits réservés',
+    lang: 'Ce site existe aussi en espagnol',
+  },
+  form: {
+    name: 'Votre prénom et nom',
+    company: 'Entreprise',
+    email: 'E-mail',
+    phone: 'Téléphone',
+    site: 'Site actuel (si vous en avez un)',
+    message: 'Votre projet en quelques mots',
+    referrer: 'Nom de la personne qui vous recommande (facultatif)',
+    consent: 'J’accepte que Stripwork utilise ces informations pour me recontacter.',
+    send: 'Envoyer',
+    sending: 'Envoi…',
+    ok: 'C’est reçu. On vous recontacte très vite.',
+    error: 'L’envoi a échoué. Réessayez, ou écrivez-nous directement :',
+    required: 'obligatoire',
+  },
+}
+
+type Dict = typeof FR
+
+const ES: Dict = {
+  tagline: 'Estudio · webs, SEO, Google Ads',
+  nav: [
+    { key: 'creation', label: 'Diseño web' },
+    { key: 'refonte', label: 'Rediseño' },
+    { key: 'seo', label: 'SEO' },
+    { key: 'ads', label: 'Google Ads' },
+    { key: 'realisations', label: 'Proyectos' },
+    { key: 'tarifs', label: 'Precios' },
+  ],
+  cta: 'Auditoría gratis',
+  ctaLong: 'Pedir la auditoría gratuita',
+  call: 'Llamar',
+  menu: 'Menú',
+  close: 'Cerrar',
+  langName: 'Español',
+  otherLang: 'FR',
+  otherLangLabel: 'Voir le site en français',
+  home: 'Inicio',
+  skip: 'Ir al contenido',
+  folio: 'pág.',
+  seeSite: 'Ver la web',
+  seeCase: 'Leer el caso',
+  allWork: 'Todos los proyectos',
+  faq: 'Preguntas frecuentes',
+  from: 'desde',
+  perProject: 'por proyecto',
+  footer: {
+    studio: 'El estudio',
+    services: 'Servicios',
+    metiers: 'Por sector',
+    info: 'Información',
+    rights: 'Todos los derechos reservados',
+    lang: 'Esta web también existe en francés',
+  },
+  form: {
+    name: 'Nombre y apellidos',
+    company: 'Empresa',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    site: 'Web actual (si tiene)',
+    message: 'Su proyecto en pocas palabras',
+    referrer: 'Nombre de quien le recomienda (opcional)',
+    consent: 'Acepto que Stripwork use estos datos para volver a contactarme.',
+    send: 'Enviar',
+    sending: 'Enviando…',
+    ok: 'Recibido. Le contactamos muy pronto.',
+    error: 'No se ha podido enviar. Inténtelo de nuevo o escríbanos directamente:',
+    required: 'obligatorio',
+  },
+}
+
+export function ui(locale: Locale): Dict {
+  return locale === 'fr' ? FR : ES
+}
