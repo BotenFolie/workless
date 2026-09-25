@@ -17,6 +17,8 @@ export function pageMetadata(key: string, locale: Locale, title: string, descrip
   if (route?.paths.es) languages['es'] = absolute(route.paths.es)
   if (route?.paths.fr) languages['x-default'] = absolute(route.paths.fr)
   const url = absolute(href(key, locale))
+  // Image de partage statique (public/og-*.png) : le catch-all intercepte les routes opengraph-image
+  const image = { url: `/og-${locale}.png`, width: 1200, height: 630, alt: 'Stripwork' }
 
   return {
     title: { absolute: title },
@@ -29,8 +31,9 @@ export function pageMetadata(key: string, locale: Locale, title: string, descrip
       siteName: 'Stripwork',
       locale: locale === 'fr' ? 'fr_FR' : 'es_ES',
       type: 'website',
+      images: [image],
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image', title, description, images: [image.url] },
   }
 }
 

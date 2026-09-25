@@ -1,4 +1,5 @@
 // Image Open Graph « page d'annuaire » (FR / ES)
+// Générateur : le rendu est figé dans public/og-fr.png et public/og-es.png (à régénérer si le slogan change)
 
 import { ImageResponse } from 'next/og'
 import type { Locale } from './routes'
