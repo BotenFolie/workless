@@ -949,7 +949,7 @@ const es: Content = {
           h: 'Datos recogidos',
           p: [
             'Lo que usted escribe en nuestros formularios: nombre, empresa, correo, teléfono, web actual, mensaje y, en su caso, el nombre de quien le recomienda.',
-            'Con su petición recibimos también su procedencia: la página por la que llegó a la web, la web de la que venía y los parámetros de campaña del enlace (utm, identificador de clic de Google Ads o Meta). Nada de esto se envía si no manda un formulario.',
+            'Con su petición recibimos también su procedencia: la página por la que llegó a la web, la web de la que venía y los parámetros de campaña del enlace (utm, identificador de clic de Google Ads o Meta). Nada de esto se envía si no manda un formulario ni si ha rechazado las cookies.',
           ],
         },
         {
@@ -964,7 +964,7 @@ const es: Content = {
           h: 'Cookies',
           p: [
             'Esta web no usa cookies publicitarias ni herramientas de seguimiento de terceros.',
-            'Dos cookies propias de stripwork.com (sw_src y sw_last, 90 días) guardan la procedencia de su visita descrita arriba. Solo se leen cuando envía un formulario y no sirven para ningún seguimiento publicitario. Puede borrarlas desde su navegador.',
+            'Con su permiso (aviso mostrado en la primera visita), dos cookies propias de stripwork.com (sw_src y sw_last, 90 días) guardan la procedencia de su visita descrita arriba. Solo se leen cuando envía un formulario y no sirven para ningún seguimiento publicitario. Una cookie sw_consent (6 meses) guarda su elección, que puede cambiar en cualquier momento con el enlace «Cookies» al pie de página. Sin su permiso no se deposita ninguna.',
           ],
         },
         {

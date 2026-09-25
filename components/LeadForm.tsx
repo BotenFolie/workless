@@ -4,6 +4,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { usePathname } from 'next/navigation'
+import { readAttribution } from '@/lib/consent'
 
 type Labels = {
   name: string
@@ -31,26 +32,20 @@ type Props = {
 
 type Status = 'idle' | 'sending' | 'ok' | 'error'
 
-/** Provenance posée par le script de RootDoc (cookies sw_src / sw_last), au format attendu par l'OS. */
-function readTouch(name: string) {
-  const raw = document.cookie.split('; ').find((c) => c.startsWith(`${name}=`))
-  if (!raw) return null
-  try {
-    const t = JSON.parse(decodeURIComponent(raw.slice(name.length + 1))) as Record<string, string>
-    return {
-      utmSource: t.utm_source,
-      utmMedium: t.utm_medium,
-      utmCampaign: t.utm_campaign,
-      utmContent: t.utm_content,
-      utmTerm: t.utm_term,
-      gclid: t.gclid,
-      fbclid: t.fbclid,
-      landingPage: t.landing,
-      referrerUrl: t.ref,
-      at: t.at,
-    }
-  } catch {
-    return null
+/** Provenance (cookies si accord, mémoire de la page sinon, rien si refus) au format attendu par l'OS. */
+function touchOf(t: Record<string, string> | null) {
+  if (!t) return null
+  return {
+    utmSource: t.utm_source,
+    utmMedium: t.utm_medium,
+    utmCampaign: t.utm_campaign,
+    utmContent: t.utm_content,
+    utmTerm: t.utm_term,
+    gclid: t.gclid,
+    fbclid: t.fbclid,
+    landingPage: t.landing,
+    referrerUrl: t.ref,
+    at: t.at,
   }
 }
 
@@ -69,6 +64,7 @@ export default function LeadForm({ type, locale, labels, submitLabel, fallbackEm
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
+    const attribution = readAttribution()
     setStatus('sending')
     try {
       const res = await fetch('/api/lead', {
@@ -88,8 +84,8 @@ export default function LeadForm({ type, locale, labels, submitLabel, fallbackEm
           consent: data.get('consent') === 'on',
           _hp: data.get('website'),
           submissionId,
-          first: readTouch('sw_src'),
-          last: readTouch('sw_last'),
+          first: touchOf(attribution.first),
+          last: touchOf(attribution.last),
         }),
       })
       if (!res.ok) throw new Error(String(res.status))

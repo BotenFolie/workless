@@ -982,7 +982,7 @@ const fr: Content = {
           h: 'Données collectées',
           p: [
             'Ce que vous saisissez dans nos formulaires : nom, entreprise, e-mail, téléphone, site actuel, message et, le cas échéant, le nom de la personne qui vous recommande.',
-            'Avec votre demande, nous recevons aussi sa provenance : la page par laquelle vous êtes arrivé sur le site, le site d’où vous veniez, et les paramètres de campagne présents dans le lien (utm, identifiant de clic Google Ads ou Meta). Rien de cela n’est transmis si vous n’envoyez pas de formulaire.',
+            'Avec votre demande, nous recevons aussi sa provenance : la page par laquelle vous êtes arrivé sur le site, le site d’où vous veniez, et les paramètres de campagne présents dans le lien (utm, identifiant de clic Google Ads ou Meta). Rien de cela n’est transmis si vous n’envoyez pas de formulaire, ni si vous avez refusé les cookies.',
           ],
         },
         {
@@ -999,7 +999,7 @@ const fr: Content = {
           h: 'Cookies',
           p: [
             'Ce site n’utilise ni cookie publicitaire ni outil de suivi tiers.',
-            'Deux cookies propres à stripwork.com (sw_src et sw_last, 90 jours) retiennent la provenance de votre visite décrite plus haut. Ils ne sont lus qu’au moment où vous envoyez un formulaire et ne servent à aucun suivi publicitaire. Vous pouvez les supprimer depuis votre navigateur.',
+            'Avec votre accord (bandeau affiché à la première visite), deux cookies propres à stripwork.com (sw_src et sw_last, 90 jours) retiennent la provenance de votre visite décrite plus haut. Ils ne sont lus qu’au moment où vous envoyez un formulaire et ne servent à aucun suivi publicitaire. Un cookie sw_consent (6 mois) garde votre choix, que vous pouvez modifier à tout moment via le lien « Cookies » en bas de page. Sans accord, aucun de ces cookies n’est déposé.',
           ],
         },
         {

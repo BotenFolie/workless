@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import Header from './Header'
+import CookieConsent, { CookieSettingsLink } from './CookieConsent'
 import { breadcrumbChain, getRoute, href, ROUTES, routesOfKind, type Locale } from '@/lib/routes'
 import { IconArrow } from './Icons'
 import { labelOf } from '@/lib/labels'
@@ -146,6 +147,9 @@ export default function Shell({ locale, current, children }: Props) {
                   <Link href={href('confidentialite', locale)}>{labelOf('confidentialite', locale)}</Link>
                 </li>
                 <li>
+                  <CookieSettingsLink label="Cookies" />
+                </li>
+                <li>
                   <a href={otherHref} hrefLang={other}>
                     {t.otherLangLabel}
                   </a>
@@ -161,6 +165,7 @@ export default function Shell({ locale, current, children }: Props) {
           </div>
         </div>
       </footer>
+      <CookieConsent locale={locale} />
     </>
   )
 }
