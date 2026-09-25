@@ -981,13 +981,14 @@ const fr: Content = {
         {
           h: 'Données collectées',
           p: [
-            'Uniquement ce que vous saisissez dans nos formulaires : nom, entreprise, e-mail, téléphone, site actuel, message et, le cas échéant, le nom de la personne qui vous recommande.',
+            'Ce que vous saisissez dans nos formulaires : nom, entreprise, e-mail, téléphone, site actuel, message et, le cas échéant, le nom de la personne qui vous recommande.',
+            'Avec votre demande, nous recevons aussi sa provenance : la page par laquelle vous êtes arrivé sur le site, le site d’où vous veniez, et les paramètres de campagne présents dans le lien (utm, identifiant de clic Google Ads ou Meta). Rien de cela n’est transmis si vous n’envoyez pas de formulaire.',
           ],
         },
         {
           h: 'Utilisation',
           p: [
-            'Ces données servent à répondre à votre demande et à préparer votre audit ou votre devis. Elles sont transmises par e-mail à l’équipe Stripwork et ne sont ni vendues ni cédées.',
+            'Ces données servent à répondre à votre demande, à préparer votre audit ou votre devis et à savoir quels canaux nous amènent des demandes. Elles sont transmises par e-mail à l’équipe Stripwork et enregistrées dans son outil de suivi interne. Elles ne sont ni vendues ni cédées.',
           ],
         },
         {
@@ -996,7 +997,10 @@ const fr: Content = {
         },
         {
           h: 'Cookies',
-          p: ['Ce site n’utilise ni cookie publicitaire ni outil de suivi tiers.'],
+          p: [
+            'Ce site n’utilise ni cookie publicitaire ni outil de suivi tiers.',
+            'Deux cookies propres à stripwork.com (sw_src et sw_last, 90 jours) retiennent la provenance de votre visite décrite plus haut. Ils ne sont lus qu’au moment où vous envoyez un formulaire et ne servent à aucun suivi publicitaire. Vous pouvez les supprimer depuis votre navigateur.',
+          ],
         },
         {
           h: 'Vos droits',
