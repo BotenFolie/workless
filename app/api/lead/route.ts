@@ -124,22 +124,47 @@ export async function POST(req: NextRequest) {
   const lead = parseLead(raw)
   if (!lead) return NextResponse.json({ error: 'invalid' }, { status: 422 })
 
-  // Copie vers Stripwork OS après la réponse : ne ralentit pas le visiteur, indépendante de l'e-mail
-  after(async () => {
-    const r = await sendLeadToOs(lead)
-    if (!r.ok) {
-      console.error('[lead] non transmis à Stripwork OS après 4 essais', { submissionId: lead.submissionId, error: r.error })
-      await sendTelegramAlert(`<b>ALERTE : demande non transmise à Stripwork OS</b>\n${escapeHtml(lead.name)} · ${escapeHtml(lead.email)}\n${escapeHtml(r.error)}`)
-    }
-  })
+  const alert = () =>
+    sendTelegramAlert(
+      `<b>${lead.type === 'audit' ? 'Audit' : 'Contact'} ${lead.locale.toUpperCase()}</b>\n${escapeHtml(lead.name)} — ${escapeHtml(lead.company)}\n${escapeHtml(lead.phone)} · ${escapeHtml(lead.email)}${lead.referrer ? `\nRecommandé par : ${escapeHtml(lead.referrer)}` : ''}`,
+    )
 
+  const mailed = await trySendMail(lead)
+  if (mailed.ok) {
+    await alert()
+    // Copie vers Stripwork OS après la réponse : ne ralentit pas le visiteur
+    after(async () => {
+      const r = await sendLeadToOs(lead)
+      if (!r.ok) {
+        console.error('[lead] non transmis à Stripwork OS après 4 essais', { submissionId: lead.submissionId, error: r.error })
+        await sendTelegramAlert(`<b>ALERTE : demande non transmise à Stripwork OS</b>\n${escapeHtml(lead.name)} · ${escapeHtml(lead.email)}\n${escapeHtml(r.error)}`)
+      }
+    })
+    return NextResponse.json({ ok: true })
+  }
+
+  // E-mail indisponible : la demande n'est pas perdue si Stripwork OS l'a bien reçue
+  const saved = await sendLeadToOs(lead)
+  if (saved.ok) {
+    await alert()
+    after(() => sendTelegramAlert(`<b>ALERTE : e-mail de demande non envoyé</b> (${escapeHtml(mailed.error)}). La demande est dans Stripwork OS.`))
+    return NextResponse.json({ ok: true })
+  }
+  console.error('[lead] e-mail ET Stripwork OS en échec', { submissionId: lead.submissionId, mail: mailed.error, os: saved.error })
+  await sendTelegramAlert(
+    `<b>ALERTE : demande perdue côté serveur</b>\n${escapeHtml(lead.name)} · ${escapeHtml(lead.email)} · ${escapeHtml(lead.phone)}\n${escapeHtml(lead.message.slice(0, 500))}`,
+  )
+  return NextResponse.json({ error: 'send_failed' }, { status: 502 })
+}
+
+/** E-mail Resend à l'équipe ; renvoie l'erreur au lieu de la lever. */
+async function trySendMail(lead: Lead): Promise<{ ok: true } | { ok: false; error: string }> {
   const to = process.env.LEADS_TO_EMAIL || process.env.DIAGNOSTIC_RECIPIENT_EMAIL
   const from = process.env.FROM_EMAIL
   if (!to || !from) {
     console.error('[lead] LEADS_TO_EMAIL ou FROM_EMAIL non configuré')
-    return NextResponse.json({ error: 'not_configured' }, { status: 500 })
+    return { ok: false, error: 'FROM_EMAIL ou LEADS_TO_EMAIL non configuré' }
   }
-
   try {
     await sendMail({
       to,
@@ -148,14 +173,9 @@ export async function POST(req: NextRequest) {
       subject: `[Stripwork ${lead.locale.toUpperCase()}] ${lead.type === 'audit' ? 'Audit' : 'Contact'} — ${lead.company || lead.name}`,
       html: buildHtml(lead),
     })
+    return { ok: true }
   } catch (err) {
     console.error('[lead] échec envoi', err)
-    return NextResponse.json({ error: 'send_failed' }, { status: 502 })
+    return { ok: false, error: err instanceof Error ? err.message.slice(0, 200) : 'échec envoi' }
   }
-
-  await sendTelegramAlert(
-    `<b>${lead.type === 'audit' ? 'Audit' : 'Contact'} ${lead.locale.toUpperCase()}</b>\n${escapeHtml(lead.name)} — ${escapeHtml(lead.company)}\n${escapeHtml(lead.phone)} · ${escapeHtml(lead.email)}${lead.referrer ? `\nRecommandé par : ${escapeHtml(lead.referrer)}` : ''}`,
-  )
-
-  return NextResponse.json({ ok: true })
 }
